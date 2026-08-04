@@ -1,0 +1,48 @@
+// 4-portal configuration.
+//
+// Each portal is a separate "brand" a user can log into from the login page.
+// All portals share the SAME product catalog and SKUs — only the branding
+// (header logo + wordmark) and the per-SKU product images differ per portal.
+//
+// PLACEHOLDER CONTENT: replace `name`, `sub`, and the logo files in
+// public/portals/<id>.svg with the real brand names + logos. Passwords are read
+// from env vars (PORTAL1_PASSWORD … PORTAL4_PASSWORD) in layout.tsx `useLogin`;
+// a dev fallback (the portal id) is used when the env var is unset.
+
+export interface Portal {
+  /** Stable id — also the value stored in the auth cookie and the key used for
+   *  per-portal product images (see portal-images.ts). */
+  id: string;
+  /** Primary wordmark line shown next to the header logo. */
+  name: string;
+  /** Secondary wordmark line. */
+  sub: string;
+  /** Header / login logo image (in /public). */
+  logo: string;
+  /** Accent colour used for the portal tile + selected states. */
+  accent: string;
+  /** Set when the logo is light/white and needs a dark backdrop to be visible
+   *  (e.g. a reversed/knockout logo). */
+  dark?: boolean;
+  /** Full-bleed field photo shown behind the login when this portal is
+   *  selected (scraped from the company's own site). */
+  hero: string;
+}
+
+export const PORTALS: Portal[] = [
+  { id: "portal1", name: "Airtech", sub: "Synergy", logo: "/portals/portal1.png", accent: "#1f6fb2", dark: true, hero: "/airtech-hero.webp" },
+  // PLACEHOLDER heroes for Corflow/Powered (airtech field photos) until their
+  // own site imagery is scraped; Airtech + Wired are the real company heroes.
+  { id: "portal2", name: "Corflow", sub: "Synergy", logo: "/portals/portal2.png", accent: "#ae1f2a", hero: "/airtech-chillers.webp" },
+  { id: "portal3", name: "Wired", sub: "Synergy", logo: "/portals/portal3.png", accent: "#4f8a4d", hero: "/wired-hero.webp" },
+  { id: "portal4", name: "Powered", sub: "Synergy", logo: "/portals/portal4.png", accent: "#d9a441", hero: "/airtech-mechroom.webp" },
+];
+
+export const PORTAL_IDS = PORTALS.map((p) => p.id);
+
+export const DEFAULT_PORTAL = PORTALS[0];
+
+/** Resolve a portal by id, falling back to the first portal. */
+export function getPortal(id?: string | null): Portal {
+  return PORTALS.find((p) => p.id === id) ?? DEFAULT_PORTAL;
+}
