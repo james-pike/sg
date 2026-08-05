@@ -834,17 +834,6 @@ export default component$(() => {
     cleanup(() => window.removeEventListener("toggle-menu", handler));
   }, { strategy: 'document-ready' });
 
-  // Autoplay the login banner carousel while the login modal is open.
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ track, cleanup }) => {
-    track(() => showLogin.value);
-    if (!showLogin.value) return;
-    const id = setInterval(() => {
-      loginHeroIndex.value = (loginHeroIndex.value + 1) % 2;
-    }, 5000);
-    cleanup(() => clearInterval(id));
-  }, { strategy: 'document-ready' });
-
   // Settle the header's scroll-dependent state before the new route renders.
   // Qwik commits the DOM and sets the scroll to the top in one synchronous
   // block (see viewTransition={false} in root.tsx), so the new route's first
@@ -1092,9 +1081,22 @@ export default component$(() => {
               )}
 
               <div class="login-card">
-                <p class="login-card__eyebrow">{t("login.eyebrow", locale.value)}</p>
-                <h1 class="login-card__title">{t("login.chooseportal", locale.value)}</h1>
-                <p class="login-card__hint">{t("login.portalsubtitle", locale.value)}</p>
+                {selectedPortal.value ? (
+                  <div
+                    key={selectedPortal.value}
+                    class={`login-card__brand ${getPortal(selectedPortal.value).dark ? "login-card__brand--dark" : "login-card__brand--light"}`}
+                  >
+                    <img
+                      class="login-card__brandmark"
+                      src={getPortal(selectedPortal.value).logo}
+                      alt={`${getPortal(selectedPortal.value).name} ${getPortal(selectedPortal.value).sub}`}
+                      loading="eager"
+                    />
+                  </div>
+                ) : (
+                  <h1 class="login-card__title">{t("login.chooseportal", locale.value)}</h1>
+                )}
+                <p class="login-card__hint">{t("login.subtitle", locale.value)}</p>
 
                 {/* Step 1 — pick one of the 4 company portals. */}
                 <div class="login-portals" role="radiogroup" aria-label={t("login.chooseportal", locale.value)}>

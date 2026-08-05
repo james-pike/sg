@@ -3376,10 +3376,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   padding: 0.34rem 0.72rem;
   font-size: 0.64rem; font-weight: 800;
   letter-spacing: 0.28em; text-transform: uppercase;
-  color: #f5c542;
-  border: 1px solid rgba(245, 197, 66, 0.5);
+  color: #4d9fd6;
+  border: 1px solid rgba(31, 111, 178, 0.5);
   border-radius: 2px;
-  background: rgba(245, 197, 66, 0.09);
+  background: rgba(31, 111, 178, 0.1);
 }
 .login-card__title {
   margin: 0;
@@ -3388,6 +3388,27 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   letter-spacing: -0.02em; text-transform: uppercase;
   color: #fff;
   text-shadow: 0 2px 26px rgba(0, 0, 0, 0.4);
+}
+/* Once a company is chosen, its logo replaces the title. Light/reversed logos
+   (dark portals) sit straight on the panel; dark logos get a white plate so
+   they stay legible — mirroring the portal tiles. */
+.login-card__brand {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  animation: fadeIn 0.45s ease;
+}
+.login-card__brand--light {
+  padding: 1.05rem 1.4rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.34);
+}
+.login-card__brandmark {
+  display: block;
+  height: clamp(56px, 6.5vw, 88px);
+  width: auto;
+  max-width: 100%;
 }
 .login-card__hint {
   margin: 0.9rem 0 0;
@@ -3466,7 +3487,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-modal__portal-name {
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.01em;
-  text-transform: none; color: #f5c542;
+  text-transform: none; color: #4d9fd6;
 }
 .login-modal__field input {
   padding: 13px 15px; border-radius: 9px;
@@ -3478,27 +3499,26 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   outline: none;
 }
 .login-modal__field input:focus {
-  border-color: #f5c542;
+  border-color: #1f6fb2;
   background: rgba(255, 255, 255, 0.13);
-  box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.22);
+  box-shadow: 0 0 0 3px rgba(31, 111, 178, 0.28);
 }
 .login-modal__field input::placeholder { color: rgba(224, 236, 244, 0.45); }
 .login-modal__field input:disabled { opacity: 0.55; cursor: not-allowed; }
 
-/* Submit: safety-amber CTA — the one warm accent, pulled from the photo's
-   equipment tags, popping against the cool steel scene. */
+/* Submit: the Airtech Synergy blue CTA. */
 .login-modal__submit.btn {
   width: 100%; justify-content: center; margin-top: 0.55rem;
   padding: 14px 20px; border: none; border-radius: 9px;
-  background: #f5c542; color: #12212c;
+  background: #1f6fb2; color: #fff;
   font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.9rem;
   text-shadow: none;
-  box-shadow: 0 8px 22px rgba(245, 197, 66, 0.28);
+  box-shadow: 0 8px 22px rgba(31, 111, 178, 0.32);
   transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 .login-modal__submit.btn:hover {
-  background: #ffd75e; color: #12212c;
-  box-shadow: 0 10px 28px rgba(245, 197, 66, 0.42);
+  background: #2f83c9; color: #fff;
+  box-shadow: 0 10px 28px rgba(31, 111, 178, 0.46);
 }
 .login-modal__submit.btn:active { transform: translateY(1px); }
 .login-modal__submit.btn:disabled {
@@ -13770,7 +13790,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   padding: 0;
 }
 .login-portal {
-  --portal-accent: #f5c542;
+  --portal-accent: #1f6fb2;
   position: relative;
   display: flex;
   align-items: center;
@@ -13786,23 +13806,25 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 }
 .login-portal:hover {
   transform: translateY(-2px);
-  border-color: rgba(245, 197, 66, 0.85);
+  border-color: rgba(31, 111, 178, 0.8);
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.36);
 }
 .login-portal:focus-visible {
-  outline: 2px solid #f5c542;
+  outline: 2px solid #1f6fb2;
   outline-offset: 2px;
 }
+/* Selected — the Synergy brand blue. */
 .login-portal--active {
-  border-color: #f5c542;
-  box-shadow: 0 0 0 2px #f5c542, 0 12px 26px rgba(0, 0, 0, 0.36);
+  border-color: #1f6fb2;
+  box-shadow: 0 0 0 2px #1f6fb2, 0 12px 26px rgba(0, 0, 0, 0.4);
 }
 .login-portal__logo {
   width: 100%;
   height: 60px;
   object-fit: contain;
 }
-/* Light/reversed logos need a dark backdrop to be visible. */
+/* Every tile carries the Airtech dark-sign treatment; the reversed white
+   logos read against it. */
 .login-portal--dark { background: #14232f; border-color: rgba(255, 255, 255, 0.14); }
 
 /* Step 2 — the selected portal's name rides inline with the PASSWORD label
