@@ -622,6 +622,6 @@ export default component$(() => {
 export const head: DocumentHead = ({ params }) => {
   const product = allProducts.find((p) => p.sku === params.sku);
   return {
-    title: product ? `${product.name} - Modern Niagara Building Services Apparel` : "Product - Modern Niagara Building Services Apparel",
+    title: product ? `${product.name} - Synergy Group Apparel` : "Product - Synergy Group Apparel",
   };
 };

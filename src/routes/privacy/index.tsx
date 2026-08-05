@@ -51,5 +51,5 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Privacy Policy — Modern Niagara Building Services Apparel",
+  title: "Privacy Policy — Synergy Group Apparel",
 };

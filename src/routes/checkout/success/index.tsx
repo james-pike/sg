@@ -59,5 +59,5 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Order confirmed — Modern Niagara Building Services Apparel",
+  title: "Order confirmed — Synergy Group Apparel",
 };

@@ -101,14 +101,13 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
       <div style="background:#39627c;padding:18px 24px;border-radius:8px 8px 0 0">
         ${o.logoUrl
           ? `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td style="vertical-align:middle;padding-right:12px"><img src="${o.logoUrl}" width="46" height="46" alt="Modern Niagara" style="display:block;width:46px;height:46px;border:0" /></td>
+              <td style="vertical-align:middle;padding-right:12px"><img src="${o.logoUrl}" width="46" height="46" alt="Synergy Group Apparel" style="display:block;width:46px;height:46px;border:0" /></td>
               <td style="vertical-align:middle;font-family:sans-serif">
-                <div style="color:#fff;font-size:15px;font-weight:700;letter-spacing:0.02em;line-height:1.15">MODERN NIAGARA</div>
-                <div style="color:#fff;font-size:15px;font-weight:600;letter-spacing:0.02em;line-height:1.15">BUILDING SERVICES</div>
+                <div style="color:#fff;font-size:15px;font-weight:700;letter-spacing:0.02em;line-height:1.15">SYNERGY GROUP</div>
                 <div style="color:#cfe0ec;font-size:15px;font-weight:500;letter-spacing:0.16em;line-height:1.15">APPAREL</div>
               </td>
             </tr></table>`
-          : `<h1 style="color:#fff;margin:0;font-size:20px">Modern Niagara Business Services Apparel</h1>`}
+          : `<h1 style="color:#fff;margin:0;font-size:20px">Synergy Group Apparel</h1>`}
         ${o.orderNumber ? `<p style="color:#cfe0ec;margin:10px 0 0;font-size:13px;letter-spacing:0.04em">Order #${esc(o.orderNumber)}</p>` : ""}
       </div>
       <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">

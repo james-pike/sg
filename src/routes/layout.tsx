@@ -352,7 +352,7 @@ export const useSubmitOrder = routeAction$(
           secretKey: stripeKey!,
           amountCents: Math.round(cardAmount * 100),
           currency: "cad",
-          description: `Modern Niagara apparel order ${orderNumber} — balance after gift card`,
+          description: `Synergy Group apparel order ${orderNumber} — balance after gift card`,
           successUrl: `${siteUrl}/checkout/success/?session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${siteUrl}/checkout/cancelled/`,
           customerEmail: (employee.email || "").trim() || undefined,

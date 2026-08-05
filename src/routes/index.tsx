@@ -108,10 +108,10 @@ export default component$(() => {
               }}
             >
               <Carousel.Slide class="hero-carousel__slide">
-                <img src="/hero.jpg" alt="Modern Niagara hero" loading="eager" />
+                <img src="/hero.jpg" alt="Synergy Group Apparel hero" loading="eager" />
               </Carousel.Slide>
               <Carousel.Slide class="hero-carousel__slide hero-carousel__slide--van">
-                <img src="/hero-edmonton-van.jpg" alt="Modern Niagara service van" class="hero-carousel__van-img" loading="eager" />
+                <img src="/hero-edmonton-van.jpg" alt="Synergy Group Apparel service van" class="hero-carousel__van-img" loading="eager" />
               </Carousel.Slide>
             </Carousel.Scroller>
 
@@ -186,19 +186,19 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Modern Niagara Building Services Apparel",
+  title: "Synergy Group Apparel",
   meta: [
-    { name: "description", content: "Premium Branded Modern Niagara Building Services Apparel" },
+    { name: "description", content: "Premium Branded Synergy Group Apparel" },
     { name: "robots", content: "noindex, nofollow" },
     { name: "theme-color", content: "#ffffff" },
-    { property: "og:title", content: "Modern Niagara Building Services Apparel" },
-    { property: "og:description", content: "Premium Branded Modern Niagara Building Services Apparel" },
+    { property: "og:title", content: "Synergy Group Apparel" },
+    { property: "og:description", content: "Premium Branded Synergy Group Apparel" },
     { property: "og:type", content: "website" },
     { property: "og:url", content: "https://modernniagaraapparel.ca/" },
     { property: "og:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
     { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: "Modern Niagara Building Services Apparel" },
-    { name: "twitter:description", content: "Premium Branded Modern Niagara Building Services Apparel" },
+    { name: "twitter:title", content: "Synergy Group Apparel" },
+    { name: "twitter:description", content: "Premium Branded Synergy Group Apparel" },
     { name: "twitter:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
   ],
 };

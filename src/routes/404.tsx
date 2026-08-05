@@ -19,7 +19,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Not Found — Modern Niagara Building Services Apparel",
+  title: "Not Found — Synergy Group Apparel",
   meta: [
     { name: "robots", content: "noindex, nofollow" },
   ],

@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "name": "Modern Niagara Building Services Apparel",
-  "short_name": "Modern Niagara",
+  "name": "Synergy Group Apparel",
+  "short_name": "Synergy Group",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
-  "description": "Internal apparel ordering for Modern Niagara staff.",
+  "description": "Internal apparel ordering for Synergy Group staff.",
   "icons": [
     {
       "src": "/favicon-192.png",
