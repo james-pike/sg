@@ -834,6 +834,27 @@ export default component$(() => {
     cleanup(() => window.removeEventListener("toggle-menu", handler));
   }, { strategy: 'document-ready' });
 
+  // Keep the login panel a constant PROPORTION of the viewport at any browser
+  // zoom / window height. The panel is designed at fixed px, then scaled as one
+  // unit (logos, text, tiles together) by viewport-height ÷ reference, so it
+  // tracks the full-bleed photo behind it instead of ballooning relative to it
+  // as you zoom. Desktop zoom changes the layout-viewport height and fires
+  // 'resize', so recomputing there covers it.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup }) => {
+    const REF = 800; // reference height (px) where scale ≈ 1
+    const apply = () => {
+      const s = window.innerHeight / REF;
+      document.documentElement.style.setProperty(
+        "--login-scale",
+        String(Math.max(0.4, Math.min(2.2, s))),
+      );
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    cleanup(() => window.removeEventListener("resize", apply));
+  }, { strategy: 'document-ready' });
+
   // Settle the header's scroll-dependent state before the new route renders.
   // Qwik commits the DOM and sets the scroll to the top in one synchronous
   // block (see viewTransition={false} in root.tsx), so the new route's first
@@ -1094,7 +1115,7 @@ export default component$(() => {
                     />
                   </div>
                 ) : (
-                  <h1 class="login-card__title">{t("login.chooseportal", locale.value)}</h1>
+                  <h1 class="login-card__title">{t("login.storetitle", locale.value)}</h1>
                 )}
                 <p class="login-card__hint">{t("login.subtitle", locale.value)}</p>
 

@@ -33,9 +33,9 @@ export const PORTALS: Portal[] = [
   { id: "portal1", name: "Airtech", sub: "Synergy", logo: "/portals/portal1.png", accent: "#1f6fb2", dark: true, hero: "/airtech-hero.webp" },
   // All logos are reversed to white on a dark tile (matching Airtech), so every
   // portal is dark:true. Corflow's hero is a placeholder (its site is down).
-  { id: "portal2", name: "Corflow", sub: "Synergy", logo: "/portals/portal2.png", accent: "#ae1f2a", dark: true, hero: "/airtech-chillers.webp" },
-  { id: "portal3", name: "Wired", sub: "Synergy", logo: "/portals/portal3.png", accent: "#4f8a4d", dark: true, hero: "/wired-hero.webp" },
-  { id: "portal4", name: "Powered", sub: "Synergy", logo: "/portals/portal4.png", accent: "#d9a441", dark: true, hero: "/powered-hero.webp" },
+  { id: "portal2", name: "Corflow", sub: "Synergy", logo: "/corflow-lockup.png", accent: "#ae1f2a", dark: true, hero: "/airtech-chillers.webp" },
+  { id: "portal4", name: "Powered", sub: "Synergy", logo: "/powered-lockup.png", accent: "#d9a441", dark: true, hero: "/powered-hero.webp" },
+  { id: "portal3", name: "Wired", sub: "Synergy", logo: "/wired-lockup.png", accent: "#4f8a4d", dark: true, hero: "/wired-hero.webp" },
 ];
 
 export const PORTAL_IDS = PORTALS.map((p) => p.id);

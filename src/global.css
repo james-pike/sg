@@ -3328,7 +3328,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   object-fit: cover;
   object-position: 50% 50%;
   opacity: 0;
-  transition: opacity 1.1s ease;
+  transition: opacity 0.4s ease;
 }
 .login-showcase__img.is-active { opacity: 1; }
 /* The blend: opaque steel on the left where the controls live,
@@ -3355,18 +3355,40 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: transparent;
   box-shadow: none;
   flex-shrink: 0;
-  width: min(48%, 540px);
-  min-width: 380px;
+  /* Fixed width (not a % or vw) so the panel stays one constant size as the
+     window resizes/zooms — only the full-bleed photo behind it rescales. */
+  width: 480px;
+  max-width: 92vw;
+  /* Lock the panel's CENTER to 21% of viewport width. center = margin-left +
+     240px (half the 480px panel), so margin-left = 21vw − 240px puts the center
+     at exactly 21vw — the ±240px cancels, leaving a pure viewport fraction with
+     no fixed-px term. That keeps it horizontally fixed under zoom (just like the
+     50% vertical centering), rather than drifting as vw and px diverge. This
+     sits it in the left third, right edge near the rule-of-thirds line. */
+  margin-left: calc(21vw - 240px);
   display: flex;
   align-items: center;
   animation: slideInLeft 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .login-card {
   width: 100%;
-  padding: clamp(1.75rem, 4vw, 3.5rem);
-  padding-left: clamp(2rem, 5.5vw, 6.5rem);
-  padding-right: clamp(1.25rem, 2.5vw, 2rem);
+  /* Grounded semi-transparent panel so the controls read as a contained card
+     rather than floating loose on the photo. */
+  padding: 2.5rem 2.25rem;
+  background: rgba(11, 22, 30, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   color: #eef4f8;
+  /* Scale the whole panel — logos, text, tiles, spacing — as one unit so it
+     stays a constant proportion of the viewport height at any browser zoom,
+     tracking the full-bleed photo behind it. --login-scale is driven by JS
+     (viewport height ÷ reference) and updated on resize/zoom. */
+  transform: scale(var(--login-scale, 1));
+  transform-origin: center center;
+  will-change: transform;
 }
 
 /* Signature — the eyebrow set like a stencilled equipment tag. */
@@ -3383,8 +3405,14 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-card__title {
   margin: 0;
-  font-size: clamp(2.15rem, 3.6vw, 3.05rem);
-  font-weight: 800; line-height: 1.02;
+  /* Match the height of the portal logo block (.login-card__brand) so swapping
+     the title for the selected portal's logo doesn't shift the panel height. */
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 2.35rem;
+  font-weight: 800; line-height: 1.05;
   letter-spacing: -0.02em; text-transform: uppercase;
   color: #fff;
   text-shadow: 0 2px 26px rgba(0, 0, 0, 0.4);
@@ -3393,8 +3421,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
    (dark portals) sit straight on the panel; dark logos get a white plate so
    they stay legible — mirroring the portal tiles. */
 .login-card__brand {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  /* Same height as .login-card__title so the title→logo swap causes no shift. */
+  min-height: 90px;
   margin: 0;
   animation: fadeIn 0.45s ease;
 }
@@ -3406,7 +3436,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-card__brandmark {
   display: block;
-  height: clamp(56px, 6.5vw, 88px);
+  height: 72px;
   width: auto;
   max-width: 100%;
 }
@@ -3419,8 +3449,15 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 
 /* Mobile — panel fills the screen; the photo still reads through a
    heavier top-to-bottom scrim. */
+/* Tablet — center the panel instead of pinning it to the left third. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .login-modal { margin-left: auto; margin-right: auto; }
+}
+
 @media (max-width: 767px) {
-  .login-modal { width: 100%; min-width: 0; }
+  .login-modal { width: 100%; max-width: none; margin-left: 0; margin-right: 0; }
+  /* Phone: the panel fills the width, so keep it 1:1 (no viewport scaling). */
+  .login-card { transform: none; }
   .login-showcase__img { object-position: 58% 50%; }
   .login-showcase__scrim {
     background: linear-gradient(180deg, rgba(9,20,28,0.66) 0%, rgba(9,20,28,0.86) 52%, rgba(9,20,28,0.95) 100%);
