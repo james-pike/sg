@@ -32,7 +32,7 @@ const translations = {
   "login.subtitle": { en: "Login to access apparel", fr: "Connectez-vous pour accéder aux vêtements" },
   "login.chooseportal": { en: "Apparel Login", fr: "Connexion vêtements" },
   "login.eyebrow": { en: "Employee Store", fr: "Boutique employé" },
-  "login.portalsubtitle": { en: "Select a portal, then enter its password.", fr: "Sélectionnez un portail, puis entrez son mot de passe." },
+  "login.portalsubtitle": { en: "Select a portal to enter password", fr: "Sélectionnez un portail pour entrer le mot de passe" },
   "login.selectedportal": { en: "Selected", fr: "Sélectionné" },
   "login.username": { en: "Username", fr: "Nom d'utilisateur" },
   "login.username.placeholder": { en: "Enter username", fr: "Entrez le nom d'utilisateur" },

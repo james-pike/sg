@@ -69,7 +69,7 @@ export default component$(() => {
   // Hero temporarily disabled so the catalog (and its sticky tab strip) sits at
   // the top of the page by default. Flip to true to restore — and re-enable the
   // header's hero slide-in in layout.tsx (search "SHOW_HERO") to match.
-  const SHOW_HERO = true;
+  const SHOW_HERO = false;
 
   return (
     <div class="home-page">

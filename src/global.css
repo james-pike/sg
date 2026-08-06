@@ -3524,7 +3524,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-modal__portal-name {
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.01em;
-  text-transform: none; color: #4d9fd6;
+  text-transform: none; color: #2f8fd4;
 }
 .login-modal__field input {
   padding: 13px 15px; border-radius: 9px;
@@ -3547,17 +3547,17 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .login-modal__submit.btn {
   width: 100%; justify-content: center; margin-top: 0.55rem;
   padding: 14px 20px; border: none; border-radius: 9px;
-  background: #1f6fb2; color: #fff;
+  background: #005596; color: #fff;
   font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.9rem;
   text-shadow: none;
-  box-shadow: 0 8px 22px rgba(31, 111, 178, 0.32);
+  box-shadow: 0 8px 22px rgba(0, 85, 150, 0.32);
   transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 .login-modal__submit.btn:hover {
-  background: #2f83c9; color: #fff;
-  box-shadow: 0 10px 28px rgba(31, 111, 178, 0.46);
+  background: #0a68b0; color: #fff;
+  box-shadow: 0 10px 28px rgba(0, 85, 150, 0.46);
 }
-.login-modal__submit.btn:active { transform: translateY(1px); }
+.login-modal__submit.btn:active { filter: brightness(0.96); }
 .login-modal__submit.btn:disabled {
   background: rgba(255, 255, 255, 0.16); color: rgba(255, 255, 255, 0.5);
   box-shadow: none; cursor: not-allowed;
@@ -13841,10 +13841,11 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
 }
+/* Hover: lighten the tile background only — no lift/scale (a transform here
+   re-rasterizes the scaled card and makes the selected logo shimmer). */
 .login-portal:hover {
-  transform: translateY(-2px);
-  border-color: rgba(31, 111, 178, 0.8);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.36);
+  background: #1d3141;
+  border-color: rgba(255, 255, 255, 0.22);
 }
 .login-portal:focus-visible {
   outline: 2px solid #1f6fb2;
