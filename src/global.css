@@ -13908,6 +13908,17 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   width: auto !important;
   max-width: none !important;
 }
+/* The Powered lockup's wordmark sits smaller within its artwork, so it reads a
+   touch small at the shared height — nudge just this one up. Targeted by the
+   logo filename so only the Powered portal is affected. */
+.site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="powered-lockup"] {
+  height: 60px !important;
+}
+/* The Powered lockup's wordmark is a hair smaller, so trim APPAREL beside it to
+   match. Adjacent-sibling of the Powered logo, so only Powered is affected. */
+.site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="powered-lockup"] + .brand-cluster__apparel {
+  font-size: 1.13rem !important;
+}
 .site-footer .brand-cluster--lockup .brand-cluster__mark--lockup {
   height: 42px !important;
   width: auto !important;
@@ -13934,6 +13945,9 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 @media (max-width: 600px) {
   .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup {
     height: 34px !important;
+  }
+  .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="powered-lockup"] {
+    height: 37px !important;
   }
   .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__apparel {
     font-size: 0.92rem !important; margin-left: -4px !important;

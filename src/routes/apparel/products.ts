@@ -5,12 +5,12 @@ import type { Locale } from "../../i18n";
 export const allProducts = [
   {
     "sku": "SG-1",
-    "name": "Gildan Short Sleeve T-Shirt - Navy",
+    "name": "Gildan Short Sleeve T-Shirt",
     "category": "T-Shirts",
     "sizes": "S - 4XL / LT - 4XLT",
     "badge": "",
     "colors": [
-      "#2c3e50"
+      "#1a1a18"
     ],
     "price": 9.5,
     "img": "/sku/tshirt.png",
@@ -22,11 +22,13 @@ export const allProducts = [
   },
   {
     "sku": "SG-2",
-    "name": "Gildan Ultra Cotton® Pocket T-Shirt - Black",
+    "name": "Gildan Ultra Cotton® Pocket T-Shirt",
     "category": "T-Shirts",
     "sizes": "S - 3XL",
     "badge": "",
-    "colors": [],
+    "colors": [
+      "#1a1a18"
+    ],
     "price": 16,
     "img": "/tshirtblack.png",
     "imgs": [
@@ -37,12 +39,12 @@ export const allProducts = [
   },
   {
     "sku": "SG-3",
-    "name": "Gildan Long Sleeve T-Shirt - Navy",
+    "name": "Gildan Long Sleeve T-Shirt",
     "category": "T-Shirts",
     "sizes": "S - 5XL",
     "badge": "",
     "colors": [
-      "#2c3e50"
+      "#1a1a18"
     ],
     "price": 19.5,
     "img": "/2400.jpg",
