@@ -7,6 +7,8 @@ import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { retrieveCheckoutSession } from "../../../lib/stripe";
+import { useAuthCheck } from "../../layout";
+import { portalBrand } from "../../../portals";
 
 export const useSession = routeLoader$(async ({ query, env }) => {
   const sessionId = query.get("session_id") || "";
@@ -58,6 +60,6 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: "Order confirmed — Synergy Group Apparel",
-};
+export const head: DocumentHead = ({ resolveValue }) => ({
+  title: `Order confirmed — ${portalBrand(resolveValue(useAuthCheck).loginType)}`,
+});

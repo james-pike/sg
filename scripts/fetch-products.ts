@@ -21,25 +21,13 @@ async function fetchAndWrite() {
   // truth for most fields, but these title/category tweaks live here so they
   // survive every regeneration — editing products.ts directly does NOT persist
   // (this script overwrites it on every build). Update the DB to retire one.
-  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string }>> = {
-    "MN-5": { name: "Flexfit Trucker Ball Cap - Navy" },
-    "MN-7": { name: "Men's Carhartt Winter Jacket - Navy" },
-    "MN-9": { category: "Sweaters" },   // Pullover Hoodie: not a jacket
-    "MN-10": { category: "Sweaters" },  // Full Zip Hoodie: not a jacket
-    "MN-11": { name: "Men's FootJoy Speckle Print Polo", category: "Polos" },
-    "MN-12": { name: "Women's FootJoy Speckle Print Polo", category: "Polos" },
-    "MN-15": { category: "Polos" },   // Men's Under Armour Tech Polo
-    "MN-16": { category: "Polos" },   // Women's Under Armour Tech Polo
-    "MN-13": { sizes: "25 oz" },        // Yeti Rambler: only the 25oz size
-    "MN-14": { sizes: "35L" },          // Yeti Tundra Cooler: only the 35L size
-    "MN-17": { name: "Insulated Two Compartment Cooler" },
-    // Duck Bib: 3 fits — Regular S-5XL, Short (MS-4XLS), Tall (MT-4XLT).
-    "MN-8": { sizes: "S - 5XL / MS - 4XLS / MT - 4XLT" },
-  };
+  // The synergygroup rows are seeded already-clean (see scripts/seed-synergygroup.ts),
+  // so no overrides are needed yet.
+  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string }>> = {};
 
   try {
     const result = await db.execute(
-      "SELECT * FROM products WHERE vendor = 'modernniagara' ORDER BY sort_order ASC"
+      "SELECT * FROM products WHERE vendor = 'synergygroup' ORDER BY sort_order ASC"
     );
 
     const products = result.rows.map((row: any) => ({

@@ -21,10 +21,39 @@ export interface PortalImageOverride {
 }
 
 export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverride>> = {
-  portal1: {},
-  portal2: {},
-  portal3: {},
-  portal4: {},
+  // portal1 = Airtech, portal2 = Corflow, portal3 = Wired, portal4 = Powered.
+  portal1: {
+    "SG-1": { img: "/portals/g2000-as.jpg", imgs: ["/portals/g2000-as.jpg"] },
+    "SG-2": { img: "/portals/g2300-as.jpg", imgs: ["/portals/g2300-as.jpg"] },
+    "SG-3": { img: "/portals/g2400-as.jpg", imgs: ["/portals/g2400-as.jpg"] },
+    "SG-11": { img: "/88194-as.png", imgs: ["/88194-as.png"] },
+  },
+  portal2: {
+    "SG-1": { img: "/portals/g2000-cf.jpg", imgs: ["/portals/g2000-cf.jpg"] },
+    "SG-2": { img: "/portals/g2300-cf.jpg", imgs: ["/portals/g2300-cf.jpg"] },
+    "SG-3": { img: "/portals/g2400-cf.jpg", imgs: ["/portals/g2400-cf.jpg"] },
+    "SG-11": { img: "/88194-cf.png", imgs: ["/88194-cf.png"] },
+    "SG-12": { img: "/portals/l00550-cf.png", imgs: ["/portals/l00550-cf.png"] },
+    "SG-13": { img: "/portals/122307-cf.png", imgs: ["/portals/122307-cf.png"] },
+    "SG-14": { img: "/portals/L00545-cf.webp", imgs: ["/portals/L00545-cf.webp"] },
+    "SG-15": { img: "/portals/L00555-cf.webp", imgs: ["/portals/L00555-cf.webp"] },
+  },
+  portal3: {
+    "SG-1": { img: "/portals/g2000-ws.jpg", imgs: ["/portals/g2000-ws.jpg"] },
+    "SG-2": { img: "/portals/g2300-ws.jpg", imgs: ["/portals/g2300-ws.jpg"] },
+    "SG-3": { img: "/portals/g2400-ws.jpg", imgs: ["/portals/g2400-ws.jpg"] },
+    "SG-11": { img: "/88194-ws.png", imgs: ["/88194-ws.png"] },
+  },
+  portal4: {
+    "SG-1": { img: "/portals/g2000-ps.jpg", imgs: ["/portals/g2000-ps.jpg"] },
+    "SG-2": { img: "/portals/g2300-ps.jpg", imgs: ["/portals/g2300-ps.jpg"] },
+    "SG-3": { img: "/portals/g2400-ps.jpg", imgs: ["/portals/g2400-ps.jpg"] },
+    "SG-11": { img: "/88194-ps.png", imgs: ["/88194-ps.png"] },
+    "SG-12": { img: "/portals/l00550-ps.png", imgs: ["/portals/l00550-ps.png"] },
+    "SG-13": { img: "/portals/122307-ps.png", imgs: ["/portals/122307-ps.png"] },
+    "SG-14": { img: "/portals/L00545-ps.webp", imgs: ["/portals/L00545-ps.webp"] },
+    "SG-15": { img: "/portals/L00555-ps.webp", imgs: ["/portals/L00555-ps.webp"] },
+  },
 };
 
 import { allProducts, type Product } from "./routes/apparel/products";

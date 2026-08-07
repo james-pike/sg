@@ -46,3 +46,9 @@ export const DEFAULT_PORTAL = PORTALS[0];
 export function getPortal(id?: string | null): Portal {
   return PORTALS.find((p) => p.id === id) ?? DEFAULT_PORTAL;
 }
+
+/** Full brand name for titles/metadata, e.g. "Corflow Synergy Apparel". */
+export function portalBrand(id?: string | null): string {
+  const p = getPortal(id);
+  return `${p.name} ${p.sub} Apparel`;
+}

@@ -5,6 +5,8 @@
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { useAuthCheck } from "../../layout";
+import { portalBrand } from "../../../portals";
 
 export default component$(() => {
   return (
@@ -24,6 +26,6 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: "Payment cancelled — Synergy Group Apparel",
-};
+export const head: DocumentHead = ({ resolveValue }) => ({
+  title: `Payment cancelled — ${portalBrand(resolveValue(useAuthCheck).loginType)}`,
+});

@@ -2,10 +2,12 @@ import { component$, useContext } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { Link } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../i18n";
+import { useAuthCheck } from "../layout";
+import { portalBrand } from "../../portals";
 
 export default component$(() => {
   const locale = useContext(LocaleContext);
-  const email = "info@modernniagaraapparel.ca";
+  const email = "info@synergygroupapparel.ca";
   const body = t("privacy.body", locale.value);
   const [beforeResend, afterResend = ""] = body.split("Resend");
   const [middle = "", afterEmail = ""] = afterResend.split(email);
@@ -50,6 +52,6 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: "Privacy Policy — Synergy Group Apparel",
-};
+export const head: DocumentHead = ({ resolveValue }) => ({
+  title: `Privacy Policy — ${portalBrand(resolveValue(useAuthCheck).loginType)}`,
+});

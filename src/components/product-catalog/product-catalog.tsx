@@ -16,7 +16,10 @@ const VIEW_MODES: { key: number | "list"; label: string; icon: string }[] = [
 ];
 
 
-const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"];
+// Tabs for the sg catalog — must match the category values the synergygroup
+// products actually use (see scripts/seed-synergygroup.ts), otherwise a tab
+// filters to an empty list. Add "SWAG" etc. back here when such products exist.
+const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "T-Shirts", "Polos", "Headwear"];
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
@@ -456,8 +459,7 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     }
   });
 
-  // "New Hire Kit" is always shown even before any products are tagged into it.
-  const ALWAYS_SHOW = new Set(["All", "New Hire Kit"]);
+  const ALWAYS_SHOW = new Set(["All"]);
 
   const visibleCategories = useComputed$(() => {
     if (isTech.value) return ["Work Wear"];

@@ -6,7 +6,8 @@ import { LocaleContext, t } from "../../../i18n";
 import { allProducts, colorName, categoryLabel } from "../products";
 import { portalizeProduct } from "../../../portal-images";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../utils";
-import { LoginTypeContext } from "../../layout";
+import { LoginTypeContext, useAuthCheck } from "../../layout";
+import { portalBrand } from "../../../portals";
 import { ProductImage } from "../../../components/product-image/product-image";
 
 export default component$(() => {
@@ -524,9 +525,14 @@ export default component$(() => {
           safety: ["Flame Resistant", "Shirts", "Hats"],
         };
         const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
-        const inVisible = visible.includes(p.category);
+        const sameCategory = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8);
+        // Show a same-category run only when the product's category is a catalog
+        // tab AND it actually has siblings — otherwise fall back to a broad "More
+        // Apparel" list. (A lone-category product, e.g. the only Sweater, would
+        // otherwise hand the carousel zero slides and crash it.)
+        const inVisible = visible.includes(p.category) && sameCategory.length > 0;
         const related = (inVisible
-          ? allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8)
+          ? sameCategory
           : allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && visible.includes(r.category)).slice(0, 8)
         ).map((r) => portalizeProduct(r, loginType.value));
         const headingSuffix = inVisible ? catLabel : t("nav.apparel", locale.value);
@@ -619,9 +625,10 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = ({ params }) => {
+export const head: DocumentHead = ({ params, resolveValue }) => {
   const product = allProducts.find((p) => p.sku === params.sku);
+  const brand = portalBrand(resolveValue(useAuthCheck).loginType);
   return {
-    title: product ? `${product.name} - Synergy Group Apparel` : "Product - Synergy Group Apparel",
+    title: product ? `${product.name} - ${brand}` : `Product - ${brand}`,
   };
 };

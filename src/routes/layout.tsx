@@ -1117,7 +1117,6 @@ export default component$(() => {
                 ) : (
                   <h1 class="login-card__title">{t("login.storetitle", locale.value)}</h1>
                 )}
-                <p class="login-card__hint">{t("login.subtitle", locale.value)}</p>
 
                 {/* Step 1 — pick one of the 4 company portals. */}
                 <div class="login-portals" role="radiogroup" aria-label={t("login.chooseportal", locale.value)}>
@@ -1179,13 +1178,9 @@ export default component$(() => {
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
       <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
         <div class="site-header__inner">
-          <Link href="/" class="site-header__logo brand-cluster brand-cluster--small">
-            <img class="brand-cluster__mark brand-cluster__mark--img" src={portal.value.logo} alt="" width="100" height="100" loading="eager" decoding="sync" />
-            <div class="brand-cluster__words">
-              <span class="brand-cluster__word">{portal.value.name}</span>
-              <span class="brand-cluster__word brand-cluster__word--sub">{portal.value.sub}</span>
-              <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
-            </div>
+          <Link href="/" class="site-header__logo brand-cluster brand-cluster--small brand-cluster--lockup">
+            <img class="brand-cluster__mark brand-cluster__mark--img brand-cluster__mark--lockup" src={portal.value.logo} alt={`${portal.value.name} ${portal.value.sub}`} width="400" height="100" loading="eager" decoding="sync" />
+            <span class="brand-cluster__word brand-cluster__word--muted brand-cluster__apparel">{t("logo.apparel", locale.value).toUpperCase()}</span>
           </Link>
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
@@ -1486,13 +1481,9 @@ export default component$(() => {
 
       <footer class="site-footer">
         <div class="site-footer__inner">
-          <div class="site-footer__brand brand-cluster">
-            <img class="brand-cluster__mark brand-cluster__mark--img" src={portal.value.logo} alt="" width="100" height="100" loading="lazy" decoding="async" />
-            <div class="brand-cluster__words">
-              <span class="brand-cluster__word">{portal.value.name}</span>
-              <span class="brand-cluster__word brand-cluster__word--sub">{portal.value.sub}</span>
-              <span class="brand-cluster__word brand-cluster__word--muted">{t("logo.apparel", locale.value).toUpperCase()}</span>
-            </div>
+          <div class="site-footer__brand brand-cluster brand-cluster--lockup">
+            <img class="brand-cluster__mark brand-cluster__mark--img brand-cluster__mark--lockup" src={portal.value.logo} alt={`${portal.value.name} ${portal.value.sub}`} width="400" height="100" loading="lazy" decoding="async" />
+            <span class="brand-cluster__word brand-cluster__word--muted brand-cluster__apparel">{t("logo.apparel", locale.value).toUpperCase()}</span>
           </div>
           <div class="site-footer__col">
           {loginType.value === "safety" && (
@@ -1516,7 +1507,7 @@ export default component$(() => {
           <div class="site-footer__contact-block">
             <div class="site-footer__contact site-footer__contact--inline">
               <svg class="site-footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-              <a href="mailto:info@modernniagaraapparel.ca">info@modernniagaraapparel.ca</a>
+              <a href="mailto:info@synergygroupapparel.ca">info@synergygroupapparel.ca</a>
             </div>
             <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
           </div>

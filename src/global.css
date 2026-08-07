@@ -3423,7 +3423,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .login-card__brand {
   display: flex;
   align-items: center;
-  /* Same height as .login-card__title so the title→logo swap causes no shift. */
+  justify-content: center;
+  /* At least as tall as .login-card__title so the title→logo swap causes no
+     shift; grows taller as the full-width logo needs. */
   min-height: 90px;
   margin: 0;
   animation: fadeIn 0.45s ease;
@@ -3436,8 +3438,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-card__brandmark {
   display: block;
-  height: 72px;
-  width: auto;
+  /* Span the full card content width so the lockup lines up with the portal
+     grid below it (same left/right margin), centered by the flex parent. */
+  width: 100%;
+  height: auto;
   max-width: 100%;
 }
 .login-card__hint {
@@ -13878,3 +13882,60 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 }
 .hero__upper .hero__text .hero__brandmark--img { transform: none !important; }
 .hero-card-header__logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* ── Portal logo lockups (header + footer) ──────────────────────────────────
+   The portal logos are wide horizontal lockups (~4:1), not square marks. The
+   old brand-cluster crammed them into a ~44px square box (so they read tiny)
+   and set the full "AIRTECH / SYNERGY" wordmark in text beside them — doubling
+   the brand. The lockup already carries the wordmark, so we drop that text,
+   size the image by HEIGHT with auto width so the whole lockup reads at scale,
+   and set a single APPAREL tag beside it. These win over the many per-breakpoint
+   square-mark rules via later source order + !important. */
+/* Baseline-align so APPAREL sits on the lockup's wordmark baseline. An image's
+   flex baseline is its bottom edge, and the baked wordmark's baseline sits ~1px
+   above that edge — so this lands APPAREL on the same line on every surface
+   (header 46px, footer 42px) with no per-surface margin tuning. */
+.brand-cluster--lockup { gap: 0 !important; align-items: baseline !important; }
+.brand-cluster__mark--lockup {
+  border-radius: 0 !important;
+  filter: none !important;      /* reversed lockups carry their own contrast */
+  object-fit: contain;
+}
+/* Header lockup — a lot bigger than the old squished square. Width:auto here
+   (not on the bare class) so it out-specifies the old square width rules. */
+.site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup {
+  height: 46px !important;
+  width: auto !important;
+  max-width: none !important;
+}
+.site-footer .brand-cluster--lockup .brand-cluster__mark--lockup {
+  height: 42px !important;
+  width: auto !important;
+  max-width: none !important;
+}
+/* APPAREL reads as a continuation of the wordmark — matched to the lighter
+   "SYNERGY" half of the lockup (light weight, muted, matching cap height, tight
+   tracking) and dropped onto the same baseline. High specificity so it beats
+   the old 1.3rem wordmark sizing. */
+.site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__apparel,
+.site-footer .brand-cluster--lockup .brand-cluster__apparel {
+  /* Cap height matched to the lockup wordmark (~15-16px), light weight and
+     tight tracking like the "SYNERGY" half. */
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  opacity: 1;
+  /* Only a horizontal pull into the lockup's transparent tail so APPAREL butts
+     against SYNERGY; vertical handled by baseline alignment above. */
+  margin: 0 0 0 0 !important;
+}
+@media (max-width: 600px) {
+  .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup {
+    height: 34px !important;
+  }
+  .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__apparel {
+    font-size: 0.92rem !important; margin-left: -4px !important;
+  }
+}

@@ -3,8 +3,8 @@ import { Carousel } from "@qwik-ui/headless";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../i18n";
 import { ProductCatalog } from "../components/product-catalog/product-catalog";
-import { LoginTypeContext } from "./layout";
-import { getPortal } from "../portals";
+import { LoginTypeContext, useAuthCheck } from "./layout";
+import { getPortal, portalBrand } from "../portals";
 
 export default component$(() => {
   const locale = useContext(LocaleContext);
@@ -185,20 +185,23 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: "Synergy Group Apparel",
-  meta: [
-    { name: "description", content: "Premium Branded Synergy Group Apparel" },
-    { name: "robots", content: "noindex, nofollow" },
-    { name: "theme-color", content: "#ffffff" },
-    { property: "og:title", content: "Synergy Group Apparel" },
-    { property: "og:description", content: "Premium Branded Synergy Group Apparel" },
-    { property: "og:type", content: "website" },
-    { property: "og:url", content: "https://modernniagaraapparel.ca/" },
-    { property: "og:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
-    { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: "Synergy Group Apparel" },
-    { name: "twitter:description", content: "Premium Branded Synergy Group Apparel" },
-    { name: "twitter:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
-  ],
+export const head: DocumentHead = ({ resolveValue }) => {
+  const brand = portalBrand(resolveValue(useAuthCheck).loginType);
+  return {
+    title: brand,
+    meta: [
+      { name: "description", content: `Premium Branded ${brand}` },
+      { name: "robots", content: "noindex, nofollow" },
+      { name: "theme-color", content: "#ffffff" },
+      { property: "og:title", content: brand },
+      { property: "og:description", content: `Premium Branded ${brand}` },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://modernniagaraapparel.ca/" },
+      { property: "og:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: brand },
+      { name: "twitter:description", content: `Premium Branded ${brand}` },
+      { name: "twitter:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
+    ],
+  };
 };

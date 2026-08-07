@@ -2,6 +2,8 @@ import { component$, useContext } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../i18n";
+import { useAuthCheck } from "./layout";
+import { portalBrand } from "../portals";
 
 export default component$(() => {
   const locale = useContext(LocaleContext);
@@ -18,9 +20,9 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: "Not Found — Synergy Group Apparel",
+export const head: DocumentHead = ({ resolveValue }) => ({
+  title: `Not Found — ${portalBrand(resolveValue(useAuthCheck).loginType)}`,
   meta: [
     { name: "robots", content: "noindex, nofollow" },
   ],
-};
+});

@@ -26,13 +26,17 @@ const RULES: { dir: string; maxWidth: number }[] = [
   { dir: "public/wt", maxWidth: 880 },
   { dir: "public/sku", maxWidth: 880 },
   { dir: "public/swag", maxWidth: 880 },
+  // Per-portal product shots (e.g. g2000-cf.jpg) — same size cap as other
+  // product images. The portal logo files here are protected by SKIP below.
+  { dir: "public/portals", maxWidth: 880 },
   { dir: "public", maxWidth: 1600 },
 ];
 
 const IMAGE_RE = /\.(jpe?g|png)$/i;
 // The sign texture is inlined into the CSS as a data URI; leave the source file
-// alone. Favicons are tiny and format-sensitive.
-const SKIP = /favicon|iron-grunge/i;
+// alone. Favicons are tiny and format-sensitive. The portalN.png brand logos
+// must stay crisp/full-res — never resize or re-encode them.
+const SKIP = /favicon|iron-grunge|portal[1-4]\.png/i;
 
 type Manifest = Record<string, string>;
 const manifest: Manifest = existsSync(MANIFEST)
