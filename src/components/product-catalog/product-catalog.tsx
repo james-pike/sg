@@ -19,7 +19,7 @@ const VIEW_MODES: { key: number | "list"; label: string; icon: string }[] = [
 // Tabs for the sg catalog — must match the category values the synergygroup
 // products actually use (see scripts/seed-synergygroup.ts), otherwise a tab
 // filters to an empty list. Add "SWAG" etc. back here when such products exist.
-const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "T-Shirts", "Polos", "Headwear"];
+const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "T-Shirts", "Polos", "Headwear", "Safety"];
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
@@ -112,7 +112,8 @@ function sizesOf(p: Product): string[] {
 // up as a filter (the facet list is BRAND_LIST ∩ brands-present).
 const BRAND_LIST = [
   // Clothing brands first...
-  "Carhartt", "Cole Harbour", "Flexfit", "FootJoy", "Gildan",
+  "Canada Sportswear", "Carhartt", "Champion", "Cole Harbour", "Core 365",
+  "CX2", "Flexfit", "FootJoy", "Gildan", "Harriton", "Sportsman", "Trimark",
   "Under Armour", "Wilson", "Yeti",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
   "2 Buds", "Nexgen", "Nomad", "Srixon", "Tranzip", "Cap America",
@@ -127,6 +128,20 @@ const BRAND_BY_SKU: Record<string, string> = {
   "MN-12": "FootJoy", // Women's Speckle Print Polo
   "MN-29": "Nexgen",  // Microfiber Waffle Towel
   "MN-24": "2 Buds", // 2 Buds Pro Wireless ANC Earbuds (ANC = feature, not brand)
+
+  // Synergy Group SKUs whose brand isn't in the display name (from the product
+  // spec / seed-synergygroup.ts). Champion (SG-17) and Sportsman (SG-22) match
+  // by name, so they need no override.
+  "SG-11": "Core 365",          // Optimum #88194 dress shirt
+  "SG-12": "Canada Sportswear", // CSW 24/7 "Vault" #L00550
+  "SG-13": "Harriton",          // Advantage Snag Protection #M748
+  "SG-14": "Canada Sportswear", // CSW 24/7 "Flux" #L00545
+  "SG-15": "Canada Sportswear", // CSW 24/7 "Surfer" #L00555
+  "SG-16": "CX2",               // Hi-Vis "Scout" #L01150 vest
+  "SG-20": "Harriton",          // Advantage IL SS work shirt #M585
+  "SG-21": "Harriton",          // Advantage IL workshirt #M585L
+  "SG-23": "Trimark",           // Maxson softshell #19534
+  "SG-26": "Trimark",           // Stirling SS work shirt #17745
 };
 function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
@@ -496,11 +511,10 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     const shoeSizes = [...sizes]
       .filter((s) => !SIZE_ORDER.includes(s))
       .sort((x, y) => Number(x) - Number(y));
-    // Headwear (Hats) and the Office/New Hire Kit have no gendered fit, so the
-    // Fit facet is suppressed for those categories.
-    const NO_FIT_CATS = new Set(["Hats", "New Hire Kit"]);
+    // Every product in this catalog is men's/unisex, so the Fit facet carries no
+    // signal — suppress it entirely (empty list hides the sidebar section).
     return {
-      genders: NO_FIT_CATS.has(activeCat.value) ? [] : GENDER_ORDER.filter((g) => genders.has(g)),
+      genders: [] as string[],
       sizes: [...SIZE_ORDER.filter((s) => sizes.has(s)), ...shoeSizes],
       brands: BRAND_LIST.filter((b) => brands.has(b)),
     };

@@ -211,8 +211,8 @@ dialog:not([open]) {
 
 .apparel-page { overflow: clip; }
 .apparel-page.dot-pattern::before {
-  /* A touch lighter than before (was 0.06) so the margin dots read softer. */
-  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1.2px, transparent 1.2px);
+  /* Softer margin dots (was 0.06 → 0.05 → 0.03) so they read as a faint texture. */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1.2px, transparent 1.2px);
   z-index: 1;
 }
 
@@ -10220,7 +10220,7 @@ details[open] > .cart-drawer__checkout-title::after {
        done in the background stack, so no mask touches the page content. */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.04) 1.7px, transparent 1.7px),
       var(--wt-surround);
     background-size: 100% 100%, 15px 15px, auto;
     background-position: 0 0, 0 0, center;
@@ -10244,7 +10244,7 @@ details[open] > .cart-drawer__checkout-title::after {
        (never under the logout/search controls). */
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
-      radial-gradient(circle, rgba(0, 0, 0, 0.07) 1.7px, transparent 1.7px),
+      radial-gradient(circle, rgba(0, 0, 0, 0.04) 1.7px, transparent 1.7px),
       var(--wt-surround) !important;
     background-size: 100% 100%, 15px 15px, auto !important;
     background-position: 0 0, 0 0, center !important;

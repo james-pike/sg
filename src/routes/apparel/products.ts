@@ -61,93 +61,29 @@ export const allProducts = [
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
-      "#2c3e50",
-      "#1a1a18",
-      "#ffffff",
-      "#b8b8b8",
-      "#6b3fa0",
-      "#c0392b",
-      "#1e40af"
+      "#1a1a18"
     ],
     "price": 65,
-    "img": "/uapolomodel.webp",
+    "img": "/portals/1370399-as.jpg",
     "imgs": [
-      "/uapolomodel.webp"
+      "/portals/1370399-as.jpg"
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
   },
   {
-    "sku": "SG-5",
-    "name": "Women's Under Armour Tech Polo",
-    "category": "Polos",
-    "sizes": "XS - 2XL",
-    "badge": "",
-    "colors": [
-      "#2c3e50",
-      "#1a1a18",
-      "#ffffff",
-      "#b8b8b8",
-      "#6b3fa0",
-      "#c0392b",
-      "#1e40af"
-    ],
-    "price": 65,
-    "img": "/sku/ua-womens.jpg",
-    "imgs": [
-      "/sku/ua-womens.jpg"
-    ],
-    "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
-    "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370431"
-  },
-  {
-    "sku": "SG-6",
-    "name": "Flexfit Trucker Ball Cap - Navy",
-    "category": "Headwear",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 23.5,
-    "img": "/swag/cap.png",
-    "imgs": [
-      "/swag/cap.png"
-    ],
-    "material": "Poly/spandex blend with performance mesh back",
-    "details": "Mid-profile structured trucker cap, shapeable pre-curved visor, UV protection, moisture wicking, 110 Technology® sweatband, adjustable plastic snapback, grey under visor, #i8502"
-  },
-  {
-    "sku": "SG-7",
-    "name": "Carhartt Flip Toque - Navy",
-    "category": "Headwear",
-    "sizes": "One Size",
-    "badge": "",
-    "colors": [
-      "#2c3e50"
-    ],
-    "price": 18.5,
-    "img": "/sku/toque.png",
-    "imgs": [
-      "/sku/toque.png"
-    ],
-    "material": "100% acrylic rib knit",
-    "details": "Stretchy thick knit, fold-up cuff with Carhartt patch, one-size-fits-most, #A18"
-  },
-  {
     "sku": "SG-8",
-    "name": "Carhartt Winter Jacket - Navy",
+    "name": "Carhartt Winter Jacket - Black",
     "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
-      "#2c3e50"
+      "#1a1a18"
     ],
     "price": 198.49,
-    "img": "/sku/mwinterjacket.png",
+    "img": "/portals/106674-as.png",
     "imgs": [
-      "/sku/mwinterjacket.png",
-      "/sku/winterjacket.png"
+      "/portals/106674-as.png"
     ],
     "material": "12 oz 100% ringspun cotton duck shell, quilted nylon lining, Arctic-weight polyester insulation",
     "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
@@ -159,9 +95,7 @@ export const allProducts = [
     "sizes": "XS - 6XL",
     "badge": "",
     "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#2c3e50"
+      "#1a1a18"
     ],
     "price": 65,
     "img": "/j7603model.webp",
@@ -173,29 +107,9 @@ export const allProducts = [
     "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
   },
   {
-    "sku": "SG-10",
-    "name": "Women's Cole Harbour Soft Shell Jacket",
-    "category": "Jackets",
-    "sizes": "XS - 4XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18",
-      "#6e6e6e",
-      "#2c3e50"
-    ],
-    "price": 65,
-    "img": "/womensjacket1.webp",
-    "imgs": [
-      "/womensjacket1.webp",
-      "/sku/women-jacket.jpg"
-    ],
-    "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
-    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #L7603"
-  },
-  {
     "sku": "SG-11",
     "name": "Men's Optimum Short Sleeve Twill Dress Shirt",
-    "category": "T-Shirts",
+    "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
     "colors": [
@@ -276,6 +190,176 @@ export const allProducts = [
     ],
     "material": "280 gsm, 8.3 oz/yd² (14 oz/lin. yd), 70% ring-spun combed cotton / 30% polyester fleece (heathers 60/40)",
     "details": "100% ring-spun combed cotton face for a superior print surface, Self-fabric lined hood with drawcord, Rib-knit cuff and hem, Kangaroo pocket, YKK zipper, Tear-away label, #L00555"
+  },
+  {
+    "sku": "SG-16",
+    "name": "Scout Hi-Vis Zipper Front Vest",
+    "category": "Safety",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 25,
+    "img": "/L01150-black.webp",
+    "imgs": [
+      "/L01150-black.webp"
+    ],
+    "material": "130 gsm, 3.8 oz/yd² (6.5 oz/lin yd), 100% polyester tricot knit",
+    "details": "Mesh panel on upper back for ventilation, 4 front storage pockets, Radio-clip straps on front shoulders, YKK zipper closure, Durable binding, 4\" contrast hi-vis tape with 2\" reflective tape front and back, Meets CSA standards, #L01150"
+  },
+  {
+    "sku": "SG-17",
+    "name": "Champion Heavy Duty Insulated Bomber Jacket",
+    "category": "Jackets",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 179,
+    "img": "/portals/L01110-as.jpg",
+    "imgs": [
+      "/portals/L01110-as.jpg"
+    ],
+    "material": "275 gsm, 8.1 oz/yd² (13.5 oz/lin yd), 100% polyester oxford (3000 mm waterproof, wind-resistant, water-repellent); 3M Thinsulate insulation — 200 gsm body, 170 gsm sleeves",
+    "details": "Detachable, adjustable hood, Inner fleece storm cuffs with gusset, Adjustable double-snap outer cuffs, Double overlapping storm-flap placket, Zippered patch pockets, Sleeve pencil pocket, Two inner chest pockets, #L01110"
+  },
+  {
+    "sku": "SG-18",
+    "name": "Flexfit 110® Mesh-Back Cap",
+    "category": "Headwear",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 22.04,
+    "img": "/portals/110M-as.jpg",
+    "imgs": [
+      "/portals/110M-as.jpg"
+    ],
+    "material": "74/26 polyester/cotton; Mélange colors are 80/19/1 polyester/rayon/PU spandex",
+    "details": "Structured, six-panel, mid-profile, Permacurv® visor, silver undervisor, Flexfit® Tech + snapback closure, #110M"
+  },
+  {
+    "sku": "SG-19",
+    "name": "Flexfit NU® Adjustable Cap",
+    "category": "Headwear",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 27.28,
+    "img": "/portals/6110NU-as.jpg",
+    "imgs": [
+      "/portals/6110NU-as.jpg"
+    ],
+    "material": "79/18/3 polyester/rayon/PU spandex",
+    "details": "FLEXFIT THE ONE AND ONLY ORIGINAL®, Reimagined Flexfit® Baseball cap, ACTIVEGUARD™ Technology, Flexfit® Technology, Cool & Dry Technology, Structured, six-panel, mid profile, Permacurv® visor, YP four-bar logo placed on the wearer's right side of the cap, Flexfit® Tech + snapback closure, #6110NU"
+  },
+  {
+    "sku": "SG-20",
+    "name": "Men's Advantage IL Short Sleeve Work Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 55,
+    "img": "/portals/M585-as.jpg",
+    "imgs": [
+      "/portals/M585-as.jpg"
+    ],
+    "material": "4.5 oz/yd²/155 gsm (US), 7.4 oz./L yd (CA), 55% cotton, 45% polyester twill",
+    "details": "Tested to 50 industrial washes in accordance with AATCC industry standards, Wrinkle resistant fabric properties for a crisp, polished look, Stain release fabric properties allows stains to detach during washing, Structured collar stand with integrated collar stays, Button-down collar, Dyed-to-match pearl buttons, Double chest pockets with button closures and pen slot, Left-chest zippered pocket at placket, Side vents, Carbon neutral style in partnership with Green Story third party verified carbon offset program, #M585"
+  },
+  {
+    "sku": "SG-21",
+    "name": "Men's Advantage IL Workshirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 59,
+    "img": "/portals/M585L-as.jpg",
+    "imgs": [
+      "/portals/M585L-as.jpg"
+    ],
+    "material": "4.5 oz./yd²/155 gsm (US), 7.5 oz./L yd (CA), 55% cotton, 45% polyester twill",
+    "details": "Tested to 50 industrial washes in accordance with AATCC industry standards, Wrinkle resistant fabric properties for a crisp, polished look, Stain release fabric properties allows stains to detach during washing, Structured collar stand with integrated collar stays, Button-down collar, Double chest pockets with button closures and pen slot, Left-chest zippered pocket at placket, Carbon neutral style in partnership with Green Story third party verified carbon offset program, #M585L"
+  },
+  {
+    "sku": "SG-22",
+    "name": "Sportsman 12\" Fleece Lined Cuffed Beanie",
+    "category": "Headwear",
+    "sizes": "One Size",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 11.78,
+    "img": "/portals/56795-as.jpg",
+    "imgs": [
+      "/portals/56795-as.jpg"
+    ],
+    "material": "100% acrylic exterior, Black 100% polyester fleece lining",
+    "details": "12\" cuffed knit beanie, Fleece lined for warmth, One size fits most, #SP12FL"
+  },
+  {
+    "sku": "SG-23",
+    "name": "Men's Maxson Softshell Jacket",
+    "category": "Jackets",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 90,
+    "img": "/portals/19534-as.webp",
+    "imgs": [
+      "/portals/19534-as.webp"
+    ],
+    "material": "270 g/m² (8 oz/yd²), 100% polyester mechanical-stretch woven bonded to 100% polyester anti-pill microfleece with waterproof (8000 mm) breathable membrane and water-repellent finish; 100% polyester brushed tricot lining",
+    "details": "Three-layer waterproof, breathable construction, Articulated elbows and ergonomic sleeves, Centre-front exposed contrast reverse-coil zipper with interior zipper flap, Polyester brushed tricot upper storm flap, Lower welt pockets with coil zipper, Adjustable cuff tabs with hook-and-loop closure, Easy-grip zipper pull, Contrast hanger loop at inside back neck, Heat-transfer tagless label, Warmth Level 1 (10°C to -5°C), #19534"
+  },
+  {
+    "sku": "SG-24",
+    "name": "Gildan Unisex DryBlend® Polo",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 17.24,
+    "img": "/portals/g8800-as.jpg",
+    "imgs": [
+      "/portals/g8800-as.jpg"
+    ],
+    "material": "6 oz./yd² (US), 10 oz./L yd (CA), 52/48 ring-spun cotton/polyester knit, 20 singles",
+    "details": "Moisture-wicking DryBlend® ring-spun cotton/poly blend, Modern classic fit, Contoured welt collar and cuffs, Clean-finished placket with dyed-to-match buttons, Tear-away label, #8800"
+  },
+  {
+    "sku": "SG-26",
+    "name": "Men's Stirling Short Sleeve Work Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 54,
+    "img": "/portals/17745-as.webp",
+    "imgs": [
+      "/portals/17745-as.webp"
+    ],
+    "material": "65% polyester, 35% combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
+    "details": "Button-down shirt collar, Contrast inner yoke, Centre-back box pleat, Flat-felled seams, Back yoke, Upper patch pocket, Left-chest pocket, #17745"
   }
 ];
 
