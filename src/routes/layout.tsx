@@ -531,6 +531,19 @@ export default component$(() => {
   const portal = useComputed$(() => getPortal(loginType.value));
   // Login page: which portal tile the user has picked before typing a password.
   const selectedPortal = useSignal("");
+  // Login background carousel: before a portal is chosen, cycle through the
+  // portals' hero photos every 6s. Once one is selected, autoplay stops and the
+  // background holds on the selected portal's own hero (see the img class below).
+  const heroIndex = useSignal(0);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track, cleanup }) => {
+    // Re-runs when the selection changes; the prior interval is cleaned up first.
+    if (track(() => selectedPortal.value)) return; // selected → no autoplay
+    const id = setInterval(() => {
+      heroIndex.value = (heroIndex.value + 1) % PORTALS.length;
+    }, 6000);
+    cleanup(() => clearInterval(id));
+  });
 
   // Cart state
   const initialCartCount = useCartCountLoader();
@@ -1085,7 +1098,7 @@ export default component$(() => {
               {PORTALS.map((p) => (
                 <img key={p.id} src={p.hero} alt="" width="1600" height="1067"
                      loading="eager" decoding="sync"
-                     class={`login-showcase__img ${(selectedPortal.value || PORTALS[0].id) === p.id ? "is-active" : ""}`} />
+                     class={`login-showcase__img ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
               ))}
               <div class="login-showcase__scrim" />
             </div>

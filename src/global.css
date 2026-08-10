@@ -3398,7 +3398,8 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
+  border-bottom: none;
+  border-radius: 0;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   color: #eef4f8;
 }
@@ -3425,9 +3426,12 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   height: var(--login-brand-h);
   display: flex;
   flex-direction: column;
-  /* Bottom-aligned within the fixed block so the title hugs the tiles (the
-     reserved empty space sits above it, not between it and the boxes). */
+  /* Bottom-aligned within the fixed block, then lifted by padding-bottom so the
+     title text lands at the same height as a selected portal's wordmark (which
+     sits above the image's bottom edge). border-box keeps the block height fixed,
+     so the tiles/fields below don't move. */
   justify-content: flex-end;
+  padding-bottom: 17px;
   /* Sized so the whole title fills the card width on ONE line. */
   font-size: 2.78rem;
   font-weight: 800; line-height: 1.04;
