@@ -1,13 +1,13 @@
 /* ===== Modern Niagara Building Services Apparel Brand Theme ===== */
 :root {
-  /* Accent blue = the header sign blue (was a brighter #2563eb). All blue accents
+  /* Accent blue = the header sign blue (was a brighter #4f74ac). All blue accents
      — prices, links, active states, selected borders — track the header now. */
-  --ce-green: #416f8d;
-  --ce-green-dark: #32556c;
-  --ce-green-light: #5f8ca8;
+  --ce-green: #546f83;
+  --ce-green-dark: #425767;
+  --ce-green-light: #758f9f;
   --ce-orange: #E6570C;
   --ce-orange-light: #F27D13;
-  --ce-gold: #31759c;
+  --ce-gold: #4d6f83;
 
   --ce-white: #ffffff;
   /* Product image panel. Images multiply onto this, so their baked-in white
@@ -15,7 +15,7 @@
   --ce-greige: #f0f0ee;
   /* Shared light blue-gray panel tint — the sidebar shade, reused on the card
      info strips, product info panel, cart, checkout and menu drawers. */
-  --mn-panel: rgba(70, 137, 179, 0.1);
+  --mn-panel: rgba(84, 111, 131, 0.03);
   /* Single hairline-border token for card/panel/input edges — replaces the
      scattered rgba(0,0,0,0.08)/0.12/0.15 + 1px/1.5px mix so every thin edge
      reads identically. (The card DROP-SHADOW ring uses 0.14 and stays separate.)
@@ -319,8 +319,8 @@ img { max-width: 100%; display: block; }
 }
 .site-header--hero-visible .cart-btn,
 .site-header--hero-visible .cart-btn.cart-btn--active {
-  background: #31759c !important;
-  border-color: #31759c !important;
+  background: #4d6f83 !important;
+  border-color: #4d6f83 !important;
   color: #ffffff !important;
   border-radius: 4px !important;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
@@ -1267,7 +1267,7 @@ img { max-width: 100%; display: block; }
 }
 
 .hero__title--accent {
-  color: #2563eb;
+  color: #4f74ac;
 }
 .hero__title--muted {
   color: var(--ce-gray-200);
@@ -1740,7 +1740,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
        showed through beneath the short card, since --wt-surround is only defined
        on desktop and fell through to transparent here). Clicking it closes the
        menu (layout.tsx). */
-    background: #e9eff4;
+    background: #eef1f3;
     animation: fade-in 0.15s ease;
   }
   .nav-drawer {
@@ -1876,7 +1876,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 /* ===== Home Catalog Section ===== */
 /* Site Footer */
 .site-footer {
-  background: #1e40af;
+  background: #3f507c;
   color: rgba(255,255,255,0.7);
   padding: 2rem 1rem 1.5rem;
   flex-shrink: 0;
@@ -1948,7 +1948,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   margin: 0;
 }
 .privacy-page__contact-link {
-  color: #1e40af;
+  color: #3f507c;
   text-decoration: underline;
   font-weight: 500;
 }
@@ -2372,7 +2372,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   color: var(--ce-gray-700);
   text-transform: capitalize;
   text-decoration: none;
-  background: #e0e3e6;
+  background: #ebeef0;
   border-radius: 2px;
   transition: background 0.15s ease, color 0.15s ease;
   position: relative;
@@ -2420,7 +2420,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   font-size: 1rem;
   font-weight: 400;
   color: var(--ce-gray-700);
-  background: #e0e3e6;
+  background: #ebeef0;
   border: none;
   border-radius: 2px;
   cursor: pointer;
@@ -2750,7 +2750,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 /* Teaser card color rotation: green, gold, orange */
-.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #31759c; --tc-btn-bg: #31759c; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #31759c; }
+.teaser-card { --tc-bg: rgba(255,255,255,0.1); --tc-text: #fff; --tc-tag-bg: rgba(49,117,156,0.15); --tc-tag-border: rgba(49,117,156,0.3); --tc-tag-color: #4d6f83; --tc-btn-bg: #4d6f83; --tc-btn-color: #fff; --tc-dot-color: rgba(255,255,255,0.4); --tc-glow: #4d6f83; }
 
 .teaser-card {
   background: var(--tc-bg);
@@ -2879,7 +2879,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--tc-glow, #2563eb), var(--tc-btn-bg, var(--ce-orange)), var(--tc-glow, #2563eb));
+  background: linear-gradient(90deg, var(--tc-glow, #4f74ac), var(--tc-btn-bg, var(--ce-orange)), var(--tc-glow, #4f74ac));
   transform: translateY(0);
   pointer-events: none;
   z-index: 10;
@@ -2994,10 +2994,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 
 @media (min-width: 1025px) {
-  /* Match the card fill to the info panel (#e0e3e6) so a short single-line-title
+  /* Match the card fill to the info panel (#ebeef0) so a short single-line-title
      card doesn't show a lighter near-white strip below its info — the lower area
      stays the same blue-grey off-white. */
-  .apparel-grid .product-card { background: #e0e3e6; }
+  .apparel-grid .product-card { background: #ebeef0; }
 }
 .product-card:hover .product-card__image {
   background: var(--ce-gray-200);
@@ -3110,7 +3110,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   color: var(--ce-orange-light);
 }
 
-.product-card__info { padding: 0.42rem 0.42rem 0.42rem 0.42rem; background: #e0e3e6; }
+.product-card__info { padding: 0.42rem 0.42rem 0.42rem 0.42rem; background: #ebeef0; }
 
 .product-card__category {
   font-size: 0.66rem;
@@ -3267,7 +3267,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 
 .product-card__badge--green { background: rgba(37, 99, 235,0.08); color: var(--ce-green); }
 .product-card__badge--orange { background: rgba(230,87,12,0.08); color: var(--ce-orange); }
-.product-card__badge--gold { background: rgba(49,117,156,0.12); color: #1e4a66; }
+.product-card__badge--gold { background: rgba(49,117,156,0.12); color: #2f4756; }
 
 /* ===== Login Modal ===== */
 .login-overlay {
@@ -3573,7 +3573,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   outline: none;
 }
 .login-modal__field input:focus {
-  border-color: #1f6fb2;
+  border-color: #47708c;
   background: rgba(255, 255, 255, 0.13);
   box-shadow: 0 0 0 3px rgba(31, 111, 178, 0.28);
 }
@@ -4321,10 +4321,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 
 /* Same colour language for the floating home-hero toggle. */
 .hero-card-header__btn--to-fr {
-  background: #4689b3 !important;
+  background: #5f849c !important;
   color: #ffffff !important;
 }
-.hero-card-header__btn--to-fr:hover { background: #31759c !important; color: #ffffff !important; }
+.hero-card-header__btn--to-fr:hover { background: #4d6f83 !important; color: #ffffff !important; }
 .hero-card-header__btn--to-en {
   background: #d43950 !important;
   color: #ffffff !important;
@@ -4506,17 +4506,17 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   justify-content: center;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04);
 }
-@media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; } .cart-btn:hover svg { stroke: #1e4a66; } }
+@media (hover: hover) { .cart-btn:hover { border-color: var(--ce-gold); background: #eef1f3; color: #2f4756; } .cart-btn:hover svg { stroke: #2f4756; } }
 .cart-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 .cart-btn--active {
-  border-color: #31759c;
-  background: #31759c;
+  border-color: #4d6f83;
+  background: #4d6f83;
   color: #ffffff;
   box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08);
 }
 .cart-btn--active svg { stroke: #ffffff; }
 .cart-btn--active .cart-btn__label { color: #ffffff; }
-@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #265f80; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
+@media (hover: hover) { .cart-btn--active:hover { border-color: var(--ce-gold); background: #3d5a6b; color: #ffffff; } .cart-btn--active:hover svg { stroke: #ffffff; } }
 /* Wherever the catalog header shows (home + apparel routes), the cart reads as
    an actual button in the bright tab-bar orange on the darker textured header,
    instead of the old brown / transparent outline that blended in. !important
@@ -4533,7 +4533,7 @@ body:has(.home-catalog) .site-header .cart-btn {
 body:has(.home-catalog) .site-header .cart-btn svg { stroke: #ffffff !important; }
 body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff !important; }
 @media (hover: hover) {
-  body:has(.home-catalog) .site-header .cart-btn:hover { border-color: var(--ce-gold) !important; background: #265f80 !important; color: #ffffff !important; }
+  body:has(.home-catalog) .site-header .cart-btn:hover { border-color: var(--ce-gold) !important; background: #3d5a6b !important; color: #ffffff !important; }
   body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #ffffff !important; }
 }
 /* Logout button in site-header gets a subtle green tint to match the other accented buttons */
@@ -4576,8 +4576,8 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 .logout-btn svg { stroke: var(--ce-gray-700); width: 17px; height: 17px; }
 @media (hover: hover) {
-  .logout-btn:hover { border-color: var(--ce-gold); background: #eaf3fa; color: #1e4a66; }
-  .logout-btn:hover svg { stroke: #1e4a66; }
+  .logout-btn:hover { border-color: var(--ce-gold); background: #eef1f3; color: #2f4756; }
+  .logout-btn:hover svg { stroke: #2f4756; }
 }
 /* ===== Mobile Apparel Link ===== */
 .site-header__apparel-link {
@@ -5025,8 +5025,8 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  background: #eaf3fa;
-  color: #1e4a66;
+  background: #eef1f3;
+  color: #2f4756;
   border: 1px solid var(--ce-gold);
   padding: 0.6rem 1.5rem;
   font-size: 0.85rem;
@@ -5402,9 +5402,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(5),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.1s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(6),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.125s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: #5f849c; transition-delay: 0.125s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(7),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.15s; }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: #4d6f83; transition-delay: 0.15s; }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(8),
 .product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
 /* Cart outline at the centre — always white, with a soft dark shadow so
@@ -5457,17 +5457,17 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 }
 
 
-/* Add to Cart — filled in the lighter secondary-bar blue (#84acc7). Hover/tap
-   only nudges a touch deeper (not the old dark #31759c theme, which read "too
+/* Add to Cart — filled in the lighter secondary-bar blue (#98aab6). Hover/tap
+   only nudges a touch deeper (not the old dark #4d6f83 theme, which read "too
    blue" when the :hover state stuck on a mobile tap). */
 .product-modal__add.btn--primary {
-  background: #416f8d;
+  background: #546f83;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65,111,141,0.34);
 }
 .product-modal__add.btn--primary:hover {
-  background: #375f79;
+  background: #485c68;
   box-shadow: 0 10px 30px rgba(65,111,141,0.42);
 }
 
@@ -5485,18 +5485,18 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   color: var(--ce-white);
 }
 /* Order Now — ghost button edged in the logo's darker-blue triangle
-   colour (#31759c). Fills with the warm gold triangle on hover so the
+   colour (#4d6f83). Fills with the warm gold triangle on hover so the
    two buttons echo opposite corners of the pinwheel. */
 .product-modal__add.btn--secondary {
   background: var(--ce-white);
-  border: 1.5px solid #31759c;
-  color: #1e4a66;
+  border: 1.5px solid #4d6f83;
+  color: #2f4756;
   box-shadow: 0 4px 16px rgba(49,117,156,0.14);
 }
 .product-modal__add.btn--secondary:hover {
   background: linear-gradient(135deg, #ffd25b 0%, #ffe2a6 100%);
   border-color: #f0bf3f;
-  color: #1e4a66;
+  color: #2f4756;
   transform: translateY(-2px);
   box-shadow: 0 10px 26px rgba(240,191,63,0.4);
 }
@@ -5818,9 +5818,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   color: var(--ce-green);
 }
 .cart-drawer__error {
-  background: #eaf3fa;
+  background: #eef1f3;
   border: 1px solid var(--ce-gold);
-  color: #1e4a66;
+  color: #2f4756;
   padding: 8px 12px;
   border-radius: 0;
   font-size: 0.78rem;
@@ -5858,7 +5858,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .checkout-modal__field--error input,
 .checkout-modal__field--error select {
   border-color: #d97706;
-  background: #eaf3fa;
+  background: #eef1f3;
 }
 .checkout-modal__field--error input:focus,
 .checkout-modal__field--error select:focus {
@@ -6022,7 +6022,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .cart-drawer__summary,
 .checkout-modal__form,
 .checkout-modal__pay {
-  background: #eef0f2 !important;
+  background: #ebeef0 !important;
   border: none !important;
   border-radius: 0 !important;
   margin: 4px 4px 0 !important;
@@ -6034,7 +6034,7 @@ details[open] > .cart-drawer__checkout-title::after {
     /* Match the product info panel's exact rendered shade. The info panel is
        --mn-panel over greige (= rgb(223,230,232)); the checkout sits on a white
        drawer, so use that effective colour as a solid to match it. */
-    background: rgb(223, 230, 232) !important;
+    background: rgb(235, 238, 240) !important;
     border: none !important;
     /* Desktop lays these out in a 2-col grid; drop the per-panel margins and
        let a single uniform grid gap + step padding space them, so the gap
@@ -6396,7 +6396,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header__login {
   display: inline-flex; padding: 7px 18px;
   border-radius: 3px;
-  background: #2563eb; color: var(--ce-white);
+  background: #4f74ac; color: var(--ce-white);
   font-size: 0.8rem; font-weight: 600;
   border: none; cursor: pointer;
   transition: all var(--transition-fast);
@@ -6455,7 +6455,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .teaser-card:hover .btn--sm { transform: none; box-shadow: none; }
   .teaser-card:hover .btn--primary,
   .teaser-card .btn--primary:hover { background: var(--tc-btn-bg); color: var(--ce-gray-900); }
-  .teaser-card:hover .teaser-card__body::after { background: linear-gradient(90deg, var(--tc-glow, #2563eb), var(--tc-btn-bg, var(--ce-orange)), var(--tc-glow, #2563eb)); }
+  .teaser-card:hover .teaser-card__body::after { background: linear-gradient(90deg, var(--tc-glow, #4f74ac), var(--tc-btn-bg, var(--ce-orange)), var(--tc-glow, #4f74ac)); }
   .teaser-card__image { aspect-ratio: 3/1; }
   .teaser-card__body { padding: 0.35rem 0.75rem 0.35rem 1.4rem; flex-direction: row; align-items: center; justify-content: space-between; }
   .teaser-card__body .featured-banner__tag { display: none; }
@@ -6535,7 +6535,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .logout-form { display: none; }
   .hero-card-header__btn--logout { display: none; }
   .cart-btn svg { width: 22px; height: 22px; }
-  .cart-btn--active { background: #31759c !important; border-color: #31759c !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
+  .cart-btn--active { background: #4d6f83 !important; border-color: #4d6f83 !important; color: #ffffff !important; box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important; }
   .cart-btn--active svg { stroke: #ffffff !important; }
   .cart-btn--active .cart-btn__label { color: #ffffff !important; }
   .site-header__nav a { font-size: 0.75rem; }
@@ -6723,8 +6723,8 @@ details[open] > .cart-drawer__checkout-title::after {
     text-decoration: none;
     padding: 4px 8px;
   }
-  .hero-card-header__nav-link:hover { color: #31759c; }
-  .hero-card-header__nav-link.active { color: #4689b3; }
+  .hero-card-header__nav-link:hover { color: #4d6f83; }
+  .hero-card-header__nav-link.active { color: #5f849c; }
   .hero-card-header__brand { display: none !important; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none !important; }
   /* Desktop main site-header is visible from first view, so the in-card actions would be duplicates. */
@@ -6957,12 +6957,12 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden.site-header--hero-visible .site-header__logo-apparel { color: var(--ce-gray-400); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border: 1px solid var(--ce-gray-200); border-radius: var(--ce-btn-radius); }
   .site-header--hero-hidden.site-header--hero-visible .locale-btn:hover { color: var(--ce-gray-700); background: rgba(0,0,0,0.03); border-color: var(--ce-gray-200); }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #31759c; border: 1px solid #31759c; border-radius: var(--ce-btn-radius); color: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover { color: #ffffff; background: #265f80; border-color: #265f80; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn { background: #4d6f83; border: 1px solid #4d6f83; border-radius: var(--ce-btn-radius); color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover { color: #ffffff; background: #3d5a6b; border-color: #3d5a6b; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn:hover svg { stroke: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active { background: #31759c; border-color: #31759c; color: #ffffff; }
-  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover { background: #265f80; border-color: #265f80; color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active { background: #4d6f83; border-color: #4d6f83; color: #ffffff; }
+  .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover { background: #3d5a6b; border-color: #3d5a6b; color: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .cart-btn.cart-btn--active:hover svg { stroke: #ffffff; }
   .site-header--hero-hidden.site-header--hero-visible .logout-btn { background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.12); border-radius: var(--ce-btn-radius); color: var(--ce-gray-900); box-shadow: inset 0 1px 4px rgba(0,0,0,0.06), inset 0 0 6px rgba(0,0,0,0.03); }
@@ -7346,8 +7346,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .hero-card-header__btn { padding: 10px; }
   .hero-card-header__nav { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; margin-right: 0.5rem; }
   .hero-card-header__nav-link { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); text-decoration: none; padding: 4px 8px; }
-  .hero-card-header__nav-link:hover { color: #4689b3; }
-  .hero-card-header__nav-link.active { color: #31759c; }
+  .hero-card-header__nav-link:hover { color: #5f849c; }
+  .hero-card-header__nav-link.active { color: #4d6f83; }
   .hero-card-header__actions .hero-card-header__btn:last-child { display: none; }
 
   /* Hero carousel — shorter on tablet so it doesn't dominate */
@@ -7622,8 +7622,8 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header.site-header--hero-visible .cart-btn,
   .site-header:not(.site-header--hero-hidden) .cart-btn.cart-btn--active,
   .site-header.site-header--hero-visible .cart-btn.cart-btn--active {
-    background: #31759c !important;
-    border-color: #31759c !important;
+    background: #4d6f83 !important;
+    border-color: #4d6f83 !important;
     color: #ffffff !important;
     border-radius: 0 !important;
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
@@ -8339,14 +8339,14 @@ details[open] > .cart-drawer__checkout-title::after {
   /* The cart is now the filled blue button. */
   .hero__upper .hero-card-header__btn--cart,
   .hero__upper .hero-card-header__btn--cart.hero-card-header__btn--cart-active {
-    background: #4689b3 !important;
-    border-color: #4689b3 !important;
+    background: #5f849c !important;
+    border-color: #5f849c !important;
     color: #ffffff !important;
     box-shadow: inset 0 1px 4px rgba(0,0,0,0.18), inset 0 0 6px rgba(0,0,0,0.08) !important;
   }
   .hero__upper .hero-card-header__btn--cart:hover {
-    background: #31759c !important;
-    border-color: #31759c !important;
+    background: #4d6f83 !important;
+    border-color: #4d6f83 !important;
     color: #ffffff !important;
   }
   .hero__upper .hero-card-header__btn--cart svg { stroke: #ffffff !important; }
@@ -9008,21 +9008,21 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 
 /* ============================================================
-   Blue brand theme — Modern Niagara header colour (#1e3a8a)
+   Blue brand theme — Modern Niagara header colour (#3a4a66)
    with the white "Wills" wordmark logo.
    Applies to every device header, the mobile menu drawer, and the
    login modal. Appended last so it wins over the stateful rules above.
    ============================================================ */
 :root {
-  /* Header blue = the secondary-bar blue (#73a1bf) scaled darker by the golden
-     ratio (÷1.618) → #3b6581, so the header sits a φ step below the tab bar just
+  /* Header blue = the secondary-bar blue (#8ba3b3) scaled darker by the golden
+     ratio (÷1.618) → #4c6070, so the header sits a φ step below the tab bar just
      like the 64/40 height ratio between them. Both blues were lightened + softened
-     a step (from #2b556f / #4689b3) so they read gentler against the pale page. */
-  --wt-orange: #416f8d;
-  --wt-orange-dark: #32556c;
+     a step (from #2b556f / #5f849c) so they read gentler against the pale page. */
+  --wt-orange: #546f83;
+  --wt-orange-dark: #425767;
   --wt-orange-hi: #dbeafe;
   /* Darker-orange overlay box behind the logo + buttons (willstransfer.com
-     mobile/tablet look): ~30% black over the orange bar → ~#14285f. */
+     mobile/tablet look): ~30% black over the orange bar → ~#2b374d. */
   /* The Wills "pressed sign" 30% black overlay — removed (transparent) so the
      bars, boxes and buttons show their true base blue instead of a darkened,
      muddied version of it. */
@@ -9423,7 +9423,7 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 
 /* ---- Catalog tabs tie into the orange header ---- */
-/* A mid orange BETWEEN the header orange (#1e3a8a) and the darker box overlay
+/* A mid orange BETWEEN the header orange (#3a4a66) and the darker box overlay
    (~#ab5c18): an ~18% black overlay over the header orange. Distinct from the
    header while staying in the family; the active tab is the bright header
    orange, the buttons/logo boxes are the darker shade. */
@@ -9744,7 +9744,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* The full height below the links reads a very off-white blue tint (the greige
      links container only covers the rows themselves; everything under it is
      this tint). */
-  background: #e9eff4 !important;
+  background: #eef1f3 !important;
   box-shadow: none !important;
 }
 /* Link + category rows read as white panels PRESSED into the orange sign —
@@ -9948,7 +9948,7 @@ details[open] > .cart-drawer__checkout-title::after {
     top: calc(var(--wt-header-pin) + 44px - 1px);
     /* Medium light-gray sidebar surface — darker than the page/product panels so
        the filter column reads as a distinct block beside the product list. */
-    background: #e0e3e6;
+    background: #ebeef0;
     box-shadow: none;
     border-radius: 2px;
     padding: 0.35rem 0 0.85rem;
@@ -10846,7 +10846,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .cart-btn.cart-btn--active,
   .site-header--hero-hidden .cart-btn,
   .site-header--hero-hidden.site-header--hero-visible .cart-btn {
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     border: 1px solid rgba(0,0,0,0.18) !important;
     border-radius: var(--wt-box-radius) !important;
     color: #fff !important;
@@ -11256,7 +11256,7 @@ details[open] > .cart-drawer__checkout-title::after {
    Keeps the Modern Niagara button wholesale: the mark chip, the staggered
    fade-in of the triangles, the square->diamond rotate, the travelling sheen,
    the cart->check crossfade. Only the COLOUR changes.
-   Was: a #31759c -> #4689b3 gradient (brown into MN blue) with the triangles
+   Was: a #4d6f83 -> #5f849c gradient (brown into MN blue) with the triangles
    staggering through MN's brand reds, greens, blue and yellow — none of which
    appear anywhere else in this app.
    Now: the sign palette. The ramp is one warm family (cream -> orange ->
@@ -11274,8 +11274,8 @@ details[open] > .cart-drawer__checkout-title::after {
   --wt-pin-3: #d43950;
   --wt-pin-4: #9ec069;
   --wt-pin-5: #7fa244;
-  --wt-pin-6: #4689b3;
-  --wt-pin-7: #31759c;
+  --wt-pin-6: #5f849c;
+  --wt-pin-7: #4d6f83;
   --wt-pin-8: #ffd25b;
 }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(1),
@@ -11308,13 +11308,13 @@ details[open] > .cart-drawer__checkout-title::after {
    from the same orange rather than the old blue one. Deeper on hover so the
    press still reads on a warm background. */
 .product-modal__add.btn--primary {
-  background: #416f8d;
+  background: #546f83;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65, 111, 141, 0.34);
 }
 .product-modal__add.btn--primary:hover {
-  background: #375f79;
+  background: #485c68;
   box-shadow: 0 10px 30px rgba(65, 111, 141, 0.42);
 }
 
@@ -11584,7 +11584,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
     padding: 0 15px !important;
     border: none !important;
     border-radius: 0 !important;
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
   }
@@ -11598,7 +11598,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .site-header .cart-btn.cart-btn--active svg { stroke: #fff !important; }
   .site-header .cart-btn:hover,
   .site-header .cart-btn.cart-btn--active:hover {
-    background: #77a1bf !important;
+    background: #8fa4b2 !important;
     color: #fff !important;
   }
   .site-header .cart-btn:hover svg,
@@ -12072,7 +12072,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    (left over from the old blue palette) and a GREEN hover — none of which
    belong to the orange sign theme. Repaint it in the theme's two-shade
    system: the dark box shade the header lockup/buttons and the active tab
-   use (30% black over the sign orange, ~#14285f) at rest, lifting to the
+   use (30% black over the sign orange, ~#2b374d) at rest, lifting to the
    tab strip's lighter orange on hover — the same rest→hover direction the
    active tab reads in, inverted.
    ============================================================ */
@@ -12157,7 +12157,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
     /* The inviting CTA: the lighter tab-bar blue, no white/dark seam border —
        just a soft drop shadow so it lifts off the darker header bar. */
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     border: none !important;
     color: #fff !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
@@ -12176,7 +12176,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   body:has(.home-catalog) .site-header .cart-btn:hover,
   body:has(.home-catalog) .site-header .cart-btn.cart-btn--active:hover {
     border: none !important;
-    background: #77a1bf !important;
+    background: #8fa4b2 !important;
     color: #fff !important;
   }
   body .site-header .cart-btn svg,
@@ -13014,8 +13014,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
    the product breadcrumb — takes Modern Niagara's lighter brand blue.
    The shared iron texture overlays whichever blue the bar scopes.
    ============================================================ */
-/* All five secondary bars take the milder/lighter blue (#73a1bf) — a softened,
-   lightened step up from the pinwheel's #4689b3 steel-blue, so the bars read
+/* All five secondary bars take the milder/lighter blue (#8ba3b3) — a softened,
+   lightened step up from the pinwheel's #5f849c steel-blue, so the bars read
    gentler against the pale page rather than sharp/saturated. Still a shade
    lighter than the header's deep blue. */
 .home-catalog__header,
@@ -13023,7 +13023,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 .pdp-breadcrumb,
 .nav-drawer__header,
 .cart-table thead,
-.cart-drawer__back-btn { --wt-orange: #84acc7; }
+.cart-drawer__back-btn { --wt-orange: #98aab6; }
 
 /* Brand-cluster wordmark reads white on the deep-blue sign bars. */
 .site-header__inner .brand-cluster__word,
@@ -13268,7 +13268,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
      rule that dissolves the button to transparent on the catalog route. */
   body .site-header .cart-btn,
   body:has(.home-catalog) .site-header .cart-btn,
-  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active { background: #84acc7 !important; border: none !important; color: #fff !important; box-shadow: none !important; }
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active { background: #98aab6 !important; border: none !important; color: #fff !important; box-shadow: none !important; }
   body .site-header .cart-btn svg,
   body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
   body .site-header .cart-btn .cart-btn__label,
@@ -13307,10 +13307,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .drawer.cart-drawer .cart-drawer__details-step { padding-top: 0 !important; }
   /* The checkout "Back to Cart" bar is a secondary bar — span it the FULL width
      (it was only as wide as its label, leaving the rest of the bar grey) and
-     paint it the same lighter blue (#84acc7) as the PRODUCT/TOTAL strip and tab
+     paint it the same lighter blue (#98aab6) as the PRODUCT/TOTAL strip and tab
      bar, so the whole bar reads blue like every other secondary bar. */
   .cart-drawer__back-btn {
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     color: #fff !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -13337,7 +13337,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .product-card__color-size-row .product-card__gender { display: none !important; }
   /* View toggle blends into the blue tab bar. */
   .apparel-titlebar__action--tablet-cols {
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     color: #fff !important;
     align-self: stretch !important;
     height: auto !important;
@@ -13362,7 +13362,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 @media (max-width: 1024px) {
   /* Product card info strip (under the image): faint blue tint like the sidebar,
      so it's not stark white. */
-  .product-card__info { background: #e0e3e6 !important; }
+  .product-card__info { background: #ebeef0 !important; }
   /* Remove the extra x-margin on the product detail so its content aligns to the
      edges like the bars. */
   .product-detail { margin-left: 0 !important; margin-right: 0 !important; }
@@ -13390,11 +13390,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .home-catalog__header::before { display: none !important; }
 }
 
-/* The selected/active category tab takes the darker header blue (#3b6581) rather
+/* The selected/active category tab takes the darker header blue (#4c6070) rather
    than the lighter tab-bar blue, so the active tab reads as the header colour.
    Scoped --wt-orange resolves inside the active tab's background gradient (and
    its ::before, which inherits the variable). */
-.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #416f8d; }
+.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #546f83; }
 
 /* ============================================================
    Desktop: header a golden step TALLER than the secondary bars.
@@ -13513,7 +13513,7 @@ body:has(.nav-drawer-overlay) .site-header__logo {
 /* Header: the darker blue sign (a φ-step below the lighter tab-bar blue) with the
    iron texture + restored pressed/raised depth. Deep bg → white content (below). */
 .site-header__inner {
-  --wt-orange: #416f8d;
+  --wt-orange: #546f83;
   /* Dots fade toward the centre (a solid-blue overlay peaks at 50% and eases to
      transparent at both ends), so the dot texture reads strongest at the left/
      right edges and clears through the middle. */
@@ -13643,9 +13643,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
    no white gap), and make the logout opaque so the bar's dot texture doesn't
    show through it. */
 @media (min-width: 601px) and (max-width: 1024px) {
-  .home-catalog__header { background: #84acc7 !important; }
+  .home-catalog__header { background: #98aab6 !important; }
   .home-catalog__right {
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     align-self: stretch !important;
     height: auto !important;
     display: flex !important;
@@ -13653,7 +13653,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     padding: 0 !important;
   }
   .apparel-titlebar__action.apparel-titlebar__action--tablet-cols {
-    background: #84acc7 !important;
+    background: #98aab6 !important;
     align-self: stretch !important;
     height: auto !important;
     display: flex !important;
@@ -13715,7 +13715,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-bottom: none !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    box-shadow: 0 3px 0 0 #416f8d !important;
+    box-shadow: 0 3px 0 0 #546f83 !important;
   }
 }
 
@@ -13735,7 +13735,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
      uses semi-transparent --mn-panel over greige; the thumbs sit over white, so
      the same var would read lighter. Use the info's effective solid colour. */
   .product-thumbs {
-    background: rgb(223, 230, 232);
+    background: rgb(235, 238, 240);
     padding: 8px;
     border-radius: var(--radius-sm);
     box-sizing: border-box;
@@ -13748,11 +13748,11 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 /* Cart page (item list) shares the checkout page's panel background so the two
    steps match — the cart view was plain white against the checkout's blue/gray. */
 .cart-drawer__items {
-  background: #eef0f2 !important;
+  background: #ebeef0 !important;
 }
 @media (min-width: 1025px) {
   .cart-drawer__items {
-    background: rgb(223, 230, 232) !important;
+    background: rgb(235, 238, 240) !important;
   }
 }
 
@@ -13790,7 +13790,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
    dot-pattern layer bled THROUGH them and showed dots inside the boxes (visible
    on the desktop "Catalog" button and the tablet search field). Composite the
    same overlay over an OPAQUE copy of the bar colour (--wt-orange resolves to
-   the brand blue #84acc7 in this scope) — identical appearance, but now opaque
+   the brand blue #98aab6 in this scope) — identical appearance, but now opaque
    so no dots leak through. */
 .home-catalog__viewmode,
 .home-catalog__sidebar-search {
@@ -13822,7 +13822,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   padding: 0;
 }
 .login-portal {
-  --portal-accent: #1f6fb2;
+  --portal-accent: #47708c;
   position: relative;
   display: flex;
   align-items: center;
@@ -13844,13 +13844,13 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   border-color: rgba(255, 255, 255, 0.22);
 }
 .login-portal:focus-visible {
-  outline: 2px solid #1f6fb2;
+  outline: 2px solid #47708c;
   outline-offset: 2px;
 }
 /* Selected — the Synergy brand blue. */
 .login-portal--active {
-  border-color: #1f6fb2;
-  box-shadow: 0 0 0 2px #1f6fb2, 0 12px 26px rgba(0, 0, 0, 0.4);
+  border-color: #47708c;
+  box-shadow: 0 0 0 2px #47708c, 0 12px 26px rgba(0, 0, 0, 0.4);
 }
 .login-portal__logo {
   width: 100%;
