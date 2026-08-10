@@ -130,18 +130,18 @@ const BRAND_BY_SKU: Record<string, string> = {
   "MN-24": "2 Buds", // 2 Buds Pro Wireless ANC Earbuds (ANC = feature, not brand)
 
   // Synergy Group SKUs whose brand isn't in the display name (from the product
-  // spec / seed-synergygroup.ts). Champion (SG-17) and Sportsman (SG-22) match
+  // spec / seed-synergygroup.ts). Champion (SG-13) and Sportsman (SG-18) match
   // by name, so they need no override.
-  "SG-11": "Core 365",          // Optimum #88194 dress shirt
-  "SG-12": "Canada Sportswear", // CSW 24/7 "Vault" #L00550
-  "SG-13": "Harriton",          // Advantage Snag Protection #M748
-  "SG-14": "Canada Sportswear", // CSW 24/7 "Flux" #L00545
-  "SG-15": "Canada Sportswear", // CSW 24/7 "Surfer" #L00555
-  "SG-16": "CX2",               // Hi-Vis "Scout" #L01150 vest
-  "SG-20": "Harriton",          // Advantage IL SS work shirt #M585
-  "SG-21": "Harriton",          // Advantage IL workshirt #M585L
-  "SG-23": "Trimark",           // Maxson softshell #19534
-  "SG-26": "Trimark",           // Stirling SS work shirt #17745
+  "SG-7": "Core 365",          // Optimum #88194 dress shirt
+  "SG-8": "Canada Sportswear", // CSW 24/7 "Vault" #L00550
+  "SG-9": "Harriton",          // Advantage Snag Protection #M748
+  "SG-10": "Canada Sportswear", // CSW 24/7 "Flux" #L00545
+  "SG-11": "Canada Sportswear", // CSW 24/7 "Surfer" #L00555
+  "SG-12": "CX2",               // Hi-Vis "Scout" #L01150 vest
+  "SG-16": "Harriton",          // Advantage IL SS work shirt #M585
+  "SG-17": "Harriton",          // Advantage IL workshirt #M585L
+  "SG-19": "Trimark",           // Maxson softshell #19534
+  "SG-21": "Trimark",           // Stirling SS work shirt #17745
 };
 function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];

@@ -72,7 +72,7 @@ export const allProducts = [
     "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
   },
   {
-    "sku": "SG-8",
+    "sku": "SG-5",
     "name": "Carhartt Winter Jacket - Black",
     "category": "Jackets",
     "sizes": "S - 4XL",
@@ -89,7 +89,7 @@ export const allProducts = [
     "details": "Two-way brass zip, pleated bi-swing back, internal rib-knit storm cuffs, four exterior pockets, two interior pockets, triple-stitched seams, #106674"
   },
   {
-    "sku": "SG-9",
+    "sku": "SG-6",
     "name": "Men's Cole Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 6XL",
@@ -107,7 +107,7 @@ export const allProducts = [
     "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
   },
   {
-    "sku": "SG-11",
+    "sku": "SG-7",
     "name": "Men's Optimum Short Sleeve Twill Dress Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
@@ -124,7 +124,7 @@ export const allProducts = [
     "details": "UPF 40+ protection, Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, #88194"
   },
   {
-    "sku": "SG-12",
+    "sku": "SG-8",
     "name": "Vault Pullover Hooded Sweatshirt - Black",
     "category": "Sweaters",
     "sizes": "XS - 4XL",
@@ -141,7 +141,7 @@ export const allProducts = [
     "details": "Self-fabric lined hood with drawcord, 100% ring-spun combed cotton face for a superior print surface, Rib-knit cuff and hem, Kangaroo pocket, Tear-away label, #L00550"
   },
   {
-    "sku": "SG-13",
+    "sku": "SG-9",
     "name": "Men's Advantage Snag Protection Plus Quarter-Zip Pullover",
     "category": "Sweaters",
     "sizes": "S - 6XL",
@@ -158,7 +158,7 @@ export const allProducts = [
     "details": "Relaxed fit, Snag-protection-plus fabric resists snags and keeps a smooth look, Moisture-wicking, Antimicrobial odor control, Center-front coil zipper with auto-lock slider, Side vents, UPF 15-39, Tested to 75 industrial washes (AATCC), #M748"
   },
   {
-    "sku": "SG-14",
+    "sku": "SG-10",
     "name": "Flux Quarter-Zip Sweatshirt - Black",
     "category": "Sweaters",
     "sizes": "XS - 4XL",
@@ -175,7 +175,7 @@ export const allProducts = [
     "details": "100% ring-spun combed cotton face for a superior print surface, Rib-knit cuff and hem, Metal YKK front zipper closure, Tear-away label, #L00545"
   },
   {
-    "sku": "SG-15",
+    "sku": "SG-11",
     "name": "Surfer Full-Zip Hooded Sweatshirt - Black",
     "category": "Sweaters",
     "sizes": "XS - 4XL",
@@ -192,7 +192,7 @@ export const allProducts = [
     "details": "100% ring-spun combed cotton face for a superior print surface, Self-fabric lined hood with drawcord, Rib-knit cuff and hem, Kangaroo pocket, YKK zipper, Tear-away label, #L00555"
   },
   {
-    "sku": "SG-16",
+    "sku": "SG-12",
     "name": "Scout Hi-Vis Zipper Front Vest",
     "category": "Safety",
     "sizes": "S - 4XL",
@@ -209,7 +209,7 @@ export const allProducts = [
     "details": "Mesh panel on upper back for ventilation, 4 front storage pockets, Radio-clip straps on front shoulders, YKK zipper closure, Durable binding, 4\" contrast hi-vis tape with 2\" reflective tape front and back, Meets CSA standards, #L01150"
   },
   {
-    "sku": "SG-17",
+    "sku": "SG-13",
     "name": "Champion Heavy Duty Insulated Bomber Jacket",
     "category": "Jackets",
     "sizes": "S - 5XL",
@@ -226,7 +226,7 @@ export const allProducts = [
     "details": "Detachable, adjustable hood, Inner fleece storm cuffs with gusset, Adjustable double-snap outer cuffs, Double overlapping storm-flap placket, Zippered patch pockets, Sleeve pencil pocket, Two inner chest pockets, #L01110"
   },
   {
-    "sku": "SG-18",
+    "sku": "SG-14",
     "name": "Flexfit 110® Mesh-Back Cap",
     "category": "Headwear",
     "sizes": "One Size",
@@ -243,7 +243,7 @@ export const allProducts = [
     "details": "Structured, six-panel, mid-profile, Permacurv® visor, silver undervisor, Flexfit® Tech + snapback closure, #110M"
   },
   {
-    "sku": "SG-19",
+    "sku": "SG-15",
     "name": "Flexfit NU® Adjustable Cap",
     "category": "Headwear",
     "sizes": "One Size",
@@ -260,7 +260,7 @@ export const allProducts = [
     "details": "FLEXFIT THE ONE AND ONLY ORIGINAL®, Reimagined Flexfit® Baseball cap, ACTIVEGUARD™ Technology, Flexfit® Technology, Cool & Dry Technology, Structured, six-panel, mid profile, Permacurv® visor, YP four-bar logo placed on the wearer's right side of the cap, Flexfit® Tech + snapback closure, #6110NU"
   },
   {
-    "sku": "SG-20",
+    "sku": "SG-16",
     "name": "Men's Advantage IL Short Sleeve Work Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
@@ -277,7 +277,7 @@ export const allProducts = [
     "details": "Tested to 50 industrial washes in accordance with AATCC industry standards, Wrinkle resistant fabric properties for a crisp, polished look, Stain release fabric properties allows stains to detach during washing, Structured collar stand with integrated collar stays, Button-down collar, Dyed-to-match pearl buttons, Double chest pockets with button closures and pen slot, Left-chest zippered pocket at placket, Side vents, Carbon neutral style in partnership with Green Story third party verified carbon offset program, #M585"
   },
   {
-    "sku": "SG-21",
+    "sku": "SG-17",
     "name": "Men's Advantage IL Workshirt",
     "category": "Polos",
     "sizes": "S - 5XL",
@@ -294,7 +294,7 @@ export const allProducts = [
     "details": "Tested to 50 industrial washes in accordance with AATCC industry standards, Wrinkle resistant fabric properties for a crisp, polished look, Stain release fabric properties allows stains to detach during washing, Structured collar stand with integrated collar stays, Button-down collar, Double chest pockets with button closures and pen slot, Left-chest zippered pocket at placket, Carbon neutral style in partnership with Green Story third party verified carbon offset program, #M585L"
   },
   {
-    "sku": "SG-22",
+    "sku": "SG-18",
     "name": "Sportsman 12\" Fleece Lined Cuffed Beanie",
     "category": "Headwear",
     "sizes": "One Size",
@@ -311,7 +311,7 @@ export const allProducts = [
     "details": "12\" cuffed knit beanie, Fleece lined for warmth, One size fits most, #SP12FL"
   },
   {
-    "sku": "SG-23",
+    "sku": "SG-19",
     "name": "Men's Maxson Softshell Jacket",
     "category": "Jackets",
     "sizes": "S - 5XL",
@@ -328,7 +328,7 @@ export const allProducts = [
     "details": "Three-layer waterproof, breathable construction, Articulated elbows and ergonomic sleeves, Centre-front exposed contrast reverse-coil zipper with interior zipper flap, Polyester brushed tricot upper storm flap, Lower welt pockets with coil zipper, Adjustable cuff tabs with hook-and-loop closure, Easy-grip zipper pull, Contrast hanger loop at inside back neck, Heat-transfer tagless label, Warmth Level 1 (10°C to -5°C), #19534"
   },
   {
-    "sku": "SG-24",
+    "sku": "SG-20",
     "name": "Gildan Unisex DryBlend® Polo",
     "category": "Polos",
     "sizes": "S - 5XL",
@@ -345,7 +345,7 @@ export const allProducts = [
     "details": "Moisture-wicking DryBlend® ring-spun cotton/poly blend, Modern classic fit, Contoured welt collar and cuffs, Clean-finished placket with dyed-to-match buttons, Tear-away label, #8800"
   },
   {
-    "sku": "SG-26",
+    "sku": "SG-21",
     "name": "Men's Stirling Short Sleeve Work Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
