@@ -3357,24 +3357,43 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   flex-shrink: 0;
   /* Fixed width (not a % or vw) so the panel stays one constant size as the
      window resizes/zooms — only the full-bleed photo behind it rescales. */
-  width: 480px;
+  width: 560px;
   max-width: 92vw;
   /* Lock the panel's CENTER to 21% of viewport width. center = margin-left +
-     240px (half the 480px panel), so margin-left = 21vw − 240px puts the center
-     at exactly 21vw — the ±240px cancels, leaving a pure viewport fraction with
+     280px (half the 560px panel), so margin-left = 21vw − 280px puts the center
+     at exactly 21vw — the ±280px cancels, leaving a pure viewport fraction with
      no fixed-px term. That keeps it horizontally fixed under zoom (just like the
      50% vertical centering), rather than drifting as vw and px diverge. This
      sits it in the left third, right edge near the rule-of-thirds line. */
-  margin-left: calc(21vw - 240px);
+  margin-left: calc(21vw - 280px);
   display: flex;
-  align-items: center;
+  /* Stretch the card to the full viewport height (login-stage is 100dvh and
+     stretches this modal) so the panel is always full-height for every portal,
+     regardless of how tall the selected logo is. */
+  align-items: stretch;
   animation: slideInLeft 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .login-card {
   width: 100%;
-  /* Grounded semi-transparent panel so the controls read as a contained card
-     rather than floating loose on the photo. */
-  padding: 2.5rem 2.25rem;
+  /* Full-height panel down the left third: the logo owns the top third, the
+     portal tiles sit below it, and the sign-in form is anchored to the bottom.
+     Laying it out as a flex column (rather than transform-scaling a
+     content-sized card) means a near-square logo can no longer balloon the
+     panel — the brandmark is capped to the top zone instead. */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Center the logo + tiles + form as ONE connected group in the full-height
+     panel, rather than pinning the logo to the top and floating the cluster
+     separately (which left a dead gap between them). */
+  justify-content: center;
+  /* Fixed height reserved for the title / selected-logo block. Because it never
+     changes with the chosen portal, the tiles and form below never shift. */
+  --login-brand-h: clamp(120px, 15vh, 158px);
+  /* Shared gap below the title / selected-logo block. MUST be identical for both
+     so there's zero shift when the title is replaced by a portal logo. */
+  --login-brand-gap: 1.3rem;
+  padding: clamp(1.75rem, 4vh, 3.25rem) 2.25rem;
   background: rgba(11, 22, 30, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -3382,13 +3401,6 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   border-radius: 18px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   color: #eef4f8;
-  /* Scale the whole panel — logos, text, tiles, spacing — as one unit so it
-     stays a constant proportion of the viewport height at any browser zoom,
-     tracking the full-bleed photo behind it. --login-scale is driven by JS
-     (viewport height ÷ reference) and updated on resize/zoom. */
-  transform: scale(var(--login-scale, 1));
-  transform-origin: center center;
-  will-change: transform;
 }
 
 /* Signature — the eyebrow set like a stencilled equipment tag. */
@@ -3404,19 +3416,30 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: rgba(31, 111, 178, 0.1);
 }
 .login-card__title {
-  margin: 0;
-  /* Match the height of the portal logo block (.login-card__brand) so swapping
-     the title for the selected portal's logo doesn't shift the panel height. */
-  min-height: 90px;
+  /* Sits directly above the tiles as part of the centered group; the
+     margin-bottom is the gap that connects it to the cluster below. Locked to
+     the SAME fixed height AND gap as .login-card__brand so the title→logo swap —
+     and every logo→logo swap — leaves the tiles and form exactly where they are. */
+  margin: 0 0 var(--login-brand-gap);
+  flex: 0 0 auto;
+  height: var(--login-brand-h);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  font-size: 2.35rem;
-  font-weight: 800; line-height: 1.05;
-  letter-spacing: -0.02em; text-transform: uppercase;
+  /* Bottom-aligned within the fixed block so the title hugs the tiles (the
+     reserved empty space sits above it, not between it and the boxes). */
+  justify-content: flex-end;
+  /* Sized so the whole title fills the card width on ONE line. */
+  font-size: 2.78rem;
+  font-weight: 800; line-height: 1.04;
+  letter-spacing: -0.03em; text-transform: uppercase;
   color: #fff;
   text-shadow: 0 2px 26px rgba(0, 0, 0, 0.4);
 }
+/* One flowing text block, kept on a single line. */
+.login-card__title-text { display: block; white-space: nowrap; }
+/* Secondary word(s) set thin to echo the brand lockups' bold-name +
+   thin-secondary pairing, pulled tighter to the primary word. */
+.login-card__title-thin { font-weight: 300; margin-left: -0.16em; }
 /* Once a company is chosen, its logo replaces the title. Light/reversed logos
    (dark portals) sit straight on the panel; dark logos get a white plate so
    they stay legible — mirroring the portal tiles. */
@@ -3424,10 +3447,14 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   display: flex;
   align-items: center;
   justify-content: center;
-  /* At least as tall as .login-card__title so the title→logo swap causes no
-     shift; grows taller as the full-width logo needs. */
-  min-height: 90px;
-  margin: 0;
+  /* Fixed height (shared with .login-card__title) so EVERY selected logo
+     occupies the exact same vertical block, centered the same way — the tiles
+     and form never shift when you switch portals, regardless of each logo's
+     own aspect ratio. The mark is contained within this block (see
+     .login-card__brandmark). */
+  flex: 0 0 auto;
+  height: var(--login-brand-h);
+  margin: 0 0 var(--login-brand-gap);
   animation: fadeIn 0.45s ease;
 }
 .login-card__brand--light {
@@ -3438,11 +3465,15 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-card__brandmark {
   display: block;
-  /* Span the full card content width so the lockup lines up with the portal
-     grid below it (same left/right margin), centered by the flex parent. */
-  width: 100%;
+  /* Contained within the fixed-height brand block: fill it as far as the logo's
+     aspect ratio allows (wide lockups by width, near-square marks by height)
+     without ever exceeding the block, so the reserved space stays constant. */
+  width: auto;
   height: auto;
   max-width: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+  object-fit: contain;
 }
 .login-card__hint {
   margin: 0.9rem 0 0;
@@ -3519,7 +3550,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   text-shadow: 0 1px 1px rgba(10, 25, 55, 0.4);
 }
 
-.login-modal__form { display: flex; flex-direction: column; gap: 0.85rem; padding: 1.7rem 0 0; }
+/* Sits directly beneath the tiles (padding-top is the gap); the whole
+   logo + tiles + form group is centered by the card's justify-content. */
+.login-modal__form { display: flex; flex-direction: column; gap: 1rem; padding: 1.7rem 0 0; }
 .login-modal__field { display: flex; flex-direction: column; gap: 0.5rem; }
 .login-modal__field label {
   display: flex; align-items: baseline; justify-content: space-between; gap: 0.6rem;
@@ -3531,7 +3564,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   text-transform: none; color: #2f8fd4;
 }
 .login-modal__field input {
-  padding: 13px 15px; border-radius: 9px;
+  padding: 16px 17px; border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.22); font-size: 16px;
   font-family: var(--font-sans); color: #fff;
   background: rgba(255, 255, 255, 0.08);
@@ -3550,9 +3583,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 /* Submit: the Airtech Synergy blue CTA. */
 .login-modal__submit.btn {
   width: 100%; justify-content: center; margin-top: 0.55rem;
-  padding: 14px 20px; border: none; border-radius: 9px;
+  padding: 16px 22px; border: none; border-radius: 10px;
   background: #005596; color: #fff;
-  font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.9rem;
+  font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.98rem;
   text-shadow: none;
   box-shadow: 0 8px 22px rgba(0, 85, 150, 0.32);
   transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
@@ -13826,8 +13859,8 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 .login-portals {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.7rem;
-  margin-top: 1.9rem;
+  gap: 0.9rem;
+  margin-top: 0;
   padding: 0;
 }
 .login-portal {
@@ -13836,8 +13869,9 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.8rem 0.9rem;
-  min-height: 92px;
+  padding: 0.7rem 0.55rem;
+  overflow: hidden;
+  min-height: clamp(94px, 12vh, 126px);
   cursor: pointer;
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -13862,9 +13896,20 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 }
 .login-portal__logo {
   width: 100%;
-  height: 60px;
+  height: clamp(72px, 10vh, 104px);
   object-fit: contain;
+  /* Slight scale so the wide wordmarks (Airtech, Wired) — which already nearly
+     fill the width — reach the edges without clipping. */
+  transform: scale(1.06);
 }
+/* Airtech and Wired are wide wordmarks that already reach the edges — pull them
+   back slightly for a touch more side padding. */
+.login-portal__logo--portal1,
+.login-portal__logo--portal3 { transform: scale(0.98); }
+/* Corflow and Powered carry much more internal whitespace, so they need more
+   scale to fill the tile. Tuned to fill the width without clipping. */
+.login-portal__logo--portal2 { transform: scale(1.18); }
+.login-portal__logo--portal4 { transform: scale(1.3); }
 /* Every tile carries the Airtech dark-sign treatment; the reversed white
    logos read against it. */
 .login-portal--dark { background: #14232f; border-color: rgba(255, 255, 255, 0.14); }

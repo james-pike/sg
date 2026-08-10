@@ -28,7 +28,7 @@ const translations = {
 
   // Login modal
   "login.title": { en: "Employee Login", fr: "Connexion employé" },
-  "login.storetitle": { en: "Synergy Group Apparel", fr: "Synergy Group Apparel" },
+  "login.storetitle": { en: "Synergy Apparel", fr: "Synergy Apparel" },
   "login.subtitle": { en: "Login to access apparel", fr: "Connectez-vous pour accéder aux vêtements" },
   "login.chooseportal": { en: "Apparel Login", fr: "Connexion vêtements" },
   "login.eyebrow": { en: "Employee Store", fr: "Boutique employé" },

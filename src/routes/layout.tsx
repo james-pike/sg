@@ -1108,14 +1108,29 @@ export default component$(() => {
                     class={`login-card__brand ${getPortal(selectedPortal.value).dark ? "login-card__brand--dark" : "login-card__brand--light"}`}
                   >
                     <img
-                      class="login-card__brandmark"
+                      class={`login-card__brandmark login-card__brandmark--${getPortal(selectedPortal.value).id}`}
                       src={getPortal(selectedPortal.value).logo}
                       alt={`${getPortal(selectedPortal.value).name} ${getPortal(selectedPortal.value).sub}`}
                       loading="eager"
                     />
                   </div>
                 ) : (
-                  <h1 class="login-card__title">{t("login.storetitle", locale.value)}</h1>
+                  <h1 class="login-card__title">
+                    {/* Wrap ALL words in one span so the title stays a single
+                        flowing text block (wrapping SYNERGY GROUP / APPAREL);
+                        the first word stays bold, the rest are set thinner. */}
+                    <span class="login-card__title-text">
+                      {(() => {
+                        const words = t("login.storetitle", locale.value).split(" ");
+                        return (
+                          <>
+                            {words[0]}{" "}
+                            <span class="login-card__title-thin">{words.slice(1).join(" ")}</span>
+                          </>
+                        );
+                      })()}
+                    </span>
+                  </h1>
                 )}
 
                 {/* Step 1 — pick one of the 4 company portals. */}
@@ -1130,7 +1145,7 @@ export default component$(() => {
                       style={`--portal-accent:${p.accent}`}
                       onClick$={() => { selectedPortal.value = p.id; }}
                     >
-                      <img class="login-portal__logo" src={p.logo} alt={p.name} width="72" height="72" loading="eager" />
+                      <img class={`login-portal__logo login-portal__logo--${p.id}`} src={p.logo} alt={p.name} width="72" height="72" loading="eager" />
                     </button>
                   ))}
                 </div>
