@@ -12,7 +12,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 9.5,
+    "price": 8,
     "img": "/sku/tshirt.png",
     "imgs": [
       "/sku/tshirt.png"
@@ -46,7 +46,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 19.5,
+    "price": 15,
     "img": "/2400.jpg",
     "imgs": [
       "/2400.jpg"
@@ -63,7 +63,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 65,
+    "price": 60,
     "img": "/portals/1370399-as.jpg",
     "imgs": [
       "/portals/1370399-as.jpg"
@@ -73,14 +73,14 @@ export const allProducts = [
   },
   {
     "sku": "SG-5",
-    "name": "Carhartt Winter Jacket - Black",
+    "name": "Men's Carhartt Winter Jacket - Black",
     "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
       "#1a1a18"
     ],
-    "price": 198.49,
+    "price": 214,
     "img": "/portals/106674-as.png",
     "imgs": [
       "/portals/106674-as.png"
@@ -234,7 +234,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 22.04,
+    "price": 17,
     "img": "/portals/110M-as.jpg",
     "imgs": [
       "/portals/110M-as.jpg"
@@ -251,7 +251,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 27.28,
+    "price": 25,
     "img": "/portals/6110NU-as.jpg",
     "imgs": [
       "/portals/6110NU-as.jpg"
@@ -268,7 +268,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 55,
+    "price": 47,
     "img": "/portals/M585-as.jpg",
     "imgs": [
       "/portals/M585-as.jpg"
@@ -285,7 +285,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 59,
+    "price": 50,
     "img": "/portals/M585L-as.jpg",
     "imgs": [
       "/portals/M585L-as.jpg"
@@ -302,7 +302,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 11.78,
+    "price": 13,
     "img": "/portals/56795-as.jpg",
     "imgs": [
       "/portals/56795-as.jpg"
@@ -360,6 +360,38 @@ export const allProducts = [
     ],
     "material": "65% polyester, 35% combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
     "details": "Button-down shirt collar, Contrast inner yoke, Centre-back box pleat, Flat-felled seams, Back yoke, Upper patch pocket, Left-chest pocket, #17745"
+  },
+  {
+    "sku": "SG-22",
+    "name": "Vice Pro Plus Golf Balls (12)",
+    "category": "Accessories",
+    "sizes": "Box of 12",
+    "badge": "",
+    "colors": [],
+    "price": 0,
+    "img": "/portals/viceball-cf.png",
+    "imgs": [
+      "/portals/viceball-cf.png"
+    ],
+    "material": "",
+    "details": ""
+  },
+  {
+    "sku": "SG-23",
+    "name": "Men's Wilshire Long Sleeve Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 57.4,
+    "img": "/17744-cf.jpg",
+    "imgs": [
+      "/17744-cf.jpg"
+    ],
+    "material": "65% Polyester 35% Combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
+    "details": "Adjustable one-button cuffs with single pleats, button-down collar, contrast inner yoke, centre-back box pleat, flat-felled seams, back yoke, upper patch pocket, tall sizes available, #17744"
   }
 ];
 

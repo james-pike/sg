@@ -19,7 +19,7 @@ const VIEW_MODES: { key: number | "list"; label: string; icon: string }[] = [
 // Tabs for the sg catalog — must match the category values the synergygroup
 // products actually use (see scripts/seed-synergygroup.ts), otherwise a tab
 // filters to an empty list. Add "SWAG" etc. back here when such products exist.
-const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "T-Shirts", "Polos", "Headwear", "Safety"];
+const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "T-Shirts", "Polos", "Headwear", "Safety", "Accessories"];
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
@@ -116,7 +116,7 @@ const BRAND_LIST = [
   "CX2", "Flexfit", "FootJoy", "Gildan", "Harriton", "Sportsman", "Trimark",
   "Under Armour", "Wilson", "Yeti",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
-  "2 Buds", "Nexgen", "Nomad", "Srixon", "Tranzip", "Cap America",
+  "2 Buds", "Nexgen", "Nomad", "Srixon", "Vice Golf", "Tranzip", "Cap America",
 ];
 // Brand overrides for products whose brand isn't in the display name (identified
 // from the product spec). Everything else is matched by name against BRAND_LIST.
@@ -142,6 +142,8 @@ const BRAND_BY_SKU: Record<string, string> = {
   "SG-17": "Harriton",          // Advantage IL workshirt #M585L
   "SG-19": "Trimark",           // Maxson softshell #19534
   "SG-21": "Trimark",           // Stirling SS work shirt #17745
+  "SG-22": "Vice Golf",         // Vice Pro Plus Golf Balls (12)
+  "SG-23": "Trimark",           // Wilshire LS dress shirt #17744
 };
 function brandOf(p: Product): string | null {
   if (BRAND_BY_SKU[p.sku]) return BRAND_BY_SKU[p.sku];
