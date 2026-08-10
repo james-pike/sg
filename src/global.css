@@ -2,9 +2,9 @@
 :root {
   /* Accent blue = the header sign blue (was a brighter #4f74ac). All blue accents
      — prices, links, active states, selected borders — track the header now. */
-  --ce-green: #546f83;
-  --ce-green-dark: #425767;
-  --ce-green-light: #758f9f;
+  --ce-green: #6e8a9c;
+  --ce-green-dark: #52697a;
+  --ce-green-light: #869eac;
   --ce-orange: #E6570C;
   --ce-orange-light: #F27D13;
   --ce-gold: #4d6f83;
@@ -5465,7 +5465,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
    only nudges a touch deeper (not the old dark #4d6f83 theme, which read "too
    blue" when the :hover state stuck on a mobile tap). */
 .product-modal__add.btn--primary {
-  background: #546f83;
+  background: #6e8a9c;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65,111,141,0.34);
@@ -9022,8 +9022,8 @@ details[open] > .cart-drawer__checkout-title::after {
      ratio (÷1.618) → #4c6070, so the header sits a φ step below the tab bar just
      like the 64/40 height ratio between them. Both blues were lightened + softened
      a step (from #2b556f / #5f849c) so they read gentler against the pale page. */
-  --wt-orange: #546f83;
-  --wt-orange-dark: #425767;
+  --wt-orange: #6e8a9c;
+  --wt-orange-dark: #52697a;
   --wt-orange-hi: #dbeafe;
   /* Darker-orange overlay box behind the logo + buttons (willstransfer.com
      mobile/tablet look): ~30% black over the orange bar → ~#2b374d. */
@@ -11312,7 +11312,7 @@ details[open] > .cart-drawer__checkout-title::after {
    from the same orange rather than the old blue one. Deeper on hover so the
    press still reads on a warm background. */
 .product-modal__add.btn--primary {
-  background: #546f83;
+  background: #6e8a9c;
   color: var(--ce-white);
   border: none;
   box-shadow: 0 6px 22px rgba(65, 111, 141, 0.34);
@@ -13398,7 +13398,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    than the lighter tab-bar blue, so the active tab reads as the header colour.
    Scoped --wt-orange resolves inside the active tab's background gradient (and
    its ::before, which inherits the variable). */
-.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #546f83; }
+.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #6e8a9c; }
 
 /* ============================================================
    Desktop: header a golden step TALLER than the secondary bars.
@@ -13517,7 +13517,7 @@ body:has(.nav-drawer-overlay) .site-header__logo {
 /* Header: the darker blue sign (a φ-step below the lighter tab-bar blue) with the
    iron texture + restored pressed/raised depth. Deep bg → white content (below). */
 .site-header__inner {
-  --wt-orange: #546f83;
+  --wt-orange: #6e8a9c;
   /* Dots fade toward the centre (a solid-blue overlay peaks at 50% and eases to
      transparent at both ends), so the dot texture reads strongest at the left/
      right edges and clears through the middle. */
@@ -13719,7 +13719,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-bottom: none !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    box-shadow: 0 3px 0 0 #546f83 !important;
+    box-shadow: 0 3px 0 0 #6e8a9c !important;
   }
 }
 

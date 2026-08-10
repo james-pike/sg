@@ -543,7 +543,7 @@ export default component$(() => {
       heroIndex.value = (heroIndex.value + 1) % PORTALS.length;
     }, 6000);
     cleanup(() => clearInterval(id));
-  });
+  }, { strategy: "document-ready" });
 
   // Cart state
   const initialCartCount = useCartCountLoader();
