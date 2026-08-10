@@ -201,9 +201,9 @@ export const allProducts = [
       "#1a1a18"
     ],
     "price": 25,
-    "img": "/L01150-black.webp",
+    "img": "/portals/L01150-cf.webp",
     "imgs": [
-      "/L01150-black.webp"
+      "/portals/L01150-cf.webp"
     ],
     "material": "130 gsm, 3.8 oz/yd² (6.5 oz/lin yd), 100% polyester tricot knit",
     "details": "Mesh panel on upper back for ventilation, 4 front storage pockets, Radio-clip straps on front shoulders, YKK zipper closure, Durable binding, 4\" contrast hi-vis tape with 2\" reflective tape front and back, Meets CSA standards, #L01150"
@@ -362,6 +362,23 @@ export const allProducts = [
     "details": "Button-down shirt collar, Contrast inner yoke, Centre-back box pleat, Flat-felled seams, Back yoke, Upper patch pocket, Left-chest pocket, #17745"
   },
   {
+    "sku": "SG-23",
+    "name": "Men's Wilshire Long Sleeve Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 60,
+    "img": "/portals/17744-cf.jpg",
+    "imgs": [
+      "/portals/17744-cf.jpg"
+    ],
+    "material": "65% Polyester 35% Combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
+    "details": "Adjustable one-button cuffs with single pleats, button-down collar, contrast inner yoke, centre-back box pleat, flat-felled seams, back yoke, upper patch pocket, tall sizes available, #17744"
+  },
+  {
     "sku": "SG-22",
     "name": "Vice Pro Plus Golf Balls (12)",
     "category": "Accessories",
@@ -375,23 +392,6 @@ export const allProducts = [
     ],
     "material": "",
     "details": ""
-  },
-  {
-    "sku": "SG-23",
-    "name": "Men's Wilshire Long Sleeve Shirt",
-    "category": "Polos",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18"
-    ],
-    "price": 57.4,
-    "img": "/17744-cf.jpg",
-    "imgs": [
-      "/17744-cf.jpg"
-    ],
-    "material": "65% Polyester 35% Combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
-    "details": "Adjustable one-button cuffs with single pleats, button-down collar, contrast inner yoke, centre-back box pleat, flat-felled seams, back yoke, upper patch pocket, tall sizes available, #17744"
   }
 ];
 
