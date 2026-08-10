@@ -5455,49 +5455,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__add--added .product-modal__add-pinwheel {
   transform: rotate(45deg) scale(0.62);
 }
-/* A light that fades in and travels around the button's perimeter on hover */
-@property --sheen-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-.product-modal__add--branded::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(from var(--sheen-angle), rgba(255,255,255,0.9) 0deg, transparent 55deg, transparent 305deg, rgba(255,255,255,0.9) 360deg);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-@keyframes sheen-travel {
-  to { --sheen-angle: 360deg; }
-}
 
-/* Hover-only effects — gated so they never "stick" on touch devices after
-   a tap (which would leave the colours/diamond showing once "Added" ends).
-   Touch relies on :active + the .product-modal__add--added state instead. */
-@media (hover: hover) {
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1) { fill: #ffe2a6; transition-delay: 0s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: #ae1f2a; transition-delay: 0.025s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: #d43950; transition-delay: 0.05s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: #9ec069; transition-delay: 0.075s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: #7fa244; transition-delay: 0.1s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: #4689b3; transition-delay: 0.125s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: #31759c; transition-delay: 0.15s; }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: #ffd25b; transition-delay: 0.175s; }
-  .product-modal__add--branded:not(:disabled):hover .product-modal__add-pinwheel { transform: rotate(45deg) scale(0.62); }
-  .product-modal__add--branded:not(:disabled):hover::before {
-    opacity: 1;
-    animation: sheen-travel 1.8s linear 1;
-  }
-}
 
 /* Add to Cart — filled in the lighter secondary-bar blue (#84acc7). Hover/tap
    only nudges a touch deeper (not the old dark #31759c theme, which read "too
@@ -13958,6 +13916,23 @@ body:has(.cart-drawer) .pdp-breadcrumb {
    logo filename so only the Powered portal is affected. */
 .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="powered-lockup"] {
   height: 60px !important;
+}
+/* Corflow's reversed lockup carries the eye icon above a smaller wordmark, so at
+   the shared 46px its text reads smaller than APPAREL. Scale it up so the
+   wordmark matches APPAREL's cap height, like Airtech's header. */
+.site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="corflow-reversed"] {
+  height: 74px !important;
+  /* The scaled-up artwork carries transparent side padding; pull it back left so
+     it doesn't read as indented, and tighten the gap before APPAREL. */
+  margin-left: -11px !important;
+  margin-right: -9px !important;
+}
+/* Corflow's wordmark is a touch smaller than the shared APPAREL size and sits
+   slightly higher than the image's baseline, so trim APPAREL beside it and nudge
+   it onto the wordmark's line. Adjacent-sibling so only Corflow is affected. */
+.site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="corflow-reversed"] + .brand-cluster__apparel {
+  font-size: 1.05rem !important;
+  transform: translateY(-9px);
 }
 /* The Powered lockup's wordmark is a hair smaller, so trim APPAREL beside it to
    match. Adjacent-sibling of the Powered logo, so only Powered is affected. */
