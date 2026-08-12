@@ -379,19 +379,21 @@ export const allProducts = [
     "details": "Adjustable one-button cuffs with single pleats, button-down collar, contrast inner yoke, centre-back box pleat, flat-felled seams, back yoke, upper patch pocket, tall sizes available, #17744"
   },
   {
-    "sku": "SG-22",
-    "name": "Vice Pro Plus Golf Balls (12)",
-    "category": "Accessories",
-    "sizes": "Box of 12",
+    "sku": "SG-24",
+    "name": "Harriton Unisex ClimaBloc® Station Vest",
+    "category": "Jackets",
+    "sizes": "XS - 5XL",
     "badge": "",
-    "colors": [],
-    "price": 0,
-    "img": "/portals/viceball-cf.png",
-    "imgs": [
-      "/portals/viceball-cf.png"
+    "colors": [
+      "#1a1a18"
     ],
-    "material": "",
-    "details": ""
+    "price": 90,
+    "img": "/portals/M723-cf.png",
+    "imgs": [
+      "/portals/M723-cf.png"
+    ],
+    "material": "8 oz./yd²/273 gsm (US), 13.4 oz/L yd (CA), 65/35 polyester/cotton twill; 140 gsm poly fill; Polyester taffeta lining with diamond quilting",
+    "details": "ClimaBloc provides durable water-repellent (DWR) protection for wet and rugged work conditions, UTK 1 ideal for mild to cool temperatures ranging from 47ºF to 18ºF (8ºC to -8ºC), Double patch pockets with flaps and velcro closure, Lower zippered pockets, Inner storage pocket, EZEM System™ designed for easy embroidery access, Responsible Supplier: made in a facility that is FLA certified, #M723"
   }
 ];
 

@@ -60,6 +60,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-19": { img: "/portals/19534-cf.webp", imgs: ["/portals/19534-cf.webp"] },
     "SG-20": { img: "/portals/g8800-cf.jpg", imgs: ["/portals/g8800-cf.jpg"] },
     "SG-21": { img: "/portals/17745-cf.webp", imgs: ["/portals/17745-cf.webp"] },
+    "SG-24": { img: "/portals/M723-cf.png", imgs: ["/portals/M723-cf.png"] },
   },
   portal3: {
     "SG-1": { img: "/portals/g2000-ws.jpg", imgs: ["/portals/g2000-ws.jpg"] },
