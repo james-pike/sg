@@ -422,7 +422,7 @@
   "public/portals/M585-as.jpg": "f488293530b1ff91",
   "public/portals/M585-cf.jpg": "05e3893adb904353",
   "public/portals/M585-ps.jpg": "c2140f36d964a079",
-  "public/portals/M585L-as.jpg": "5ddcb8e83f4f2637",
+  "public/portals/M585L-as.jpg": "b4648ac9cd66ded9",
   "public/portals/M585L-cf.jpg": "8832e285ba7a6aa0",
   "public/portals/M585L-ps.jpg": "e0c0a11214e25f45",
   "public/portals/g2000-as.jpg": "bb41c831e1cfa468",
@@ -465,5 +465,18 @@
   "public/portals/g8800-ps.jpg": "208c078ef5a2c2fc",
   "public/portals/17744-cf.jpg": "cb176d78a45289bd",
   "public/portals/viceball-cf.png": "4c6c2c992ad20a29",
-  "public/portals/M723-cf.png": "774a71b3c6aaa512"
+  "public/portals/M723-cf.png": "774a71b3c6aaa512",
+  "public/portals/106674-ws.jpg": "5dac5eb173402ba2",
+  "public/portals/19534-ws.jpg": "b306221a3aade158",
+  "public/portals/56795-ws.jpg": "9a00c088fabb5e1c",
+  "public/portals/L01110-ws.jpg": "72ae9c61f3f66a3b",
+  "public/portals/M585-ws.jpg": "d218fa9185f8a506",
+  "public/portals/M585L-ws.jpg": "d86d078a783034dc",
+  "public/portals/M723-as.jpg": "8357f650fc06bea4",
+  "public/portals/M723-ps.jpg": "2109cfad75eb4423",
+  "public/portals/M723-ws.jpg": "5e7d56e8bbc78fe4",
+  "public/portals/g8800-ws.jpg": "920c83a5203f66be",
+  "public/corflow-mark.png": "a3e9dfd031b0b96b",
+  "public/corflow-word.png": "e69573c43753d402",
+  "public/wired-logo-white-text.png": "37065dffd6d4a16f"
 }

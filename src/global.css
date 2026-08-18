@@ -6020,6 +6020,52 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .checkout-modal__pay .checkout-modal__form-title { margin-bottom: 0.6rem; }
 
+/* Split-payment summary (50% card now / 50% invoiced to the company). */
+.checkout-modal__pay-note {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--ce-gray-600);
+  margin: 0 0 0.7rem;
+}
+.checkout-modal__split {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.checkout-modal__split-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--ce-gray-200);
+}
+.checkout-modal__split-label {
+  font-size: 0.85rem;
+  color: var(--ce-gray-800);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.checkout-modal__split-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--ce-gray-500);
+  background: var(--ce-gray-100, #eef1f3);
+  border: 1px solid var(--ce-gray-200);
+  border-radius: 999px;
+  padding: 0.05rem 0.4rem;
+}
+.checkout-modal__split-amt {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ce-gray-900);
+  white-space: nowrap;
+}
+.checkout-modal__split-amt--muted { font-weight: 600; color: var(--ce-gray-600); }
+
 /* Checkout: three stacked areas (order summary / order details / payment) as
    distinct panels. Neutral light-gray on mobile/tablet; light-blue on desktop.
    Square corners + a small UNIFORM gap (4px between panels and 4px on the sides). */
@@ -13940,6 +13986,67 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   color: #fff !important;
   letter-spacing: 0.06em !important;
   transform: translate(-7px, -17px);
+}
+/* ── Corflow split header lockup ────────────────────────────────────────────
+   Corflow uses two standalone pieces — the eye symbol (headerMark) and the
+   "CORFLOW SYNERGY" wordmark (headerWord) — instead of one baked lockup image.
+   That lets the wordmark sit INLINE with APPAREL on desktop, but STACK above
+   APPAREL on mobile, both matching the square symbol's height beside them.
+   Its own classes (not .brand-cluster__mark*) so the per-breakpoint square-mark
+   sizing rules don't fight the symbol's height. */
+.site-header .brand-cluster--split {
+  gap: 0.5rem !important;
+  align-items: center !important;
+}
+.site-header .brand-cluster--split .brand-cluster__split-mark {
+  flex: 0 0 auto;
+  height: 42px !important;
+  width: auto !important;
+  object-fit: contain;
+}
+.site-header .brand-cluster--split .brand-cluster__split-text {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  gap: 0.42rem !important;
+}
+.site-header .brand-cluster--split .brand-cluster__split-word {
+  height: 16px !important;   /* cap height matched to APPAREL beside it */
+  width: auto !important;
+  object-fit: contain;
+  display: block;
+}
+.site-header .brand-cluster--split .brand-cluster__apparel {
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  color: #fff !important;
+  letter-spacing: 0 !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+/* Mobile: stack the wordmark ABOVE APPAREL so the two lines together rise to
+   the symbol's height. */
+@media (max-width: 600px) {
+  .site-header .brand-cluster--split {
+    gap: 0.45rem !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-mark {
+    height: 35px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-text {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 4px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-word {
+    height: 15px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__apparel {
+    font-size: 0.9rem !important;
+    letter-spacing: 0.02em !important;
+  }
 }
 /* The Powered lockup's wordmark is a hair smaller, so trim APPAREL beside it to
    match. Adjacent-sibling of the Powered logo, so only Powered is affected. */

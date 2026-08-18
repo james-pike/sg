@@ -5,7 +5,6 @@ import {
   Link,
   routeAction$,
   routeLoader$,
-  server$,
   useLocation,
   useNavigate,
   Form,
@@ -19,9 +18,8 @@ import type { Locale, TranslationKey } from "../i18n";
 import { allProducts, colorName } from "./apparel/products";
 import { PORTALS, PORTAL_IDS, getPortal } from "../portals";
 import { portalizeProduct } from "../portal-images";
-import { getGiftCard, giftContribution, deductGiftCard } from "../lib/giftcards";
 import { sendConfirmationEmail } from "../lib/orders";
-import type { OrderEmailData, PaymentMethod } from "../lib/orders";
+import type { OrderEmailData } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
 
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
@@ -139,31 +137,18 @@ export const useLogout = routeAction$(async (_, { cookie }) => {
   return { success: true };
 });
 
-// Look up a gift card's balance from the checkout form (before submitting), so
-// the UI can show how much it covers and how much is left for the card.
-//
-// This is a server$ RPC, NOT a routeAction$: a routeAction submit runs the
-// router lifecycle, which fired the "close the cart on navigation" visible-task
-// and booted the user out of the checkout drawer on every Apply. server$ is a
-// plain server call with no navigation, so the drawer stays put.
-export const checkGiftCardBalance = server$(async function (code: string) {
-  const env = this.env;
-  const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
-  const tursoToken = env.get("TURSO_AUTH_TOKEN") || env.get("VITE_TURSO_AUTH_TOKEN");
-  if (!tursoUrl || !tursoToken) return { valid: false, balance: 0, error: "not_configured" as const };
-  const db = createClient({ url: tursoUrl, authToken: tursoToken });
-  const card = await getGiftCard(db, (code || "").slice(0, 64));
-  if (!card || !card.active) return { valid: false, balance: 0 };
-  return { valid: true, balance: card.balance };
-});
 
 export const useSubmitOrder = routeAction$(
   async (data, { fail, env, cookie, url }) => {
     if (!isAuthenticated(cookie)) {
       return fail(401, { message: "Not authenticated" });
     }
-    const lt = getLoginType(cookie);
-    const vendor = lt === "tech" ? "modernniagara-tech" : lt === "safety" ? "modernniagara-safety" : "modernniagara";
+    const portalId = getLoginType(cookie);
+    const vendor = "modernniagara"; // order-number scheme (MN-<n>) — unchanged.
+    // The remaining half is invoiced to the SIGNED-IN portal's company, e.g.
+    // "Corflow Synergy". This is the AR party we later push to QuickBooks.
+    const portalCfg = getPortal(portalId);
+    const companyName = `${portalCfg.name} ${portalCfg.sub}`;
     // Read from non-prefixed names first, fall back to VITE_* for backward compat.
     // Both are safe at runtime — env.get() reads server env, never bundles.
     const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
@@ -172,9 +157,6 @@ export const useSubmitOrder = routeAction$(
     const stripeKey = env.get("STRIPE_SECRET_KEY") || env.get("VITE_STRIPE_SECRET_KEY");
 
     const { employee, items, date } = data;
-    const paymentMethod = (data.paymentMethod || "po") as PaymentMethod;
-    const wantsGift = paymentMethod === "giftcard" || paymentMethod === "giftcard_card";
-    const wantsCard = paymentMethod === "card" || paymentMethod === "giftcard_card";
 
     const province = employee.province;
     if (!province || !PROVINCE_TAX[province]) {
@@ -183,84 +165,70 @@ export const useSubmitOrder = routeAction$(
     if (!employee.address1?.trim() || !employee.city?.trim() || !employee.postal?.trim()) {
       return fail(400, { message: "A full shipping address (street, city, postal code) is required." });
     }
-    if (paymentMethod === "po" && !employee.po) {
-      return fail(400, { message: "A PO number is required for purchase-order checkout." });
-    }
     const taxRate = PROVINCE_TAX[province];
     const taxPct = +(taxRate * 100).toFixed(3);
     const subtotal = items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0);
     const tax = subtotal * taxRate;
     const total = +(subtotal + tax).toFixed(2);
 
+    // ---- 50/50 split ---------------------------------------------------------
+    // Customer pays half NOW by credit card (Stripe); the company is invoiced
+    // the other half (tracked as company_billing_status='pending_invoice', for
+    // the QuickBooks pipeline). Split in integer cents so the two halves always
+    // sum EXACTLY to the total — any odd cent goes to the customer's card half.
+    const totalCents = Math.round(total * 100);
+    if (totalCents <= 0) {
+      return fail(400, { message: "Order total is $0 — nothing to charge." });
+    }
+    const customerCents = Math.round(totalCents / 2);
+    const companyCents = totalCents - customerCents;
+    const customerAmount = +(customerCents / 100).toFixed(2);
+    const companyAmount = +(companyCents / 100).toFixed(2);
+
     if (!tursoUrl || !tursoToken) {
       return fail(500, { message: "Order database not configured (missing env vars)" });
     }
     const db = createClient({ url: tursoUrl, authToken: tursoToken });
 
-    // ---- Resolve the gift-card contribution (if any) ----
-    let giftAmount = 0;
-    let giftCode = "";
-    if (wantsGift) {
-      if (!data.giftCardCode) {
-        return fail(400, { message: "Enter a gift card code, or choose a different payment method." });
-      }
-      const card = await getGiftCard(db, data.giftCardCode);
-      if (!card || !card.active) {
-        return fail(400, { message: "Gift card not found or inactive." });
-      }
-      giftAmount = giftContribution(card, total);
-      giftCode = card.code;
-    }
-    const remaining = +(total - giftAmount).toFixed(2);
-
-    // Gift-card-only but the balance doesn't cover the order → they must add a card.
-    if (paymentMethod === "giftcard" && remaining > 0) {
-      return fail(400, {
-        message: `Gift card covers $${giftAmount.toFixed(2)} of $${total.toFixed(2)}. Choose "Gift card + credit card" to pay the $${remaining.toFixed(2)} balance.`,
-      });
-    }
-    const cardAmount = wantsCard ? remaining : 0;
-    if (wantsCard && cardAmount <= 0 && paymentMethod === "card") {
-      return fail(400, { message: "Order total is $0 — nothing to charge." });
-    }
     // DEV-ONLY simulated payment: when there's no Stripe key AND we're running
     // the dev server, the card charge is faked so the whole post-checkout flow
-    // (order finalized + email + gift-card deduction + success page) can be
-    // tested before a Stripe account exists. `import.meta.env.DEV` is compile-
-    // time false in a production build, so this branch is dead code in prod.
+    // (order finalized + email + success page) can be tested before a Stripe
+    // account exists. `import.meta.env.DEV` is compile-time false in a
+    // production build, so this branch is dead code in prod.
     const simulateCard = !stripeKey && !!import.meta.env.DEV;
-    if (wantsCard && cardAmount > 0 && !stripeKey && !simulateCard) {
+    if (!stripeKey && !simulateCard) {
       return fail(500, { message: "Card payments are not configured yet (missing Stripe key)." });
     }
 
-    // ---- Persist the order (status depends on whether a card charge follows) ----
-    // 'pending'          — PO / invoice, settled offline
-    // 'paid'             — gift card covered it in full
-    // 'awaiting_payment' — a Stripe card charge is required; the webhook flips it
-    //                      to 'paid' and deducts the gift card once payment lands.
-    const status = cardAmount > 0 ? "awaiting_payment" : paymentMethod === "po" ? "pending" : "paid";
+    // ---- Persist the order ---------------------------------------------------
+    // 'awaiting_payment' — the Stripe card half is required; the webhook flips it
+    //                      to 'paid' once the card payment lands. The company half
+    //                      stays 'pending_invoice' until it's billed / exported.
+    const status = "awaiting_payment";
     let orderNumber = "";
     let orderId: bigint | number | null = null;
     try {
       const result = await db.execute({
-        sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, gift_card_code, gift_amount, card_amount, device, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+        sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, card_amount, customer_amount, company_amount, company_name, company_billing_status, device, created_at, updated_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
         args: [
           vendor,
           "",
           // The name IS stored (so the admin knows who ordered); email/phone are
-          // NOT — for card orders they travel through Stripe metadata to the
-          // webhook, never a column here. See the privacy policy.
+          // NOT — they travel through Stripe metadata to the webhook, never a
+          // column here. See the privacy policy.
           employee.name || "",
           "",
-          employee.po || "",
+          "",
           JSON.stringify(items),
           total,
           status,
-          paymentMethod,
-          giftCode,
-          giftAmount,
-          cardAmount,
+          "split",
+          customerAmount, // card_amount — the card charge (customer half)
+          customerAmount, // customer_amount
+          companyAmount,  // company_amount — invoiced to the company
+          companyName,
+          "pending_invoice",
           data.device || null,
         ],
       });
@@ -293,8 +261,8 @@ export const useSubmitOrder = routeAction$(
       return `${origin}/favicon-512.png`;
     })();
 
-    // Build the confirmation-email payload once (used by the no-card path and
-    // the dev simulated-card path).
+    // Build the confirmation-email payload once (used by the dev simulated-card
+    // path and, via metadata, by the webhook after a real charge).
     const buildEmailData = (): OrderEmailData => ({
       orderNumber, date, logoUrl: emailLogoUrl,
       employee: {
@@ -304,127 +272,83 @@ export const useSubmitOrder = routeAction$(
       },
       items: items as any,
       subtotal, taxPct, tax, total,
-      payment: { method: paymentMethod, giftCardCode: giftCode || undefined, giftAmount, cardAmount },
+      payment: { method: "split", customerAmount, companyAmount, companyName },
     });
+
+    // Build the return-URL base from the ORIGIN only. Stripe needs an absolute
+    // https URL, and a SITE_URL that includes a path (".../apparel") would push
+    // success_url to /apparel/checkout/success/ — a non-existent route. Add a
+    // scheme if missing, then strip everything to scheme+host.
+    let siteBase = (env.get("SITE_URL") || url.origin || "").trim();
+    if (siteBase && !/^https?:\/\//i.test(siteBase)) siteBase = "https://" + siteBase;
+    let siteUrl = url.origin;
+    try { siteUrl = new URL(siteBase).origin; } catch { siteUrl = url.origin; }
 
     // ---- DEV simulated card payment (no Stripe key) ----
     // Finalize exactly like the webhook would after a real charge, then land on
     // the success page. Dev-only (see `simulateCard`).
-    if (cardAmount > 0 && simulateCard) {
-      if (giftAmount > 0) {
-        const ok = await deductGiftCard(db, giftCode, giftAmount);
-        if (ok) {
-          await db.execute({
-            sql: "INSERT INTO gift_card_transactions (code, amount, order_ref) VALUES (?, ?, ?)",
-            args: [giftCode, giftAmount, orderNumber],
-          });
-        }
-      }
+    if (simulateCard) {
       await db.execute({
         sql: "UPDATE orders SET status = 'paid', paid_at = datetime('now') WHERE id = ?",
         args: [orderId as any],
       });
       if (apiKey) await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, buildEmailData());
-      // Build the return-URL base from the ORIGIN only. Stripe needs an absolute
-      // https URL, and a SITE_URL that includes a path (".../apparel") would push
-      // success_url to /apparel/checkout/success/ — a non-existent route. Add a
-      // scheme if missing, then strip everything to scheme+host.
-      let siteBase = (env.get("SITE_URL") || url.origin || "").trim();
-      if (siteBase && !/^https?:\/\//i.test(siteBase)) siteBase = "https://" + siteBase;
-      let siteUrl = url.origin;
-      try { siteUrl = new URL(siteBase).origin; } catch { siteUrl = url.origin; }
       console.warn(`[DEV] Simulated card payment for order ${orderNumber} — no Stripe key set.`);
       return { redirectUrl: `${siteUrl}/checkout/success/?test=1`, orderNumber };
     }
 
-    // ---- Card required → hand off to Stripe Checkout ----
-    if (cardAmount > 0) {
-      // Build the return-URL base from the ORIGIN only. Stripe needs an absolute
-      // https URL, and a SITE_URL that includes a path (".../apparel") would push
-      // success_url to /apparel/checkout/success/ — a non-existent route. Add a
-      // scheme if missing, then strip everything to scheme+host.
-      let siteBase = (env.get("SITE_URL") || url.origin || "").trim();
-      if (siteBase && !/^https?:\/\//i.test(siteBase)) siteBase = "https://" + siteBase;
-      let siteUrl = url.origin;
-      try { siteUrl = new URL(siteBase).origin; } catch { siteUrl = url.origin; }
-      try {
-        const session = await createCheckoutSession({
-          secretKey: stripeKey!,
-          amountCents: Math.round(cardAmount * 100),
-          currency: "cad",
-          description: `Synergy Group apparel order ${orderNumber} — balance after gift card`,
-          successUrl: `${siteUrl}/checkout/success/?session_id={CHECKOUT_SESSION_ID}`,
-          cancelUrl: `${siteUrl}/checkout/cancelled/`,
-          customerEmail: (employee.email || "").trim() || undefined,
-          // Everything the webhook needs to finalize + email, WITHOUT storing PII
-          // in our DB. Items are loaded from the order row by id.
-          metadata: {
-            order_id: String(orderId ?? ""),
-            order_number: orderNumber,
-            employee_name: employee.name || "",
-            customer_email: (employee.email || "").trim(),
-            customer_phone: employee.phone || "",
-            department: employee.department || "",
-            po: employee.po || "",
-            address1: employee.address1 || "",
-            city: employee.city || "",
-            postal: employee.postal || "",
-            province_code: province,
-            province_name: provinceName,
-            tax_pct: String(taxPct),
-            subtotal: subtotal.toFixed(2),
-            tax: tax.toFixed(2),
-            total: total.toFixed(2),
-            payment_method: paymentMethod,
-            gift_code: giftCode,
-            gift_amount: giftAmount.toFixed(2),
-            card_amount: cardAmount.toFixed(2),
-            date: date,
-          },
-        });
-        await db.execute({
-          sql: "UPDATE orders SET stripe_session_id = ? WHERE id = ?",
-          args: [session.id, orderId as any],
-        });
-        return { redirectUrl: session.url, orderNumber };
-      } catch (err) {
-        console.error("Stripe checkout session failed:", err);
-        // Mark the order so a failed handoff isn't left looking like a real,
-        // payable order in the admin.
-        await db.execute({ sql: "UPDATE orders SET status = 'payment_error' WHERE id = ?", args: [orderId as any] });
-        // Surface the actual Stripe reason (e.g. bad key) — the generic message
-        // hid why the card step never started.
-        return fail(502, { message: `Card payment couldn't start: ${(err as Error)?.message || "unknown error"}` });
-      }
-    }
-
-    // ---- No card: gift-card-only (deduct now) or PO (settle offline) ----
-    if (giftAmount > 0) {
-      const ok = await deductGiftCard(db, giftCode, giftAmount);
-      if (!ok) {
-        // Balance changed between the estimate and now.
-        await db.execute({ sql: "UPDATE orders SET status = 'gift_failed' WHERE id = ?", args: [orderId as any] });
-        return fail(409, { message: "Gift card balance is no longer sufficient. Please re-check your balance." });
-      }
-      await db.execute({
-        sql: "INSERT INTO gift_card_transactions (code, amount, order_ref) VALUES (?, ?, ?)",
-        args: [giftCode, giftAmount, orderNumber],
+    // ---- Hand off the customer's half to Stripe Checkout ----
+    try {
+      const session = await createCheckoutSession({
+        secretKey: stripeKey!,
+        amountCents: customerCents,
+        currency: "cad",
+        description: `${companyName} apparel order ${orderNumber} — 50% deposit (remaining 50% invoiced to ${companyName})`,
+        successUrl: `${siteUrl}/checkout/success/?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${siteUrl}/checkout/cancelled/`,
+        customerEmail: (employee.email || "").trim() || undefined,
+        // Everything the webhook needs to finalize + email, WITHOUT storing PII
+        // in our DB. Items are loaded from the order row by id.
+        metadata: {
+          order_id: String(orderId ?? ""),
+          order_number: orderNumber,
+          employee_name: employee.name || "",
+          customer_email: (employee.email || "").trim(),
+          customer_phone: employee.phone || "",
+          department: employee.department || "",
+          address1: employee.address1 || "",
+          city: employee.city || "",
+          postal: employee.postal || "",
+          province_code: province,
+          province_name: provinceName,
+          tax_pct: String(taxPct),
+          subtotal: subtotal.toFixed(2),
+          tax: tax.toFixed(2),
+          total: total.toFixed(2),
+          payment_method: "split",
+          customer_amount: customerAmount.toFixed(2),
+          company_amount: companyAmount.toFixed(2),
+          company_name: companyName,
+          date: date,
+        },
       });
-      await db.execute({ sql: "UPDATE orders SET paid_at = datetime('now') WHERE id = ?", args: [orderId as any] });
+      await db.execute({
+        sql: "UPDATE orders SET stripe_session_id = ? WHERE id = ?",
+        args: [session.id, orderId as any],
+      });
+      return { redirectUrl: session.url, orderNumber };
+    } catch (err) {
+      console.error("Stripe checkout session failed:", err);
+      // Mark the order so a failed handoff isn't left looking like a real,
+      // payable order in the admin.
+      await db.execute({ sql: "UPDATE orders SET status = 'payment_error' WHERE id = ?", args: [orderId as any] });
+      // Surface the actual Stripe reason (e.g. bad key) — the generic message
+      // hid why the card step never started.
+      return fail(502, { message: `Card payment couldn't start: ${(err as Error)?.message || "unknown error"}` });
     }
-
-    if (apiKey) {
-      await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, buildEmailData());
-    } else {
-      console.warn("RESEND_API_KEY not configured — order saved but email not sent");
-    }
-
-    return { success: true, orderNumber };
   },
   zod$({
-    paymentMethod: z.enum(["po", "giftcard", "giftcard_card", "card"]).default("po"),
     device: z.enum(["mobile", "tablet", "desktop"]).optional(),
-    giftCardCode: z.string().max(64).optional(),
     employee: z.object({
       name: z.string().min(1).max(120),
       email: z.string().email().max(254).or(z.literal("")),
@@ -573,33 +497,9 @@ export default component$(() => {
   const empPostal = useSignal("");
   const empPO = useSignal("");
 
-  // Payment: 'po' (invoice), 'giftcard', 'giftcard_card', 'card'.
-  const payMethod = useSignal<"po" | "giftcard" | "giftcard_card" | "card">("po");
-  const giftCode = useSignal("");
-  const giftBalance = useSignal<number | null>(null); // null = not yet checked
-  const giftChecking = useSignal(false);
-  const giftError = useSignal("");
-  const usesGift = useComputed$(() => payMethod.value === "giftcard" || payMethod.value === "giftcard_card");
-
-  const checkGiftCard = $(async () => {
-    giftError.value = "";
-    if (!giftCode.value.trim()) { giftError.value = t("pay.gift.enter", locale.value); return; }
-    giftChecking.value = true;
-    try {
-      const v = await checkGiftCardBalance(giftCode.value.trim());
-      if (v?.valid) {
-        giftBalance.value = Number(v.balance) || 0;
-      } else {
-        giftBalance.value = null;
-        giftError.value = t("pay.gift.invalid", locale.value);
-      }
-    } catch {
-      giftBalance.value = null;
-      giftError.value = t("pay.gift.invalid", locale.value);
-    } finally {
-      giftChecking.value = false;
-    }
-  });
+  // Payment is always a 50/50 split: half by card now (Stripe), half invoiced to
+  // the signed-in portal's company (QuickBooks later). No method to choose.
+  const companyName = useComputed$(() => `${portal.value.name} ${portal.value.sub}`);
 
   const cartCount = useComputed$(() => {
     const count = cart.items.reduce((sum, i) => sum + i.quantity, 0);
@@ -611,27 +511,18 @@ export default component$(() => {
   const taxRate = useComputed$(() => taxRateFor(empProvince.value));
   const taxAmount = useComputed$(() => taxRate.value === undefined ? undefined : subtotal.value * taxRate.value);
   const orderTotal = useComputed$(() => subtotal.value + (taxAmount.value ?? 0));
-  // How much the checked gift card covers of the current total, and the leftover.
-  const giftCovers = useComputed$(() =>
-    giftBalance.value == null ? 0 : Math.min(giftBalance.value, orderTotal.value),
-  );
-  const giftRemaining = useComputed$(() => Math.max(0, +(orderTotal.value - giftCovers.value).toFixed(2)));
-  // What's left ON THE CARD after this order (balance minus what it covers) —
-  // shown when the card fully covers the order, so the customer sees their
-  // remaining allotment instead of a bare $0.00 amount-due.
-  const giftLeftover = useComputed$(() => Math.max(0, +((giftBalance.value ?? 0) - giftCovers.value).toFixed(2)));
-  // Whether the order can be placed — every required field filled and the
-  // payment method satisfied (gift card checked / covers the order, PO number
-  // for PO). Drives the greyed-out state of the place-order button. Detailed
-  // email/phone FORMAT checks stay on submit so the button un-greys once the
-  // fields are simply filled in.
+  // 50/50 split, mirrored from the server: split in integer cents so the two
+  // halves sum EXACTLY to the total, with any odd cent going to the card half.
+  const customerPay = useComputed$(() => Math.round(Math.round(orderTotal.value * 100) / 2) / 100);
+  const companyPay = useComputed$(() => +(orderTotal.value - customerPay.value).toFixed(2));
+  // Whether the order can be placed — every required field filled. Drives the
+  // greyed-out state of the place-order button. Detailed email/phone FORMAT
+  // checks stay on submit so the button un-greys once the fields are simply
+  // filled in.
   const canPlaceOrder = useComputed$(() => {
     if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
         || !empPhone.value.trim() || !empProvince.value) return false;
     if (!empAddress1.value.trim() || !empCity.value.trim() || !empPostal.value.trim()) return false;
-    if (payMethod.value === "po" && !empPO.value.trim()) return false;
-    if (usesGift.value && giftBalance.value == null) return false;           // card not applied yet
-    if (payMethod.value === "giftcard" && giftRemaining.value > 0) return false; // gift doesn't cover it
     return true;
   });
   const taxLabel = useComputed$(() => {
@@ -699,20 +590,8 @@ export default component$(() => {
     // click that somehow gets through when the order can't be placed / is sending.
     if (!canPlaceOrder.value || submitting.value) return;
     formTouched.value = true;
-    const poRequired = payMethod.value === "po";
-    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value || (poRequired && !empPO.value)) {
+    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value) {
       formError.value = t("cart.error.required", locale.value);
-      checkoutOpen.value = true;
-      return;
-    }
-    // Gift-card methods need a checked, valid code.
-    if (usesGift.value && giftBalance.value == null) {
-      formError.value = t("pay.gift.check", locale.value);
-      checkoutOpen.value = true;
-      return;
-    }
-    if (payMethod.value === "giftcard" && giftRemaining.value > 0) {
-      formError.value = t("pay.gift.short", locale.value);
       checkoutOpen.value = true;
       return;
     }
@@ -739,9 +618,7 @@ export default component$(() => {
     // own breakpoints (mobile <=600, tablet 601-1024, desktop >=1025).
     const device: "mobile" | "tablet" | "desktop" = window.innerWidth <= 600 ? "mobile" : window.innerWidth <= 1024 ? "tablet" : "desktop";
     const orderData = {
-      paymentMethod: payMethod.value,
       device,
-      ...(usesGift.value ? { giftCardCode: giftCode.value.trim() } : {}),
       employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, province: empProvince.value, address1: empAddress1.value, city: empCity.value, postal: empPostal.value, po: empPO.value },
       items: cart.items.map((i: any) => ({
         name: i.name || "",
@@ -811,10 +688,6 @@ export default component$(() => {
     empDept.value = "";
     empProvince.value = "";
     empPO.value = "";
-    payMethod.value = "po";
-    giftCode.value = "";
-    giftBalance.value = null;
-    giftError.value = "";
     formTouched.value = false;
     submitting.value = false;
   });
@@ -1206,9 +1079,21 @@ export default component$(() => {
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
       <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
         <div class="site-header__inner">
-          <Link href="/" class="site-header__logo brand-cluster brand-cluster--small brand-cluster--lockup">
-            <img class="brand-cluster__mark brand-cluster__mark--img brand-cluster__mark--lockup" src={portal.value.logo} alt={`${portal.value.name} ${portal.value.sub}`} width="400" height="100" loading="eager" decoding="sync" />
-            <span class="brand-cluster__word brand-cluster__word--muted brand-cluster__apparel">{t("logo.apparel", locale.value).toUpperCase()}</span>
+          <Link href="/" class={`site-header__logo brand-cluster brand-cluster--small ${portal.value.headerMark ? "brand-cluster--split" : "brand-cluster--lockup"}`}>
+            {portal.value.headerMark ? (
+              <>
+                <img class="brand-cluster__split-mark" src={portal.value.headerMark} alt={`${portal.value.name} ${portal.value.sub}`} width="72" height="40" loading="eager" decoding="sync" />
+                <span class="brand-cluster__split-text">
+                  <img class="brand-cluster__split-word" src={portal.value.headerWord} alt={`${portal.value.name} ${portal.value.sub}`} width="256" height="17" loading="eager" decoding="sync" />
+                  <span class="brand-cluster__word brand-cluster__word--muted brand-cluster__apparel">{t("logo.apparel", locale.value).toUpperCase()}</span>
+                </span>
+              </>
+            ) : (
+              <>
+                <img class="brand-cluster__mark brand-cluster__mark--img brand-cluster__mark--lockup" src={portal.value.logo} alt={`${portal.value.name} ${portal.value.sub}`} width="400" height="100" loading="eager" decoding="sync" />
+                <span class="brand-cluster__word brand-cluster__word--muted brand-cluster__apparel">{t("logo.apparel", locale.value).toUpperCase()}</span>
+              </>
+            )}
           </Link>
           <nav class="site-header__categories">
             <Link href="/" class={loc.url.pathname === "/" ? "active" : ""}>{t("nav.home", locale.value)}</Link>
@@ -1786,14 +1671,33 @@ export default component$(() => {
                     </div>
                   </div>
 
-                  {/* ---- Payment method ---- */}
+                  {/* ---- Payment: 50/50 split ---- */}
+                  {/* Every order is split: the customer pays half by credit card
+                      now (Stripe), and the signed-in portal's company is invoiced
+                      the other half (reconciled to QuickBooks later). No method to
+                      pick — this panel just shows the split before the card step. */}
                   <div class="checkout-modal__pay">
                     <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
-                    {/* MN accepts purchase-order checkout only — no gift card or
-                        credit-card options. payMethod stays at its "po" default. */}
-                    <div class={`checkout-modal__field ${formTouched.value && !empPO.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.po", locale.value)}</label>
-                      <input type="text" value={empPO.value} onInput$={(_, el) => (empPO.value = el.value)} />
+                    <p class="checkout-modal__pay-note">{t("pay.split.note", locale.value)}</p>
+                    <div class="checkout-modal__split">
+                      <div class="checkout-modal__split-row">
+                        <span class="checkout-modal__split-label">
+                          {t("pay.split.paynow", locale.value)}
+                          <span class="checkout-modal__split-badge">{t("pay.split.half", locale.value)}</span>
+                        </span>
+                        <span class="checkout-modal__split-amt">
+                          {empProvince.value ? `$${customerPay.value.toFixed(2)}` : "—"}
+                        </span>
+                      </div>
+                      <div class="checkout-modal__split-row">
+                        <span class="checkout-modal__split-label">
+                          {t("pay.split.company", locale.value)} {companyName.value}
+                          <span class="checkout-modal__split-badge">{t("pay.split.half", locale.value)}</span>
+                        </span>
+                        <span class="checkout-modal__split-amt checkout-modal__split-amt--muted">
+                          {empProvince.value ? `$${companyPay.value.toFixed(2)}` : "—"}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1817,9 +1721,7 @@ export default component$(() => {
                     ) : (
                       <>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-                    {(payMethod.value === "card" || (payMethod.value === "giftcard_card" && giftRemaining.value > 0))
-                      ? t("cart.continuepayment", locale.value)
-                      : t("cart.createorder", locale.value)}
+                    {t("cart.continuepayment", locale.value)}
                       </>
                     )}
                   </button>

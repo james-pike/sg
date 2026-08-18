@@ -1,4 +1,31 @@
-# Payments setup (gift cards + Stripe)
+# Payments setup (50/50 split + Stripe)
+
+> **Current model (Synergy Group):** every order is a **50/50 split**. The
+> customer pays **half the total by credit card** at checkout via Stripe Checkout
+> (hosted page); the **other half is invoiced to the signed-in portal's company**
+> (Airtech / Corflow / Powered / Wired Synergy) and tracked as
+> `company_billing_status = 'pending_invoice'` for a later QuickBooks export.
+> There is no payment-method choice — every checkout is a split.
+>
+> Run the split-billing migration once, in addition to the Stripe setup below:
+>
+> ```bash
+> turso db shell <your-db> < db/migrations/002_split_billing.sql
+> ```
+>
+> This adds `customer_amount`, `company_amount`, `company_name`, and
+> `company_billing_status` to `orders`. The customer half is captured by the
+> Stripe webhook (order → `paid`); the company half stays `pending_invoice`
+> until it's billed / exported to QuickBooks.
+>
+> **The gift-card sections below are legacy** (from the wt/wills project) and are
+> no longer used by the checkout. `db/lib/giftcards.ts` and the `gift_cards`
+> tables can stay in place harmlessly, or be dropped.
+
+---
+
+<details>
+<summary>Legacy: gift-card scaffold (no longer used)</summary>
 
 This scaffolds four checkout options: **PO / invoice** (existing), **gift card**,
 **gift card + credit card**, and **credit card**. Gift cards are tracked in the
@@ -6,6 +33,8 @@ database; the credit-card portion goes through Stripe Checkout (hosted page).
 
 Most orders are expected to be **gift card + credit card**: each employee gets a
 ~$250 gift card, and the card covers any remaining balance.
+
+</details>
 
 ---
 

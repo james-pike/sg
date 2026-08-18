@@ -14,8 +14,7 @@ import type { RequestHandler } from "@builder.io/qwik-city";
 import { createClient } from "@libsql/client";
 import { verifyAndParseWebhook } from "../../../lib/stripe";
 import { sendConfirmationEmail } from "../../../lib/orders";
-import type { OrderEmailData, OrderItem, PaymentMethod } from "../../../lib/orders";
-import { deductGiftCard } from "../../../lib/giftcards";
+import type { OrderEmailData, OrderItem } from "../../../lib/orders";
 
 export const onPost: RequestHandler = async ({ request, env, json }) => {
   const secret = env.get("STRIPE_WEBHOOK_SECRET");
@@ -66,23 +65,10 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
     return;
   }
 
-  // Deduct the gift-card portion now that the card has paid.
-  const giftAmount = Number(m.gift_amount || "0") || 0;
-  const giftCode = m.gift_code || "";
-  if (giftAmount > 0 && giftCode) {
-    const ok = await deductGiftCard(db, giftCode, giftAmount);
-    if (ok) {
-      await db.execute({
-        sql: "INSERT INTO gift_card_transactions (code, amount, order_ref) VALUES (?, ?, ?)",
-        args: [giftCode, giftAmount, m.order_number || ""],
-      });
-    } else {
-      // Card already charged but the gift balance is short — flag for review.
-      console.error(`Gift card ${giftCode} could not be deducted for order ${m.order_number} after card payment.`);
-      await db.execute({ sql: "UPDATE orders SET status = 'review_gift' WHERE id = ?", args: [orderId as any] });
-    }
-  }
-
+  // The customer's 50% card portion has now settled. Mark the order paid. The
+  // company's 50% is tracked separately via company_billing_status (left at
+  // 'pending_invoice' for the QuickBooks pipeline) — the order being 'paid' means
+  // the card half is captured and the order is confirmed for fulfilment.
   await db.execute({
     sql: "UPDATE orders SET status = 'paid', paid_at = datetime('now'), updated_at = datetime('now') WHERE id = ?",
     args: [orderId as any],
@@ -117,10 +103,10 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
       tax: Number(m.tax || "0") || 0,
       total: Number(m.total || "0") || 0,
       payment: {
-        method: (m.payment_method as PaymentMethod) || "card",
-        giftCardCode: giftCode || undefined,
-        giftAmount,
-        cardAmount: Number(m.card_amount || "0") || 0,
+        method: "split",
+        customerAmount: Number(m.customer_amount || "0") || 0,
+        companyAmount: Number(m.company_amount || "0") || 0,
+        companyName: m.company_name || "",
       },
     };
     await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, emailData);

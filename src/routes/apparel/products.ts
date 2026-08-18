@@ -312,23 +312,6 @@ export const allProducts = [
   },
   {
     "sku": "SG-19",
-    "name": "Men's Maxson Softshell Jacket",
-    "category": "Jackets",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18"
-    ],
-    "price": 90,
-    "img": "/portals/19534-as.webp",
-    "imgs": [
-      "/portals/19534-as.webp"
-    ],
-    "material": "270 g/m² (8 oz/yd²), 100% polyester mechanical-stretch woven bonded to 100% polyester anti-pill microfleece with waterproof (8000 mm) breathable membrane and water-repellent finish; 100% polyester brushed tricot lining",
-    "details": "Three-layer waterproof, breathable construction, Articulated elbows and ergonomic sleeves, Centre-front exposed contrast reverse-coil zipper with interior zipper flap, Polyester brushed tricot upper storm flap, Lower welt pockets with coil zipper, Adjustable cuff tabs with hook-and-loop closure, Easy-grip zipper pull, Contrast hanger loop at inside back neck, Heat-transfer tagless label, Warmth Level 1 (10°C to -5°C), #19534"
-  },
-  {
-    "sku": "SG-20",
     "name": "Gildan Unisex DryBlend® Polo",
     "category": "Polos",
     "sizes": "S - 5XL",
@@ -345,41 +328,7 @@ export const allProducts = [
     "details": "Moisture-wicking DryBlend® ring-spun cotton/poly blend, Modern classic fit, Contoured welt collar and cuffs, Clean-finished placket with dyed-to-match buttons, Tear-away label, #8800"
   },
   {
-    "sku": "SG-21",
-    "name": "Men's Stirling Short Sleeve Work Shirt",
-    "category": "Polos",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18"
-    ],
-    "price": 54,
-    "img": "/portals/17745-as.webp",
-    "imgs": [
-      "/portals/17745-as.webp"
-    ],
-    "material": "65% polyester, 35% combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
-    "details": "Button-down shirt collar, Contrast inner yoke, Centre-back box pleat, Flat-felled seams, Back yoke, Upper patch pocket, Left-chest pocket, #17745"
-  },
-  {
-    "sku": "SG-23",
-    "name": "Men's Wilshire Long Sleeve Shirt",
-    "category": "Polos",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18"
-    ],
-    "price": 60,
-    "img": "/portals/17744-cf.jpg",
-    "imgs": [
-      "/portals/17744-cf.jpg"
-    ],
-    "material": "65% Polyester 35% Combed cotton woven twill, 145 g/m² (4.3 oz/yd²)",
-    "details": "Adjustable one-button cuffs with single pleats, button-down collar, contrast inner yoke, centre-back box pleat, flat-felled seams, back yoke, upper patch pocket, tall sizes available, #17744"
-  },
-  {
-    "sku": "SG-24",
+    "sku": "SG-20",
     "name": "Harriton Unisex ClimaBloc® Station Vest",
     "category": "Jackets",
     "sizes": "XS - 5XL",
@@ -394,6 +343,55 @@ export const allProducts = [
     ],
     "material": "8 oz./yd²/273 gsm (US), 13.4 oz/L yd (CA), 65/35 polyester/cotton twill; 140 gsm poly fill; Polyester taffeta lining with diamond quilting",
     "details": "ClimaBloc provides durable water-repellent (DWR) protection for wet and rugged work conditions, UTK 1 ideal for mild to cool temperatures ranging from 47ºF to 18ºF (8ºC to -8ºC), Double patch pockets with flaps and velcro closure, Lower zippered pockets, Inner storage pocket, EZEM System™ designed for easy embroidery access, Responsible Supplier: made in a facility that is FLA certified, #M723"
+  },
+  {
+    "sku": "SG-21",
+    "name": "Men's Operate Long Sleeve Twill Shirt",
+    "category": "Polos",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 54,
+    "img": "/88194-as.png",
+    "imgs": [
+      "/88194-as.png"
+    ],
+    "material": "4.4 oz/yd² / 150 gsm (US), 7.3 oz/L yd (CA), 55/45 cotton/polyester twill",
+    "details": "UPF 40+ protection, Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, #88193"
+  },
+  {
+    "sku": "SG-22",
+    "name": "Men's Dade Short Sleeve Polo",
+    "category": "Polos",
+    "sizes": "S - 4XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 40,
+    "img": "/portals/g8800-as.jpg",
+    "imgs": [
+      "/portals/g8800-as.jpg"
+    ],
+    "material": "100% polyester pique knit, moisture-wicking",
+    "details": "Moisture-wicking performance pique, Anti-odor finish, Self-fabric collar, Three-button placket with dyed-to-match buttons, Open hem sleeves, #M-DADE"
+  },
+  {
+    "sku": "SG-23",
+    "name": "Vice Pro Plus Golf Balls (12)",
+    "category": "Accessories",
+    "sizes": "Box of 12",
+    "badge": "",
+    "colors": [],
+    "price": 0,
+    "img": "/portals/viceball-cf.png",
+    "imgs": [
+      "/portals/viceball-cf.png"
+    ],
+    "material": "",
+    "details": "Box of 12 custom-printed Vice Pro Plus golf balls"
   }
 ];
 

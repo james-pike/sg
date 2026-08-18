@@ -19,6 +19,13 @@ export interface Portal {
   sub: string;
   /** Header / login logo image (in /public). */
   logo: string;
+  /** Optional split header lockup: a standalone square symbol (`headerMark`) and
+   *  a separate wordmark (`headerWord`). When set, the header renders the symbol
+   *  to the LEFT of the wordmark, and on mobile stacks the wordmark above the
+   *  APPAREL tag so both match the symbol's height. Only the header uses these —
+   *  login tiles + footer keep `logo`. */
+  headerMark?: string;
+  headerWord?: string;
   /** Accent colour used for the portal tile + selected states. */
   accent: string;
   /** Set when the logo is light/white and needs a dark backdrop to be visible
@@ -33,7 +40,7 @@ export const PORTALS: Portal[] = [
   { id: "portal1", name: "Airtech", sub: "Synergy", logo: "/portals/portal1.png", accent: "#1f6fb2", dark: true, hero: "/airtech-hero.webp" },
   // All logos are reversed to white on a dark tile (matching Airtech), so every
   // portal is dark:true. Corflow's hero is a placeholder (its site is down).
-  { id: "portal2", name: "Corflow", sub: "Synergy", logo: "/corflow-reversed.png", accent: "#ae1f2a", dark: true, hero: "/airtech-chillers.webp" },
+  { id: "portal2", name: "Corflow", sub: "Synergy", logo: "/corflow-reversed.png", headerMark: "/corflow-mark.png", headerWord: "/corflow-word.png", accent: "#ae1f2a", dark: true, hero: "/airtech-chillers.webp" },
   { id: "portal4", name: "Powered", sub: "Synergy", logo: "/powered-reversed.png", accent: "#d9a441", dark: true, hero: "/powered-hero.webp" },
   { id: "portal3", name: "Wired", sub: "Synergy", logo: "/wired-lockup.png", accent: "#4f8a4d", dark: true, hero: "/wired-hero.webp" },
 ];

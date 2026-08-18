@@ -10,7 +10,9 @@
  */
 import { Resend } from "resend";
 
-export type PaymentMethod = "po" | "giftcard" | "giftcard_card" | "card";
+// Every order is now a 50/50 split: the customer pays half by card at checkout
+// (Stripe) and the company is invoiced the other half (QuickBooks later).
+export type PaymentMethod = "split";
 
 export interface OrderItem {
   name: string;
@@ -48,9 +50,12 @@ export interface OrderEmailData {
   total: number;
   payment: {
     method: PaymentMethod;
-    giftCardCode?: string;
-    giftAmount: number;
-    cardAmount: number;
+    /** Half paid now by credit card (Stripe). */
+    customerAmount: number;
+    /** Half invoiced to the company (billed later, QuickBooks). */
+    companyAmount: number;
+    /** The company the remaining half is billed to, e.g. "Corflow Synergy". */
+    companyName: string;
   };
 }
 
@@ -81,18 +86,18 @@ export function buildOrderEmailHtml(o: OrderEmailData): string {
     </tr>`
   ).join("");
 
-  // Payment split rows (gift card / card), shown only when relevant.
+  // Payment split rows: half paid now by card, half invoiced to the company.
   const payRows: string[] = [];
-  if (o.payment.giftAmount > 0) {
+  if (o.payment.customerAmount > 0) {
     payRows.push(`<tr>
-      <td colspan="3" style="padding:6px 12px;text-align:right">Gift card${o.payment.giftCardCode ? ` (${esc(o.payment.giftCardCode)})` : ""}</td>
-      <td style="padding:6px 12px;text-align:right">-$${o.payment.giftAmount.toFixed(2)}</td>
+      <td colspan="3" style="padding:6px 12px;text-align:right">Paid today by card (50%)</td>
+      <td style="padding:6px 12px;text-align:right">$${o.payment.customerAmount.toFixed(2)}</td>
     </tr>`);
   }
-  if (o.payment.cardAmount > 0) {
+  if (o.payment.companyAmount > 0) {
     payRows.push(`<tr>
-      <td colspan="3" style="padding:6px 12px;text-align:right">Paid by card</td>
-      <td style="padding:6px 12px;text-align:right">$${o.payment.cardAmount.toFixed(2)}</td>
+      <td colspan="3" style="padding:6px 12px;text-align:right">Invoiced to ${esc(o.payment.companyName || "your company")} (50%)</td>
+      <td style="padding:6px 12px;text-align:right">$${o.payment.companyAmount.toFixed(2)}</td>
     </tr>`);
   }
 
