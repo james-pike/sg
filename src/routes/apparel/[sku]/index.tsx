@@ -74,7 +74,7 @@ export default component$(() => {
     // the variant pick — handled the same way the cm project does its talls.
     "SG-1": {
       "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
-      "Tall": ["L", "XL", "2XL", "3XL", "4XL"],
+      "Tall": ["L", "XL", "2XL", "3XL"],
     },
     // MN-3 tee ships S-4XL regular plus a tall run (LT-4XLT). Tall starts at
     // L, so the size labels stay plain (L-4XL) and the tall-ness is carried
