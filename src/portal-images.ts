@@ -28,6 +28,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-3": { img: "/portals/g2400-as.jpg", imgs: ["/portals/g2400-as.jpg"] },
     "SG-4": { img: "/portals/1370399-as.jpg", imgs: ["/portals/1370399-as.jpg"] },
     "SG-5": { img: "/portals/106674-as.png", imgs: ["/portals/106674-as.png"] },
+    "SG-6": { img: "/portals/j7603-as.jpg", imgs: ["/portals/j7603-as.jpg"] },
     "SG-7": { img: "/88194-as.png", imgs: ["/88194-as.png"] },
     "SG-13": { img: "/portals/L01110-as.jpg", imgs: ["/portals/L01110-as.jpg"] },
     "SG-14": { img: "/portals/110M-as.jpg", imgs: ["/portals/110M-as.jpg"] },
@@ -37,6 +38,8 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-18": { img: "/portals/56795-as.jpg", imgs: ["/portals/56795-as.jpg"] },
     "SG-19": { img: "/portals/g8800-as.jpg", imgs: ["/portals/g8800-as.jpg"] },
     "SG-20": { img: "/portals/M723-as.jpg", imgs: ["/portals/M723-as.jpg"] },
+    "SG-21": { img: "/portals/88193-as.jpg", imgs: ["/portals/88193-as.jpg"] },
+    "SG-22": { img: "/portals/16398-as.png", imgs: ["/portals/16398-as.png"] },
   },
   portal2: {
     "SG-1": { img: "/portals/g2000-cf.jpg", imgs: ["/portals/g2000-cf.jpg"] },
@@ -58,12 +61,15 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-18": { img: "/portals/56795-cf.jpg", imgs: ["/portals/56795-cf.jpg"] },
     "SG-19": { img: "/portals/g8800-cf.jpg", imgs: ["/portals/g8800-cf.jpg"] },
     "SG-20": { img: "/portals/M723-cf.png", imgs: ["/portals/M723-cf.png"] },
+    "SG-21": { img: "/portals/88193-cf.jpg", imgs: ["/portals/88193-cf.jpg"] },
+    "SG-22": { img: "/portals/16398-cf.png", imgs: ["/portals/16398-cf.png"] },
   },
   portal3: {
     "SG-1": { img: "/portals/g2000-ws.jpg", imgs: ["/portals/g2000-ws.jpg"] },
     "SG-2": { img: "/portals/g2300-ws.jpg", imgs: ["/portals/g2300-ws.jpg"] },
     "SG-3": { img: "/portals/g2400-ws.jpg", imgs: ["/portals/g2400-ws.jpg"] },
     "SG-5": { img: "/portals/106674-ws.jpg", imgs: ["/portals/106674-ws.jpg"] },
+    "SG-6": { img: "/portals/j7603-ws.jpg", imgs: ["/portals/j7603-ws.jpg"] },
     "SG-7": { img: "/88194-ws.png", imgs: ["/88194-ws.png"] },
     "SG-13": { img: "/portals/L01110-ws.jpg", imgs: ["/portals/L01110-ws.jpg"] },
     "SG-16": { img: "/portals/M585-ws.jpg", imgs: ["/portals/M585-ws.jpg"] },
@@ -71,6 +77,8 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-18": { img: "/portals/56795-ws.jpg", imgs: ["/portals/56795-ws.jpg"] },
     "SG-19": { img: "/portals/g8800-ws.jpg", imgs: ["/portals/g8800-ws.jpg"] },
     "SG-20": { img: "/portals/M723-ws.jpg", imgs: ["/portals/M723-ws.jpg"] },
+    "SG-21": { img: "/portals/88193-ws.jpg", imgs: ["/portals/88193-ws.jpg"] },
+    "SG-22": { img: "/portals/16398-ws.png", imgs: ["/portals/16398-ws.png"] },
   },
   portal4: {
     "SG-1": { img: "/portals/g2000-ps.jpg", imgs: ["/portals/g2000-ps.jpg"] },
@@ -92,6 +100,9 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-18": { img: "/portals/56795-ps.jpg", imgs: ["/portals/56795-ps.jpg"] },
     "SG-19": { img: "/portals/g8800-ps.jpg", imgs: ["/portals/g8800-ps.jpg"] },
     "SG-20": { img: "/portals/M723-ps.jpg", imgs: ["/portals/M723-ps.jpg"] },
+    "SG-21": { img: "/portals/88193-ps.jpg", imgs: ["/portals/88193-ps.jpg"] },
+    "SG-22": { img: "/portals/16398-ps.png", imgs: ["/portals/16398-ps.png"] },
+    "SG-23": { img: "/portals/viceball-ps.jpg", imgs: ["/portals/viceball-ps.jpg"] },
   },
 };
 

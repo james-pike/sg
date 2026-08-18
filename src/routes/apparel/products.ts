@@ -354,9 +354,9 @@ export const allProducts = [
       "#1a1a18"
     ],
     "price": 54,
-    "img": "/88194-as.png",
+    "img": "/portals/88193-as.jpg",
     "imgs": [
-      "/88194-as.png"
+      "/portals/88193-as.jpg"
     ],
     "material": "4.4 oz/yd² / 150 gsm (US), 7.3 oz/L yd (CA), 55/45 cotton/polyester twill",
     "details": "UPF 40+ protection, Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, #88193"
@@ -371,12 +371,12 @@ export const allProducts = [
       "#1a1a18"
     ],
     "price": 40,
-    "img": "/portals/g8800-as.jpg",
+    "img": "/portals/16398-as.png",
     "imgs": [
-      "/portals/g8800-as.jpg"
+      "/portals/16398-as.png"
     ],
     "material": "100% polyester pique knit, moisture-wicking",
-    "details": "Moisture-wicking performance pique, Anti-odor finish, Self-fabric collar, Three-button placket with dyed-to-match buttons, Open hem sleeves, #M-DADE"
+    "details": "Moisture-wicking performance pique, Anti-odor finish, Self-fabric collar, Three-button placket with dyed-to-match buttons, Open hem sleeves, #16398"
   },
   {
     "sku": "SG-23",
