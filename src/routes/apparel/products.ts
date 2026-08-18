@@ -68,7 +68,7 @@ export const allProducts = [
     "imgs": [
       "/portals/1370399-as.jpg"
     ],
-    "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
+    "material": "100% polyester, 8.8 oz/L yd ",
     "details": "Anti-odor technology, Soft light and breathable fabric, Self-fabric collar, Three-button placket, #1370399"
   },
   {
@@ -120,8 +120,8 @@ export const allProducts = [
     "imgs": [
       "/88194-as.png"
     ],
-    "material": "4.4 oz/yd² / 150 gsm (US), 7.3 oz/L yd (CA), 55/45 cotton/polyester twill",
-    "details": "UPF 40+ protection, Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, #88194"
+    "material": "55/45 cotton/polyester twill",
+    "details": "Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, UPF 40+ protection, #88194"
   },
   {
     "sku": "SG-8",
@@ -137,7 +137,7 @@ export const allProducts = [
     "imgs": [
       "/pullovermodel.png"
     ],
-    "material": "280 gsm, 8.3 oz/yd² (14 oz/lin. yd), 70% ring-spun combed cotton / 30% polyester fleece (heathers 60/40)",
+    "material": "70% ring-spun combed cotton / 30% polyester fleece",
     "details": "Self-fabric lined hood with drawcord, 100% ring-spun combed cotton face for a superior print surface, Rib-knit cuff and hem, Kangaroo pocket, Tear-away label, #L00550"
   },
   {
@@ -171,8 +171,8 @@ export const allProducts = [
     "imgs": [
       "/portals/L00545-ps.webp"
     ],
-    "material": "280 gsm, 8.3 oz/yd² (14 oz/lin. yd), 70% ring-spun combed cotton / 30% polyester fleece (heathers 60/40)",
-    "details": "100% ring-spun combed cotton face for a superior print surface, Rib-knit cuff and hem, Metal YKK front zipper closure, Tear-away label, #L00545"
+    "material": "70% ring-spun combed cotton / 30% polyester fleece",
+    "details": "100% ring-spun combed cotton face, Rib-knit cuff and hem, Metal YKK front zipper closure, Tear-away label, #L00545"
   },
   {
     "sku": "SG-11",
@@ -239,7 +239,7 @@ export const allProducts = [
     "imgs": [
       "/portals/110M-as.jpg"
     ],
-    "material": "74/26 polyester/cotton; Mélange colors are 80/19/1 polyester/rayon/PU spandex",
+    "material": "74/26 polyester/cotton",
     "details": "Structured, six-panel, mid-profile, Permacurv® visor, silver undervisor, Flexfit® Tech + snapback closure, #110M"
   },
   {
@@ -261,7 +261,7 @@ export const allProducts = [
   },
   {
     "sku": "SG-16",
-    "name": "Advantage IL Short Sleeve Work Shirt",
+    "name": "Harriton Advantage IL Short Sleeve Work Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
@@ -273,12 +273,12 @@ export const allProducts = [
     "imgs": [
       "/portals/M585-as.jpg"
     ],
-    "material": "4.5 oz/yd²/155 gsm (US), 7.4 oz./L yd (CA), 55% cotton, 45% polyester twill",
+    "material": "55% cotton, 45% polyester twill, 7.4 oz./L yd (CA)",
     "details": "Wrinkle-resistant, Stain-release fabric, Structured collar with integrated stays, Button-down collar, Dyed-to-match buttons, Double chest pockets with pen slot, Left-chest zippered pocket, Side vents, #M585"
   },
   {
     "sku": "SG-17",
-    "name": "Advantage IL Workshirt",
+    "name": "Harriton Advantage IL Workshirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
@@ -290,7 +290,7 @@ export const allProducts = [
     "imgs": [
       "/portals/M585L-as.jpg"
     ],
-    "material": "4.5 oz./yd²/155 gsm (US), 7.5 oz./L yd (CA), 55% cotton, 45% polyester twill",
+    "material": "55% cotton, 45% polyester twill, 7.5 oz./L yd (CA)",
     "details": "Wrinkle-resistant, Stain-release fabric, Structured collar with integrated stays, Button-down collar, Double chest pockets with pen slot, Left-chest zippered pocket, #M585L"
   },
   {
@@ -324,7 +324,7 @@ export const allProducts = [
     "imgs": [
       "/portals/g8800-as.jpg"
     ],
-    "material": "6 oz./yd² (US), 10 oz./L yd (CA), 52/48 ring-spun cotton/polyester knit, 20 singles",
+    "material": "52/48 ring-spun cotton/polyester knit, 10 oz./L yd (CA)",
     "details": "Moisture-wicking DryBlend® ring-spun cotton/poly blend, Modern classic fit, Contoured welt collar and cuffs, Clean-finished placket with dyed-to-match buttons, Tear-away label, #8800"
   },
   {
@@ -341,12 +341,12 @@ export const allProducts = [
     "imgs": [
       "/portals/M723-cf.png"
     ],
-    "material": "8 oz./yd²/273 gsm (US), 13.4 oz/L yd (CA), 65/35 polyester/cotton twill; 140 gsm poly fill; Polyester taffeta lining with diamond quilting",
-    "details": "Durable water-repellent (DWR) finish, Double patch pockets with flap closures, Lower zippered pockets, Inner storage pocket, Easy embroidery access, #M723"
+    "material": "65/35 polyester/cotton twill, 13.4 oz/L yd (CA)",
+    "details": "Durable water-repellent (DWR) finish, Polyester taffeta lining with diamond quilting, Double patch pockets with flap closures, Lower zippered pockets, Inner storage pocket, #M723"
   },
   {
     "sku": "SG-21",
-    "name": "Operate Long Sleeve Twill Shirt",
+    "name": "Trimark Operate Long Sleeve Twill Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
@@ -358,8 +358,8 @@ export const allProducts = [
     "imgs": [
       "/portals/88193-as.jpg"
     ],
-    "material": "4.4 oz/yd² / 150 gsm (US), 7.3 oz/L yd (CA), 55/45 cotton/polyester twill",
-    "details": "UPF 40+ protection, Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, #88193"
+    "material": "55/45 cotton/polyester twill, 7.3 oz/L yd (CA)",
+    "details": "Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, UPF 40+ protection, #88193"
   },
   {
     "sku": "SG-22",
@@ -375,7 +375,7 @@ export const allProducts = [
     "imgs": [
       "/portals/16398-as.png"
     ],
-    "material": "100% polyester pique knit, moisture-wicking",
+    "material": "100% polyester pique knit",
     "details": "Moisture-wicking performance pique, Anti-odor finish, Self-fabric collar, Three-button placket with dyed-to-match buttons, Open hem sleeves, #16398"
   },
   {
