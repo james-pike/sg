@@ -69,6 +69,13 @@ export default component$(() => {
   // bib can carry different size runs (e.g. Carhartt 106672 Short comes
   // M-4XL, Regular S-5XL, Tall M-4XL).
   const variantSizesBySku: Record<string, Record<string, string[]>> = {
+    // SG-1 Gildan 2000 tee ships S-4XL regular plus a tall run (LT-4XLT). Tall
+    // starts at L, so the labels stay plain (L-4XL) and the tall-ness rides on
+    // the variant pick — handled the same way the cm project does its talls.
+    "SG-1": {
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"],
+      "Tall": ["L", "XL", "2XL", "3XL", "4XL"],
+    },
     // MN-3 tee ships S-4XL regular plus a tall run (LT-4XLT). Tall starts at
     // L, so the size labels stay plain (L-4XL) and the tall-ness is carried
     // by the variant pick — same as the rest of the catalog.
@@ -91,6 +98,16 @@ export default component$(() => {
     },
   };
   const variantSkus = new Set(Object.keys(variantSizesBySku));
+  // Per-variant price overrides. The Tall cut runs a higher price on some SKUs
+  // (e.g. Gildan 2000 talls are $18 vs $8 regular); everything else keeps the
+  // product's base price for both variants.
+  const TALL_PRICE: Record<string, number> = { "SG-1": 18 };
+  const effectivePrice = useComputed$(() => {
+    const p = product.value;
+    if (!p) return 0;
+    if (selectedVariant.value === "Tall" && TALL_PRICE[p.sku] != null) return TALL_PRICE[p.sku];
+    return Number(p.price) || 0;
+  });
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   // Per-SKU waist + inseam runs. MN-1 (Carhartt 102291 Rigby) and MNFR-1
   // (Carhartt 104204 FR Rigby) carry different waist/length grids.
@@ -177,7 +194,7 @@ export default component$(() => {
           size: sizeVal,
           color: colorVal,
           quantity: selectedQty.value,
-          price: p.price,
+          price: effectivePrice.value,
           img: p.img,
         };
         if (codeMatch) item.code = codeMatch[0];
@@ -378,7 +395,7 @@ export default component$(() => {
           </div>
           <div class="product-modal__details">
             <h2 class="product-modal__name">{p.name}</h2>
-            {!hidePrice && <div class="product-modal__price">${(Number(p.price) || 0).toFixed(2)}</div>}
+            {!hidePrice && <div class="product-modal__price">${effectivePrice.value.toFixed(2)}</div>}
             {p.material && (
               <div class="product-modal__material">
                 <strong>{t("modal.material", locale.value)}:</strong> {p.material}

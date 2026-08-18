@@ -7,7 +7,7 @@ export const allProducts = [
     "sku": "SG-1",
     "name": "Gildan Short Sleeve T-Shirt",
     "category": "T-Shirts",
-    "sizes": "S - 4XL / LT - 4XLT",
+    "sizes": "S - 4XL",
     "badge": "",
     "colors": [
       "#1a1a18"
@@ -51,12 +51,12 @@ export const allProducts = [
     "imgs": [
       "/2400.jpg"
     ],
-    "material": "100% U.S. cotton, 18 singles, 10.1 oz/L yd (CA)",
+    "material": "100% U.S. cotton, 10.1 oz/L yd (CA)",
     "details": "Classic fit, Classic width rib collar, Taped neck and shoulders, Rib cuffs, Tear away label, #2400"
   },
   {
     "sku": "SG-4",
-    "name": "Men's Under Armour Tech Polo",
+    "name": "Under Armour Tech Polo",
     "category": "Polos",
     "sizes": "S - 4XL",
     "badge": "",
@@ -69,11 +69,11 @@ export const allProducts = [
       "/portals/1370399-as.jpg"
     ],
     "material": "5.3 oz/yd² (US), 8.8 oz/L yd (CA), 100% polyester",
-    "details": "Moisture-management properties, Anti-odor technology, Textured fabric that's soft, light and breathable, Self-fabric collar, Three-button placket, #1370399"
+    "details": "Anti-odor technology, Soft light and breathable fabric, Self-fabric collar, Three-button placket, #1370399"
   },
   {
     "sku": "SG-5",
-    "name": "Men's Carhartt Winter Jacket - Black",
+    "name": "Carhartt Winter Jacket - Black",
     "category": "Jackets",
     "sizes": "S - 4XL",
     "badge": "",
@@ -90,25 +90,25 @@ export const allProducts = [
   },
   {
     "sku": "SG-6",
-    "name": "Men's Cole Harbour Soft Shell Jacket",
+    "name": "Cole Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 6XL",
     "badge": "",
     "colors": [
       "#1a1a18"
     ],
-    "price": 65,
+    "price": 60,
     "img": "/j7603model.webp",
     "imgs": [
       "/j7603model.webp",
       "/sku/mens-jacket.webp"
     ],
     "material": "100% polyester woven soft shell bonded to 100% polyester microfleece",
-    "details": "Center front reverse coil zipper, chin guard, princess seams, two front zippered pockets, interior pocket, open cuffs and hem, anti-pill microfleece interior, Port Authority, #J7603"
+    "details": "Center front reverse coil zipper, Chin guard, Two front zippered pockets, Interior pocket, Open cuffs and hem, Anti-pill microfleece lining, #J7603"
   },
   {
     "sku": "SG-7",
-    "name": "Men's Optimum Short Sleeve Twill Dress Shirt",
+    "name": "Optimum Short Sleeve Twill Dress Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
@@ -142,7 +142,7 @@ export const allProducts = [
   },
   {
     "sku": "SG-9",
-    "name": "Men's Advantage Snag Protection Plus Quarter-Zip Pullover",
+    "name": "Advantage Snag Protection Plus Quarter-Zip Pullover",
     "category": "Sweaters",
     "sizes": "S - 6XL",
     "badge": "",
@@ -155,7 +155,7 @@ export const allProducts = [
       "/portals/122307-ps.png"
     ],
     "material": "6.6 oz/yd² / 225 gsm (US), 11 oz/L yd (CA), 100% polyester jersey",
-    "details": "Relaxed fit, Snag-protection-plus fabric resists snags and keeps a smooth look, Moisture-wicking, Antimicrobial odor control, Center-front coil zipper with auto-lock slider, Side vents, UPF 15-39, Tested to 75 industrial washes (AATCC), #M748"
+    "details": "Relaxed fit, Snag-resistant fabric, Moisture-wicking, Anti-odor, Center-front zipper with auto-lock slider, Side vents, #M748"
   },
   {
     "sku": "SG-10",
@@ -257,11 +257,11 @@ export const allProducts = [
       "/portals/6110NU-as.jpg"
     ],
     "material": "79/18/3 polyester/rayon/PU spandex",
-    "details": "FLEXFIT THE ONE AND ONLY ORIGINAL®, Reimagined Flexfit® Baseball cap, ACTIVEGUARD™ Technology, Flexfit® Technology, Cool & Dry Technology, Structured, six-panel, mid profile, Permacurv® visor, YP four-bar logo placed on the wearer's right side of the cap, Flexfit® Tech + snapback closure, #6110NU"
+    "details": "Structured six-panel, Mid-profile, Permacurv® visor, Cool & Dry moisture-wicking fabric, Flexfit® stretch band, Snapback closure, #6110NU"
   },
   {
     "sku": "SG-16",
-    "name": "Men's Advantage IL Short Sleeve Work Shirt",
+    "name": "Advantage IL Short Sleeve Work Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
@@ -274,11 +274,11 @@ export const allProducts = [
       "/portals/M585-as.jpg"
     ],
     "material": "4.5 oz/yd²/155 gsm (US), 7.4 oz./L yd (CA), 55% cotton, 45% polyester twill",
-    "details": "Tested to 50 industrial washes in accordance with AATCC industry standards, Wrinkle resistant fabric properties for a crisp, polished look, Stain release fabric properties allows stains to detach during washing, Structured collar stand with integrated collar stays, Button-down collar, Dyed-to-match pearl buttons, Double chest pockets with button closures and pen slot, Left-chest zippered pocket at placket, Side vents, Carbon neutral style in partnership with Green Story third party verified carbon offset program, #M585"
+    "details": "Wrinkle-resistant, Stain-release fabric, Structured collar with integrated stays, Button-down collar, Dyed-to-match buttons, Double chest pockets with pen slot, Left-chest zippered pocket, Side vents, #M585"
   },
   {
     "sku": "SG-17",
-    "name": "Men's Advantage IL Workshirt",
+    "name": "Advantage IL Workshirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
@@ -291,7 +291,7 @@ export const allProducts = [
       "/portals/M585L-as.jpg"
     ],
     "material": "4.5 oz./yd²/155 gsm (US), 7.5 oz./L yd (CA), 55% cotton, 45% polyester twill",
-    "details": "Tested to 50 industrial washes in accordance with AATCC industry standards, Wrinkle resistant fabric properties for a crisp, polished look, Stain release fabric properties allows stains to detach during washing, Structured collar stand with integrated collar stays, Button-down collar, Double chest pockets with button closures and pen slot, Left-chest zippered pocket at placket, Carbon neutral style in partnership with Green Story third party verified carbon offset program, #M585L"
+    "details": "Wrinkle-resistant, Stain-release fabric, Structured collar with integrated stays, Button-down collar, Double chest pockets with pen slot, Left-chest zippered pocket, #M585L"
   },
   {
     "sku": "SG-18",
@@ -319,7 +319,7 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 17.24,
+    "price": 18,
     "img": "/portals/g8800-as.jpg",
     "imgs": [
       "/portals/g8800-as.jpg"
@@ -336,24 +336,24 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 90,
+    "price": 77,
     "img": "/portals/M723-cf.png",
     "imgs": [
       "/portals/M723-cf.png"
     ],
     "material": "8 oz./yd²/273 gsm (US), 13.4 oz/L yd (CA), 65/35 polyester/cotton twill; 140 gsm poly fill; Polyester taffeta lining with diamond quilting",
-    "details": "ClimaBloc provides durable water-repellent (DWR) protection for wet and rugged work conditions, UTK 1 ideal for mild to cool temperatures ranging from 47ºF to 18ºF (8ºC to -8ºC), Double patch pockets with flaps and velcro closure, Lower zippered pockets, Inner storage pocket, EZEM System™ designed for easy embroidery access, Responsible Supplier: made in a facility that is FLA certified, #M723"
+    "details": "Durable water-repellent (DWR) finish, Double patch pockets with flap closures, Lower zippered pockets, Inner storage pocket, Easy embroidery access, #M723"
   },
   {
     "sku": "SG-21",
-    "name": "Men's Operate Long Sleeve Twill Shirt",
+    "name": "Operate Long Sleeve Twill Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",
     "colors": [
       "#1a1a18"
     ],
-    "price": 54,
+    "price": 55,
     "img": "/portals/88193-as.jpg",
     "imgs": [
       "/portals/88193-as.jpg"
@@ -363,14 +363,14 @@ export const allProducts = [
   },
   {
     "sku": "SG-22",
-    "name": "Men's Dade Short Sleeve Polo",
+    "name": "Trimark Dade Short Sleeve Polo",
     "category": "Polos",
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
       "#1a1a18"
     ],
-    "price": 40,
+    "price": 25,
     "img": "/portals/16398-as.png",
     "imgs": [
       "/portals/16398-as.png"
