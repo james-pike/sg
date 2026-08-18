@@ -13154,10 +13154,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ============================================================ */
 .tablet-notice { display: none; }
 @media (max-width: 1024px) {
-  /* Mobile + tablet unlocked while their login/layout is reworked. Flip this
-     back to `flex` to re-enable the coming-soon cover. */
+  /* Mobile + tablet hidden behind a coming-soon cover while their layout is
+     reworked. Flip this back to `none` to unlock them again. */
   .tablet-notice {
-    display: none;
+    display: flex;
     position: fixed;
     inset: 0;
     z-index: 100000;
