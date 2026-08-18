@@ -3434,11 +3434,11 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   z-index: 1;                     /* above the .login-overlay::before dot texture */
   /* A step wider than the site's --site-max content — closer to full-bleed while
      still leaving a margin for the dot texture in the surround. */
-  width: 94vw;
-  max-width: 1800px;
   margin: 0 auto;                 /* cancels the base's calc(21vw - 280px) */
-  /* Lock a 16:9 ratio so the card keeps its proportions as it widens (height
-     grows with width); cap the height so it never overflows a short viewport. */
+  /* 16:9 as it widens; height grows with width, capped so a short viewport
+     doesn't overflow (the ratio only drifts at heavy zoom, which is fine). */
+  width: 94vw;
+  max-width: 1600px;
   aspect-ratio: 16 / 9;
   height: auto;
   max-height: 92vh;
