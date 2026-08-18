@@ -144,7 +144,7 @@ export const useSubmitOrder = routeAction$(
       return fail(401, { message: "Not authenticated" });
     }
     const portalId = getLoginType(cookie);
-    const vendor = "modernniagara"; // order-number scheme (MN-<n>) — unchanged.
+    const vendor = "synergygroup"; // Synergy Group orders (numbered SG-<n>).
     // The remaining half is invoiced to the SIGNED-IN portal's company, e.g.
     // "Corflow Synergy". This is the AR party we later push to QuickBooks.
     const portalCfg = getPortal(portalId);
@@ -235,11 +235,11 @@ export const useSubmitOrder = routeAction$(
       orderId = (result.lastInsertRowid as any) ?? null;
       if (orderId != null) {
         const seq = await db.execute({
-          sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'modernniagara%' AND id <= ?",
+          sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'synergygroup%' AND id <= ?",
           args: [orderId as any],
         });
         const n = Number((seq.rows[0] as any)?.n) || Number(orderId);
-        orderNumber = `MN-${n}`;
+        orderNumber = `SG-${n}`;
       }
     } catch (err) {
       console.error("Failed to save order to database:", err);
@@ -247,7 +247,7 @@ export const useSubmitOrder = routeAction$(
     }
 
     const provinceName = PROVINCE_NAMES[province] || province;
-    const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Modern Niagara <onboarding@resend.dev>";
+    const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Synergy Group <onboarding@resend.dev>";
     const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca")
       .split(",").map((a) => a.trim()).filter(Boolean);
 
