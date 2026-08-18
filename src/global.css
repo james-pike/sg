@@ -3432,16 +3432,13 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .login-modal.login-modal--split {
   position: relative;
   z-index: 1;                     /* above the .login-overlay::before dot texture */
-  /* A step wider than the site's --site-max content — closer to full-bleed while
-     still leaving a margin for the dot texture in the surround. */
+  /* Base sizing (mobile + tablet): site-width card, height driven by the
+     viewport. The wider, 16:9 desktop treatment is layered on at >=1025px only,
+     so it can't clamp the smaller breakpoints. */
   margin: 0 auto;                 /* cancels the base's calc(21vw - 280px) */
-  /* 16:9 as it widens; height grows with width, capped so a short viewport
-     doesn't overflow (the ratio only drifts at heavy zoom, which is fine). */
-  width: 94vw;
-  max-width: 1600px;
-  aspect-ratio: 16 / 9;
-  height: auto;
-  max-height: 92vh;
+  width: 100%;
+  max-width: var(--site-max);
+  height: min(90vh, 880px);
   display: flex;
   align-items: stretch;
   overflow: hidden;
@@ -3450,6 +3447,17 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: #0c1922;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
   animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Desktop only: a step wider than the site content, locked to 16:9 (height
+   grows with width), leaving a margin for the dot texture in the surround. */
+@media (min-width: 1025px) {
+  .login-modal.login-modal--split {
+    width: 94vw;
+    max-width: 1600px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    max-height: 92vh;
+  }
 }
 .login-modal--split .login-modal__form-pane {
   flex: 0 0 34%;
@@ -3507,6 +3515,10 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 @media (max-width: 767px) {
   .login-modal.login-modal--split {
     flex-direction: column;
+    /* Drop the 16:9 lock on mobile so the stacked carousel + form can grow to
+       their natural height (otherwise the ratio clamps the card short and only
+       the carousel shows). */
+    aspect-ratio: auto;
     height: auto;
     max-height: calc(100dvh - 24px);
     width: calc(100% - 1rem);
@@ -13566,7 +13578,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    they stay pinned flush under the taller header.
    ============================================================ */
 @media (min-width: 1025px) {
-  :root { --wt-box-h: 68px; }
+  :root { --wt-box-h: 60px; }
   /* All desktop secondary bars share ONE height: the tab bar, PDP breadcrumb,
      the cart PRODUCT/TOTAL strip and the checkout back bar. */
   .home-catalog__header,
@@ -13777,6 +13789,22 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
   .locale-btn--header .locale-btn__icon svg { width: 20px !important; height: 20px !important; stroke: #fff !important; }
   /* Widen the logout so it reads square, not a tall narrow button. */
   .site-header .logout-btn { min-width: 55px !important; }
+}
+
+/* Desktop: tighter horizontal spacing on the header controls to match the
+   shorter bar — less padding inside the locale / cart / logout / search buttons,
+   a narrower cart, and a smaller gap before the locale toggle. High specificity
+   + late source order so it wins over the per-button blocks above. */
+@media (min-width: 1025px) {
+  body .site-header .locale-btn--header,
+  body .site-header .cart-btn,
+  body .site-header .logout-btn,
+  body .site-header .site-header__search-btn {
+    padding-left: 11px !important;
+    padding-right: 11px !important;
+  }
+  body .site-header .cart-btn { min-width: 124px !important; }
+  body .site-header .locale-btn--header { margin-left: 4px !important; }
 }
 
 /* Tablet tabs + breadcrumb: unify to one larger matching size, and make EVERY
