@@ -154,7 +154,7 @@ export const allProducts = [
     "imgs": [
       "/portals/122307-ps.png"
     ],
-    "material": "6.6 oz/yd² / 225 gsm (US), 11 oz/L yd (CA), 100% polyester jersey",
+    "material": "100% polyester jersey, 11 oz/L yd ",
     "details": "Relaxed fit, Snag-resistant fabric, Moisture-wicking, Anti-odor, Center-front zipper with auto-lock slider, Side vents, #M748"
   },
   {
@@ -188,8 +188,8 @@ export const allProducts = [
     "imgs": [
       "/portals/L00555-ps.webp"
     ],
-    "material": "280 gsm, 8.3 oz/yd² (14 oz/lin. yd), 70% ring-spun combed cotton / 30% polyester fleece (heathers 60/40)",
-    "details": "100% ring-spun combed cotton face for a superior print surface, Self-fabric lined hood with drawcord, Rib-knit cuff and hem, Kangaroo pocket, YKK zipper, Tear-away label, #L00555"
+    "material": "70% ring-spun combed cotton / 30% polyester fleece",
+    "details": "100% ring-spun combed cotton, Self-fabric lined hood with drawcord, Rib-knit cuff and hem, Kangaroo pocket, YKK zipper, Tear-away label, #L00555"
   },
   {
     "sku": "SG-12",
@@ -205,7 +205,7 @@ export const allProducts = [
     "imgs": [
       "/portals/L01150-cf.webp"
     ],
-    "material": "130 gsm, 3.8 oz/yd² (6.5 oz/lin yd), 100% polyester tricot knit",
+    "material": "100% polyester tricot knit",
     "details": "Mesh panel on upper back for ventilation, 4 front storage pockets, Radio-clip straps on front shoulders, YKK zipper closure, Durable binding, 4\" contrast hi-vis tape with 2\" reflective tape front and back, Meets CSA standards, #L01150"
   },
   {
@@ -222,8 +222,8 @@ export const allProducts = [
     "imgs": [
       "/portals/L01110-as.jpg"
     ],
-    "material": "275 gsm, 8.1 oz/yd² (13.5 oz/lin yd), 100% polyester oxford (3000 mm waterproof, wind-resistant, water-repellent); 3M Thinsulate insulation — 200 gsm body, 170 gsm sleeves",
-    "details": "Detachable, adjustable hood, Inner fleece storm cuffs with gusset, Adjustable double-snap outer cuffs, Double overlapping storm-flap placket, Zippered patch pockets, Sleeve pencil pocket, Two inner chest pockets, #L01110"
+    "material": "",
+    "details": "Detachable adjustable hood, Inner fleece storm cuffs with gusset, Adjustable double-snap outer cuffs, Double overlapping storm-flap placket, Zippered patch pockets, Sleeve pencil pocket, Two inner chest pockets, #L01110"
   },
   {
     "sku": "SG-14",
@@ -346,7 +346,7 @@ export const allProducts = [
   },
   {
     "sku": "SG-21",
-    "name": "Trimark Operate Long Sleeve Twill Shirt",
+    "name": "Core 365 Operate Long Sleeve Twill Shirt",
     "category": "Polos",
     "sizes": "S - 5XL",
     "badge": "",

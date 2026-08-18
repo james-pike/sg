@@ -113,8 +113,8 @@ function sizesOf(p: Product): string[] {
 const BRAND_LIST = [
   // Clothing brands first...
   "Canada Sportswear", "Carhartt", "Champion", "Cole Harbour", "Core 365",
-  "CX2", "Flexfit", "FootJoy", "Gildan", "Harriton", "Sportsman", "Trimark",
-  "Under Armour", "Wilson", "Yeti",
+  "CX2", "Flexfit", "FootJoy", "Gildan", "Harriton", "Scout", "Sportsman",
+  "Trimark", "Under Armour", "Wilson", "Yeti",
   // ...then non-clothing brands (bags, golf, towels, tech, headwear), Cap America last.
   "2 Buds", "Nexgen", "Nomad", "Srixon", "Vice Golf", "Tranzip", "Cap America",
 ];
@@ -137,7 +137,7 @@ const BRAND_BY_SKU: Record<string, string> = {
   "SG-9": "Harriton",          // Advantage Snag Protection #M748
   "SG-10": "Canada Sportswear", // CSW 24/7 "Flux" #L00545
   "SG-11": "Canada Sportswear", // CSW 24/7 "Surfer" #L00555
-  "SG-12": "CX2",               // Hi-Vis "Scout" #L01150 vest
+  "SG-12": "Scout",             // Hi-Vis "Scout" #L01150 vest (shown as Scout, not the CX2 maker)
   "SG-16": "Harriton",          // Advantage IL SS work shirt #M585
   "SG-17": "Harriton",          // Advantage IL workshirt #M585L
   // SG-19 DryBlend (Gildan, in name) + SG-20 ClimaBloc (Harriton, in name) need
