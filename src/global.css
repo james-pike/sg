@@ -3277,10 +3277,30 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
      seamless rather than a harsh black-to-white flash. */
   background: rgba(226, 226, 221, 0.96);
   backdrop-filter: blur(8px);
-  display: flex; align-items: stretch; justify-content: center;
-  padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(12px, 4vh, 40px) 0;
   animation: fadeIn 0.2s ease;
   transition: opacity 0.8s ease, backdrop-filter 0.8s ease;
+}
+/* Subtle dot texture in the greige surround around the login card — densest at
+   the viewport edges, masked to fade toward the centre so it reads only as a
+   faint texture in the outer margin (mirrors the tm project's .dot-pattern). */
+.login-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  -webkit-mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.25) 7%, transparent 16%, transparent 84%, rgba(0,0,0,0.25) 93%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.25) 9%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 91%, #000 100%);
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.25) 7%, transparent 16%, transparent 84%, rgba(0,0,0,0.25) 93%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.25) 9%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 91%, #000 100%);
+  mask-composite: add;
 }
 .login-overlay--fading {
   opacity: 0;
@@ -3402,6 +3422,99 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   border-radius: 0;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
   color: #eef4f8;
+}
+
+/* ═══ Split login (tm-style) ══════════════════════════════════════════════════
+   Instead of the full-bleed blended landing, the sign-in sits in a card capped
+   to the site's max-width: form on the LEFT third, a carousel of the portal
+   field photos on the RIGHT two-thirds. Uses .login-modal.login-modal--split
+   (2-class) so it cleanly overrides the base .login-modal float rules. */
+.login-modal.login-modal--split {
+  position: relative;
+  z-index: 1;                     /* above the .login-overlay::before dot texture */
+  /* A step wider than the site's --site-max content — closer to full-bleed while
+     still leaving a margin for the dot texture in the surround. */
+  width: 94vw;
+  max-width: 1800px;
+  margin: 0 auto;                 /* cancels the base's calc(21vw - 280px) */
+  /* Lock a 16:9 ratio so the card keeps its proportions as it widens (height
+     grows with width); cap the height so it never overflows a short viewport. */
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-height: 92vh;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  border: 4px solid #fff;
+  border-radius: 0;
+  background: #0c1922;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.login-modal--split .login-modal__form-pane {
+  flex: 0 0 34%;
+  max-width: 34%;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  background: linear-gradient(180deg, #12232e 0%, #0b161e 100%);
+}
+/* The pane now carries the surface, so the card inside goes flat/transparent. */
+.login-modal--split .login-card {
+  height: 100%;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  padding: clamp(1.5rem, 4vh, 2.75rem) clamp(1.25rem, 2.2vw, 2rem);
+}
+.login-modal--split .login-card__title { font-size: clamp(1.7rem, 2.9vw, 2.6rem); }
+/* When a portal is selected its logo replaces the title. The wide lockups
+   (Airtech portal1, Wired portal3) already fill the pane width; Corflow (portal2)
+   and Powered (portal4) are taller/narrower marks, so scale them up to read at a
+   similar full-width size. */
+.login-modal--split .login-card__brandmark--portal2 { transform: scale(1.4); transform-origin: center; }
+.login-modal--split .login-card__brandmark--portal4 { transform: scale(1.4); transform-origin: center; }
+/* Carousel pane — the portal field photos cross-fading on the right. */
+.login-modal__carousel {
+  flex: 1 1 66%;
+  position: relative;
+  overflow: hidden;
+  background: #0c1922;
+}
+.login-modal__slide {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.login-modal__slide.is-active { opacity: 1; }
+.login-modal__dots {
+  position: absolute; bottom: 14px; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 8px; z-index: 2;
+}
+.login-modal__dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.login-modal__dot.is-active { background: #fff; transform: scale(1.25); }
+/* Phone: stack the form over a short carousel band. */
+@media (max-width: 767px) {
+  .login-modal.login-modal--split {
+    flex-direction: column;
+    height: auto;
+    max-height: calc(100dvh - 24px);
+    width: calc(100% - 1rem);
+    overflow: auto;
+  }
+  .login-modal--split .login-modal__form-pane { flex: none; max-width: 100%; order: 2; }
+  /* Carousel image at the TOP of the stacked card on mobile, above the form. */
+  .login-modal__carousel { flex: none; width: 100%; height: 180px; order: 1; }
 }
 
 /* Signature — the eyebrow set like a stencilled equipment tag. */

@@ -963,30 +963,20 @@ export default component$(() => {
         <div class={`login-overlay ${overlayFading.value ? "login-overlay--fading" : ""}`} onClick$={() => { if (auth.value.loggedIn) showLogin.value = false; }}>
           {/* Site-width stage so the login aligns to the same max-width as the
               homepage — the transition into the site stays seamless. */}
-          <div class="login-stage">
-            {/* Full-bleed company photo — swaps to the selected company's own
-                field imagery; the login blends over its left edge. Defaults to
-                the first portal until one is chosen. */}
-            <div class="login-showcase">
-              {PORTALS.map((p) => (
-                <img key={p.id} src={p.hero} alt="" width="1600" height="1067"
-                     loading="eager" decoding="sync"
-                     class={`login-showcase__img ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
-              ))}
-              <div class="login-showcase__scrim" />
-            </div>
-
-            <div class="login-modal" onClick$={(e) => e.stopPropagation()}>
-              {auth.value.loggedIn && (
-                <button
-                  class="login-modal__close"
-                  onClick$={() => (showLogin.value = false)}
-                  aria-label="Close"
-                >
-                  &times;
-                </button>
-              )}
-
+          {/* Split login: sign-in on the left third, a carousel of the portal
+              field photos on the right — capped to the site's max-width so the
+              hand-off into the site stays aligned (mirrors the tm project). */}
+          <div class="login-modal login-modal--split" onClick$={(e) => e.stopPropagation()}>
+            {auth.value.loggedIn && (
+              <button
+                class="login-modal__close"
+                onClick$={() => (showLogin.value = false)}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+            )}
+            <div class="login-modal__form-pane">
               <div class="login-card">
                 {selectedPortal.value ? (
                   <div
@@ -1063,6 +1053,18 @@ export default component$(() => {
                     {loginAction.isRunning ? t("login.submitting", locale.value) : t("login.submit", locale.value)}
                   </button>
                 </Form>
+              </div>
+            </div>
+            <div class="login-modal__carousel" aria-hidden="true">
+              {PORTALS.map((p) => (
+                <img key={p.id} src={p.hero} alt="" width="1600" height="1067"
+                     loading="eager" decoding="sync"
+                     class={`login-modal__slide ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
+              ))}
+              <div class="login-modal__dots">
+                {PORTALS.map((p) => (
+                  <span key={p.id} class={`login-modal__dot ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
+                ))}
               </div>
             </div>
           </div>

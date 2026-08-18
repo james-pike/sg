@@ -19,7 +19,7 @@ const VIEW_MODES: { key: number | "list"; label: string; icon: string }[] = [
 // Tabs for the sg catalog — must match the category values the synergygroup
 // products actually use (see scripts/seed-synergygroup.ts), otherwise a tab
 // filters to an empty list. Add "SWAG" etc. back here when such products exist.
-const CLOTHING_CATEGORIES = ["All", "Jackets", "Sweaters", "T-Shirts", "Polos", "Headwear", "Safety", "Accessories"];
+const CLOTHING_CATEGORIES = ["All", "T-Shirts", "Polos", "Jackets", "Sweaters", "Headwear", "Safety", "Accessories"];
 
 // Safety catalog: every MNFR-* item plus a small allowlist of standard SKUs,
 // minus a deny list for FR items we don't carry yet.
@@ -540,7 +540,11 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
     }
 
     if (activeCat.value !== "All") {
-      return applyFacets(products.filter((p) => p.category === activeCat.value));
+      // Within a category section, sort by price low → high. "All" keeps its
+      // curated sort_order (unchanged).
+      return applyFacets(products.filter((p) => p.category === activeCat.value))
+        .slice()
+        .sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
     }
 
     return applyFacets(products);

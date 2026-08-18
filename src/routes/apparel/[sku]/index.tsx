@@ -108,6 +108,18 @@ export default component$(() => {
     if (selectedVariant.value === "Tall" && TALL_PRICE[p.sku] != null) return TALL_PRICE[p.sku];
     return Number(p.price) || 0;
   });
+  // Images to show, accounting for the selected variant. Gildan 2000 (SG-1) has
+  // its own per-portal Tall photo (g2000T-*), derived from the regular one
+  // (g2000-*); swap to it when Tall is picked.
+  const viewImgs = useComputed$<string[]>(() => {
+    const p = product.value;
+    if (!p) return [];
+    const list = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+    if (p.sku === "SG-1" && selectedVariant.value === "Tall") {
+      return list.map((s) => s.replace(/g2000-/i, "g2000T-"));
+    }
+    return list;
+  });
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   // Per-SKU waist + inseam runs. MN-1 (Carhartt 102291 Rigby) and MNFR-1
   // (Carhartt 104204 FR Rigby) carry different waist/length grids.
@@ -271,7 +283,7 @@ export default component$(() => {
   const p = product.value;
   const pdf = (p as any).pdf as string | undefined;
   // Only worth a view toggle when there's more than one image to switch between.
-  const hasMultipleImgs = (p.imgs && p.imgs.length ? p.imgs : [p.img]).length > 1;
+  const hasMultipleImgs = viewImgs.value.length > 1;
   // The breadcrumb category must read as the TAB the product lives under, not
   // its raw data category: the catalog remaps Safety Boots / Safety Shoes into
   // the "Footwear" tab (see product-catalog.tsx), so the crumb has to remap the
@@ -327,7 +339,7 @@ export default component$(() => {
               onTouchStart$={(e) => { touchStartX.value = e.touches[0].clientX; }}
               onTouchEnd$={(e) => {
                 const diff = touchStartX.value - e.changedTouches[0].clientX;
-                const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
+                const imgs = viewImgs.value;
                 if (Math.abs(diff) > 40) {
                   if (diff > 0) {
                     imgIndex.value = (imgIndex.value + 1) % imgs.length;
@@ -337,7 +349,7 @@ export default component$(() => {
                 }
               }}
               onClick$={() => {
-                const imgs = ((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]);
+                const imgs = viewImgs.value;
                 if (window.innerWidth > 1024) {
                   imgFullscreen.value = true;
                 } else if (imgs.length > 1) {
@@ -345,7 +357,7 @@ export default component$(() => {
                 }
               }}
             >
-              {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
+              {(viewImgs.value).map((src, i) => (
                 <picture key={i}>
                   <source srcset={src.replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
                   <img
@@ -366,9 +378,9 @@ export default component$(() => {
                   {t("product.specsheet.pdf", locale.value)}
                 </a>
               )}
-              {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
+              {(viewImgs.value).length > 1 && (
                 <div class="product-carousel__indicators">
-                  {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((_, i) => (
+                  {(viewImgs.value).map((_, i) => (
                     <button
                       key={i}
                       class={`product-carousel__dot ${imgIndex.value === i ? "active" : ""}`}
@@ -379,9 +391,9 @@ export default component$(() => {
                 </div>
               )}
             </div>
-            {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).length > 1 && (
+            {(viewImgs.value).length > 1 && (
               <div class="product-thumbs product-thumbs--column">
-                {(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[])).map((src, i) => (
+                {(viewImgs.value).map((src, i) => (
                   <button
                     key={i}
                     class={`product-thumbs__item ${imgIndex.value === i ? "active" : ""}`}
@@ -621,7 +633,7 @@ export default component$(() => {
         <div class="product-fullscreen" onClick$={() => (imgFullscreen.value = false)}>
           <button class="product-fullscreen__close" aria-label="Close fullscreen" onClick$={(e) => { e.stopPropagation(); imgFullscreen.value = false; }}>&times;</button>
           <img
-            src={(((p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[]))[imgIndex.value]}
+            src={(viewImgs.value)[imgIndex.value]}
             alt={p.name}
             class="product-fullscreen__img"
             onClick$={(e) => e.stopPropagation()}
