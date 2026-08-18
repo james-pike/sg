@@ -33,17 +33,17 @@
        divider 2px  :  ring 3px  :  greige gap 5px  :  bottom gap 8px
      so the white line, the white ring, the gaps around the products and the
      sidebar, and the gap under the grid are all proportionally related. */
-  --wt-ring: 0px;
+  --sg-ring: 0px;
   /* The greige gap around the products and the sidebar: phi x the ring. */
-  --wt-gap: 5px;
+  --sg-gap: 5px;
   /* And phi again for the larger gap that closes the column underneath. */
-  --wt-gap-lg: 8px;
+  --sg-gap-lg: 8px;
   /* The tight, uniform gap for the desktop catalog area: every gap around the
      products and sidebar is ONE value — product-to-product, sidebar-to-grid,
      the gap under the tab bar, and the padding closing the column below. It's
      phi-cubed times the 1px border line above/below the tabs on desktop
      (1 -> 1.618 -> 2.618 -> 4.236), a tighter step down from the old ~6.4px. */
-  --wt-gap-tight: 4.236px;
+  --sg-gap-tight: 4.236px;
   /* Neutrals carry a subtle warm (orange-leaning) tint so they harmonize with
      the primary orange while staying essentially grey — R ≥ G ≥ B, ~5% chroma
      (the warm counterpart to Facebook's blue-grey). */
@@ -300,10 +300,10 @@ img { max-width: 100%; display: block; }
 /* Landing page: hide header until scroll, card has its own header */
 .site-header--hero-hidden {
   position: fixed;
-  /* Sit at the SAME offset as the solid header (var(--wt-header-top)) when slid
+  /* Sit at the SAME offset as the solid header (var(--sg-header-top)) when slid
      in, so the slid-in header's bottom edge lands exactly on the pinned strips
-     (--wt-header-pin = top + height) with no extra gap — one shared seam line. */
-  top: var(--wt-header-top);
+     (--sg-header-pin = top + height) with no extra gap — one shared seam line. */
+  top: var(--sg-header-top);
   left: 0;
   right: 0;
   transform: translateY(-100%);
@@ -685,7 +685,7 @@ img { max-width: 100%; display: block; }
 
 .hero-bento-carousel__dots {
   display: flex;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   position: absolute;
   bottom: 10px;
   left: 10px;
@@ -1376,7 +1376,7 @@ img { max-width: 100%; display: block; }
 .hero-nav {
   display: flex;
   flex-direction: column;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 .hero-nav__item {
   display: flex;
@@ -1531,7 +1531,7 @@ img { max-width: 100%; display: block; }
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     min-height: 360px;
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -1733,11 +1733,11 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     /* Pin at the header's bottom edge, the same source the tab strip and
        breadcrumb use — it was a hardcoded 64px, 2px above the 66px the others
        sit at, so the orange bar jumped 2px when the menu opened. */
-    top: var(--wt-header-pin);
+    top: var(--sg-header-pin);
     /* Opaque greige surround behind the content-sized card — the sign floats in
        the page's greige, same as the cart and apparel/product routes; its white
        edge strips read against it, and it hides the page below (which otherwise
-       showed through beneath the short card, since --wt-surround is only defined
+       showed through beneath the short card, since --sg-surround is only defined
        on desktop and fell through to transparent here). Clicking it closes the
        menu (layout.tsx). */
     background: #eef1f3;
@@ -1761,7 +1761,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     box-shadow: none;
     /* Just appears — no slide-in. */
     animation: none;
-    padding: 0 0 var(--wt-box-my);
+    padding: 0 0 var(--sg-box-my);
   }
   /* Orange strip header (un-hidden and restyled from the old logo bar): the same
      textured orange sign + white seam the catalog tab bar / breadcrumb / cart
@@ -1772,7 +1772,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     justify-content: space-between;
     grid-template-columns: none;
     gap: 0;
-    margin: 0 var(--wt-box-my);
+    margin: 0 var(--sg-box-my);
     height: 44px;
     /* Never squeezed. The drawer is a flex column capped at the overlay height,
        so expanding a category made this bar give up its own height (44 -> 29px)
@@ -1786,15 +1786,15 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
       /* Dot texture instead of the rust/iron sign texture, matching the other
          secondary bars (tab bar / breadcrumb). */
       radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-      var(--wt-orange);
+      var(--sg-orange);
     box-shadow:
       /* Side white strips so the orange MENU bar carries the sign's white edge
          in its x-margins, like the cart's strips. Left/right only — the bottom
          has its own white divider, the top meets the header seam. */
       -4px 0 0 0 transparent,
       4px 0 0 0 transparent,
-      -5px 0 0 0 var(--wt-ring-edge),
-      5px 0 0 0 var(--wt-ring-edge),
+      -5px 0 0 0 var(--sg-ring-edge),
+      5px 0 0 0 var(--sg-ring-edge),
       inset 0 -2.2px 0 transparent,
       inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
@@ -1813,14 +1813,14 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     letter-spacing: 0.02em;
     text-transform: uppercase;
   }
-  .nav-drawer__title:hover { color: var(--wt-orange-hi); }
+  .nav-drawer__title:hover { color: var(--sg-orange-hi); }
   /* Logout on the right end of the orange strip — white text/icon on the sign,
      no box (rides the bar like the other strip labels). */
   .nav-drawer__header-logout-form { display: flex; align-items: center; }
   .nav-drawer__header-logout {
     display: inline-flex;
     align-items: center;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     background: none;
     border: none;
     cursor: pointer;
@@ -1833,8 +1833,8 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     text-transform: uppercase;
   }
   .nav-drawer__header-logout svg { stroke: #fff; }
-  .nav-drawer__header-logout:hover { color: var(--wt-orange-hi); }
-  .nav-drawer__header-logout:hover svg { stroke: var(--wt-orange-hi); }
+  .nav-drawer__header-logout:hover { color: var(--sg-orange-hi); }
+  .nav-drawer__header-logout:hover svg { stroke: var(--sg-orange-hi); }
   .nav-drawer__close {
     background: none;
     width: auto;
@@ -1854,7 +1854,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     /* Sit close under the bar (1px seam) so the bar's bottom border reads the
        same thin weight as the other pages' orange bars, and keep the link rows
        tight — less greige showing between the white containers. */
-    margin: 1px var(--wt-box-my) 0;
+    margin: 1px var(--sg-box-my) 0;
     padding: 1px;
     gap: 1px;
     border-radius: 0 0 6px 6px;
@@ -1864,9 +1864,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
          segment landed in the 1px gap under the orange bar and painted a grey
          line straight through the bar's white bottom divider. The bar above
          carries the same side-only treatment for the same reason. */
-      -5px 0 0 0 var(--wt-ring-edge),
-      5px 0 0 0 var(--wt-ring-edge),
-      0 5px 0 0 var(--wt-ring-edge);
+      -5px 0 0 0 var(--sg-ring-edge),
+      5px 0 0 0 var(--sg-ring-edge),
+      0 5px 0 0 var(--sg-ring-edge);
   }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
@@ -1930,9 +1930,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
      the panel floats on the greige surround instead of sitting flat. */
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.12),
-    0 0 0 var(--wt-ring) transparent,
-    0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+    0 0 0 var(--sg-ring) transparent,
+    0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+    0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
 }
 .doc-panel .privacy-page__body { max-width: 68ch; }
 .privacy-page__title {
@@ -1963,7 +1963,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 /* Privacy Policy link under the contact email. */
 .site-footer__privacy-link {
@@ -1982,7 +1982,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .site-footer__brand {
   display: flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 .site-footer__logo {
   height: 40px;
@@ -2099,7 +2099,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   flex-wrap: wrap;
 }
 .site-footer__contact-label {
@@ -2190,7 +2190,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   min-width: 0;
 }
 .home-catalog .apparel-grid {
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 .home-catalog__viewall {
   display: block;
@@ -2201,7 +2201,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 @media (max-width: 900px) {
   /* Mobile: a small x-inset on the inner applies to both the tab strip and the
      product grid so they line up and neither runs edge-to-edge (matches cm). */
-  .home-catalog__inner { padding: 0 var(--wt-box-my); }
+  .home-catalog__inner { padding: 0 var(--sg-box-my); }
   /* Mobile nav drawer: drop the per-product thumbnails — the list is
      long enough that the images crowd the row; clean text-only list. */
   .nav-drawer__cat-item-img { display: none; }
@@ -2211,7 +2211,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
      the strip just above it so the band stays visible but no gap opens. */
   /* Taller strip: the orange seam under the header reads as the tabs' own
      band, plus extra room below the labels. */
-  .home-catalog__header { padding: 0; height: 44px; top: 64px; border-radius: 0; margin: 0 calc(-1 * var(--wt-box-my)); }
+  .home-catalog__header { padding: 0; height: 44px; top: 64px; border-radius: 0; margin: 0 calc(-1 * var(--sg-box-my)); }
   .home-catalog__title { display: none; }
   .home-catalog__search-desktop { display: none !important; }
   .home-catalog .apparel-titlebar__action--mobile-search { display: flex; }
@@ -2227,7 +2227,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
      once without the tall image tiles. */
   .home-catalog .apparel-grid.apparel-grid--list {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     padding: 0 0.25rem;
   }
   .apparel-grid--list .product-card {
@@ -2478,7 +2478,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .nav-drawer__link, .nav-drawer__cat-trigger { padding: 9px 14px; }
   .nav-drawer__cat-content .nav-drawer__cat-item { padding: 7px 6px 7px 14px; }
   .nav-drawer__links, .nav-drawer__footer { padding: 1px; }
-  .nav-drawer__header { margin: 0 var(--wt-box-my); }
+  .nav-drawer__header { margin: 0 var(--sg-box-my); }
 }
 .nav-drawer__cat-item {
   display: flex;
@@ -2697,7 +2697,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .featured-banner__tag {
   display: inline-flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   padding: 5px 12px;
   background: rgba(242,125,19,0.15);
   border: 1px solid rgba(242,125,19,0.25);
@@ -2931,7 +2931,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   letter-spacing: -0.02em;
   display: inline-flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3125,7 +3125,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   margin-bottom: 0.35rem;
 }
 .product-card__name {
@@ -3708,8 +3708,8 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   position: relative;
   overflow: hidden;
   background:
-    linear-gradient(var(--wt-box), var(--wt-box)),
-    var(--wt-orange);
+    linear-gradient(var(--sg-box), var(--sg-box)),
+    var(--sg-orange);
   /* Softer bottom seam between the blue header and the white body (was a heavy
      -9px inset shadow). */
   box-shadow:
@@ -3913,7 +3913,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     justify-self: start;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     min-width: 0;
     margin-top: 0;
   }
@@ -4031,7 +4031,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .apparel-sidebar__search {
     display: flex;
     align-items: center;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     background: var(--ce-gray-100);
     border: 1px solid var(--ce-gray-200);
     border-radius: var(--radius-sm);
@@ -4198,7 +4198,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .apparel-titlebar__search {
   display: flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   background: var(--ce-gray-100);
   border: 1px solid var(--ce-gray-200);
   border-radius: var(--radius-sm);
@@ -4243,7 +4243,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     background: var(--ce-white);
     padding: 0 0.75rem;
     align-items: center;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     border: 1px solid var(--ce-gray-200);
     border-radius: var(--radius-sm);
   }
@@ -4332,7 +4332,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .apparel-catalog__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 
 .apparel-catalog__chip {
@@ -4422,7 +4422,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   bottom: 14px;
   right: 14px;
   display: flex;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   z-index: 3;
 }
 
@@ -4444,7 +4444,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .apparel-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   background: transparent;
   padding: 0;
   border-radius: 0;
@@ -4582,7 +4582,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
      cluster is replaced (matches the cm storefront). */
   display: none;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 .site-header__search > svg { flex-shrink: 0; color: var(--ce-gray-500); }
 .site-header__search-input {
@@ -4623,7 +4623,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .site-header--search-open .site-header__search {
     display: flex;
     align-items: center;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     padding: 4px 8px;
     border: 1px solid var(--ce-gray-200);
     border-radius: var(--radius-sm);
@@ -4656,7 +4656,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     min-width: 0;
     /* Same height as the header buttons: leaves ~6px above/below inside the
        bar, matching the field's inset from the bar's right edge. */
-    height: calc(var(--wt-box-h) - 12px);
+    height: calc(var(--sg-box-h) - 12px);
     margin-right: 1px;
     gap: 3px;
     padding: 4px 6px;
@@ -4681,7 +4681,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   margin-left: 0;
   display: inline-flex;
   align-items: center;
-  gap: var(--wt-gap-tight);
+  gap: var(--sg-gap-tight);
   padding: 7px 16px;
   border-radius: 2px;
   border: 1px solid rgba(0,0,0,0.08);
@@ -4749,7 +4749,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   margin-left: 0;
   display: inline-flex;
   align-items: center;
-  gap: var(--wt-gap-tight);
+  gap: var(--sg-gap-tight);
   padding: 10px 16px;
   border-radius: 2px;
   border: 1px solid rgba(0,0,0,0.08);
@@ -4898,7 +4898,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .pdp-breadcrumb__sku {
   display: inline-flex;
   align-items: center;
-  gap: var(--wt-gap-tight);
+  gap: var(--sg-gap-tight);
   padding: 8px 14px;
   border-right: 1px solid var(--ce-gray-200);
   color: var(--ce-gray-600);
@@ -5006,7 +5006,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-image-row {
   display: flex;
   flex-direction: column;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   grid-column: 1;
   grid-row: 1 / -1;
   overflow: hidden;
@@ -5249,7 +5249,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: auto 1fr;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   align-items: stretch;
 }
 
@@ -5378,7 +5378,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__select-group {
   display: flex;
   flex-direction: column;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 .product-modal__select {
   padding: 7px 28px 7px 10px;
@@ -5428,7 +5428,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__options {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--wt-gap-tight);
+  gap: var(--sg-gap-tight);
 }
 .product-modal__option {
   padding: 7px 14px;
@@ -5917,7 +5917,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
   margin-top: 0.2rem;
   display: flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
 }
 .cart-table__swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
 .cart-drawer__summary-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; border: 1px solid rgba(0,0,0,0.15); margin-right: 6px; vertical-align: -1px; }
@@ -6033,7 +6033,7 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .cart-drawer__order-btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   padding: 10px 18px;
   font-size: 0.82rem;
   color: var(--ce-white);
@@ -6176,7 +6176,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .cart-drawer__back-btn {
   display: flex;
   align-items: center;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   background: none;
   border: none;
   color: var(--ce-gray-500);
@@ -6321,7 +6321,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .checkout-modal__pay-options {
   display: flex;
   flex-direction: column;
-  gap: var(--wt-gap);
+  gap: var(--sg-gap);
   margin-bottom: 0.75rem;
 }
 .checkout-modal__pay-opt {
@@ -6427,15 +6427,15 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 2px rgba(0, 0, 0, 0.04),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.08),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.08),
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
   }
 }
 /* Continue button: the header's orange sign face with white text — was the
    brown/gold --ce-gold with black text. Matches the cart's Place-order button. */
 .checkout-result .btn--primary {
-  background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
+  background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange);
   color: #fff;
   border: 1px solid rgba(10, 25, 55, 0.45);
   text-shadow: 0 1px 1px rgba(10, 25, 55, 0.45);
@@ -6445,7 +6445,7 @@ details[open] > .cart-drawer__checkout-title::after {
     inset 0 0 10px rgba(10, 25, 55, 0.30),
     0 2px 3px rgba(0, 0, 0, 0.28);
 }
-.checkout-result .btn--primary:hover { background: var(--wt-orange); color: #fff; }
+.checkout-result .btn--primary:hover { background: var(--sg-orange); color: #fff; }
 .checkout-result__card {
   max-width: 420px;
   width: 100%;
@@ -6817,7 +6817,7 @@ details[open] > .cart-drawer__checkout-title::after {
   html { font-size: 18px; }
   .site-header .cart-btn,
   .site-header .locale-btn,
-  .site-header .logout-btn { height: 42px; padding: 0 12px; min-width: auto; gap: var(--wt-gap); font-size: 0.78rem; border-radius: var(--ce-btn-radius); box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
+  .site-header .logout-btn { height: 42px; padding: 0 12px; min-width: auto; gap: var(--sg-gap); font-size: 0.78rem; border-radius: var(--ce-btn-radius); box-shadow: inset 0 1px 4px rgba(0,0,0,0.08), inset 0 0 6px rgba(0,0,0,0.04); }
   .site-header .cart-btn svg,
   .site-header .locale-btn svg,
   .site-header .logout-btn svg { width: 20px; height: 20px; }
@@ -7154,7 +7154,7 @@ details[open] > .cart-drawer__checkout-title::after {
      the in-hero floating .hero-card-header serves as the visible overlay header. */
   .site-header--hero-hidden {
     position: fixed;
-    top: var(--wt-header-top);
+    top: var(--sg-header-top);
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
@@ -7213,7 +7213,7 @@ details[open] > .cart-drawer__checkout-title::after {
     border-radius: 0;
     /* No side padding: the tab bar, sidebar and grid edges sit exactly on
        --site-max, flush with the header bar and footer above/below. */
-    padding: 0 0 var(--wt-gap-tight);
+    padding: 0 0 var(--sg-gap-tight);
     margin: 0 auto;
     display: grid;
     /* Categories are a horizontal bar spanning row 2 (styled like the PDP
@@ -7226,7 +7226,7 @@ details[open] > .cart-drawer__checkout-title::after {
        instead, so the bar hugs the header like it does when pinned. */
     /* One tight gap everywhere in the catalog area: phi-cubed x the tab bar's
        1px border line — the x-gap here matches the y-gap under the tabs. */
-    column-gap: var(--wt-gap-tight);
+    column-gap: var(--sg-gap-tight);
     row-gap: 0;
     box-shadow:
       0 2px 8px rgba(0,0,0,0.05),
@@ -7236,8 +7236,8 @@ details[open] > .cart-drawer__checkout-title::after {
      and the sidebar's outer gap matches the gutter between it and the grid.
      Same tight value as the column gap, so the y-gap under the tabs reads
      equal to the x-gap between the sidebar and the first product column. */
-  .home-catalog__filters { margin: var(--wt-gap-tight) 0 0 var(--wt-gap-tight); }
-  .home-catalog .apparel-grid { margin-top: var(--wt-gap-tight); }
+  .home-catalog__filters { margin: var(--sg-gap-tight) 0 0 var(--sg-gap-tight); }
+  .home-catalog .apparel-grid { margin-top: var(--sg-gap-tight); }
   .home-catalog__hero-slot { margin-bottom: 10px; }
   .home-catalog__hero-slot:empty { display: none; }
   .home-catalog__hero-slot {
@@ -7262,7 +7262,7 @@ details[open] > .cart-drawer__checkout-title::after {
        56px dark bar) — taller tabs while keeping a clear hierarchy. */
     height: 42px;
     border-radius: 0;
-    background: var(--wt-orange);
+    background: var(--sg-orange);
     margin-bottom: 0;
     position: sticky;
     top: 58px;
@@ -7282,9 +7282,9 @@ details[open] > .cart-drawer__checkout-title::after {
     /* Dark overlay box, the same one the header logo/buttons ride in — a
        recessed near-black field on the orange bar (the original look, before
        it went white and then frosted-translucent). */
-    background: var(--wt-box-strong);
-    border: 1px solid var(--wt-box-edge);
-    border-radius: var(--wt-box-radius);
+    background: var(--sg-box-strong);
+    border: 1px solid var(--sg-box-edge);
+    border-radius: var(--sg-box-radius);
     padding: 6px 12px;
     margin: 6px 8px 6px auto;
     order: 2;
@@ -7336,7 +7336,7 @@ details[open] > .cart-drawer__checkout-title::after {
     color: #fff;
   }
   .home-catalog__tabs .apparel-titlebar__tab.active {
-    background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
+    background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange);
     color: #fff;
   }
   /* Thin white dividers between tabs, like the breadcrumb bar's separators. */
@@ -7379,7 +7379,7 @@ details[open] > .cart-drawer__checkout-title::after {
     grid-row: 3;
     align-self: start;
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--wt-gap-tight);
+    gap: var(--sg-gap-tight);
     background: var(--ce-gray-200);
     border-radius: 2px;
     padding: 0;
@@ -7411,7 +7411,7 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   .home-catalog .apparel-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--wt-gap-tight);
+    gap: var(--sg-gap-tight);
   }
   .product-carousel {
     cursor: zoom-in;
@@ -8078,12 +8078,12 @@ details[open] > .cart-drawer__checkout-title::after {
     border-radius: 2px 2px 0 0;
   }
   /* Inset to the card's outer edge instead of running full-bleed: the product
-     image and details above sit ~--wt-box-my in from the viewport, so the More
+     image and details above sit ~--sg-box-my in from the viewport, so the More
      carousel matched to them reads as part of the same card rather than a
      separate full-width band. */
   /* Sit the "More …" carousel right under the info panel on the same 2px seam
      the rest of the site uses, not a 1rem gap; a small title lead-in below it. */
-  .related-items { margin-top: 3px; margin-left: var(--wt-box-my); margin-right: var(--wt-box-my); }
+  .related-items { margin-top: 3px; margin-left: var(--sg-box-my); margin-right: var(--sg-box-my); }
   .related-items__grid { display: none; }
   .related-items__title { font-size: 0.9rem; margin-bottom: 0.35rem; padding: 0.4rem 0.35rem 0; }
   .product-modal__category { display: none; }
@@ -8181,7 +8181,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Match the 6px card inset used by the back bar / summary above it, so the
      greige margin is uniform down the whole checkout card, and the same
      off-white fill as the summary/items. */
-  .checkout-modal__form { margin: 0 var(--wt-box-my) var(--wt-box-my); border-radius: 0; background: var(--mn-panel); }
+  .checkout-modal__form { margin: 0 var(--sg-box-my) var(--sg-box-my); border-radius: 0; background: var(--mn-panel); }
   .cart-item { padding: 0.5rem 0; gap: 0.5rem; }
   .cart-item__img { width: 48px; height: 36px; }
   .cart-item__name { font-size: 0.8rem; }
@@ -8214,8 +8214,8 @@ details[open] > .cart-drawer__checkout-title::after {
     letter-spacing: 0.02em;
     border: none;
     background:
-      var(--wt-iron) left calc(-1 * (var(--wt-box-h) + var(--wt-seam))) / 100% auto no-repeat,
-      var(--wt-orange);
+      var(--sg-iron) left calc(-1 * (var(--sg-box-h) + var(--sg-seam))) / 100% auto no-repeat,
+      var(--sg-orange);
     box-shadow:
       /* Greige seam stuck below, like the breadcrumb. */
       0 1px 0 0 var(--ce-greige),
@@ -8285,7 +8285,7 @@ details[open] > .cart-drawer__checkout-title::after {
      grey line removed from the apparel grid. Rebuilt to read like the apparel
      card: a full 4px of white (the card insets 6px, the white spreads to 2px
      from the viewport edge — the same 2px the body panel insets there) with the
-     --wt-ring-edge hairline OUTSIDE it, in the greige gutter, not over it. */
+     --sg-ring-edge hairline OUTSIDE it, in the greige gutter, not over it. */
   .cart-drawer__items,
   .cart-drawer__summary,
   .checkout-modal__form,
@@ -8293,7 +8293,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .cart-drawer__footer {
     box-shadow:
       0 0 0 4px transparent,
-      0 0 0 5px var(--wt-ring-edge);
+      0 0 0 5px var(--sg-ring-edge);
   }
   /* The orange bars (the cart's PRODUCT/TOTAL strip, the checkout's Back bar)
      sat with bare greige in their side margins while every card beside them
@@ -8308,8 +8308,8 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow:
       -4px 0 0 0 transparent,
       4px 0 0 0 transparent,
-      -5px 0 0 0 var(--wt-ring-edge),
-      5px 0 0 0 var(--wt-ring-edge),
+      -5px 0 0 0 var(--sg-ring-edge),
+      5px 0 0 0 var(--sg-ring-edge),
       inset 0 -2.2px 0 transparent,
       inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
@@ -8336,9 +8336,9 @@ details[open] > .cart-drawer__checkout-title::after {
   padding: 2.5rem 2rem;
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.12),
-    0 0 0 var(--wt-ring) transparent,
-    0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+    0 0 0 var(--sg-ring) transparent,
+    0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+    0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
 }
 .not-found-page__code {
   font-size: 5rem;
@@ -9254,49 +9254,49 @@ details[open] > .cart-drawer__checkout-title::after {
      ratio (÷1.618) → #4c6070, so the header sits a φ step below the tab bar just
      like the 64/40 height ratio between them. Both blues were lightened + softened
      a step (from #2b556f / #5f849c) so they read gentler against the pale page. */
-  --wt-orange: #7893a4;
-  --wt-orange-dark: #5f7688;
-  --wt-orange-hi: #dbeafe;
+  --sg-orange: #7893a4;
+  --sg-orange-dark: #5f7688;
+  --sg-orange-hi: #dbeafe;
   /* Darker-orange overlay box behind the logo + buttons (willstransfer.com
      mobile/tablet look): ~30% black over the orange bar → ~#2b374d. */
   /* The Wills "pressed sign" 30% black overlay — removed (transparent) so the
      bars, boxes and buttons show their true base blue instead of a darkened,
      muddied version of it. */
-  --wt-box: rgba(0,0,0,0);
-  --wt-box-strong: rgba(0,0,0,0.42);
-  --wt-box-edge: rgba(0,0,0,0.12);
+  --sg-box: rgba(0,0,0,0);
+  --sg-box-strong: rgba(0,0,0,0.42);
+  --sg-box-edge: rgba(0,0,0,0.12);
   /* Shared box height + vertical margin. Box height is a bit taller than
      (header − 2·margin) so the dark bar sits lower and the BOTTOM inset (the
      creamy band above the tabs) is smaller than the top. */
-  --wt-box-h: 50px;
-  --wt-box-my: 6px;
+  --sg-box-h: 50px;
+  --sg-box-my: 6px;
   /* Mobile/tablet: the frame band between the header bar's bottom edge and the
      strip pinned below it (tabs / breadcrumb) — the white line under the
-     header. Header height = 4px top padding + --wt-box-h + --wt-seam, so a
+     header. Header height = 4px top padding + --sg-box-h + --sg-seam, so a
      thinner seam is paid for out of the bar, leaving the pin offsets alone. */
-  --wt-seam: 1.5px;
+  --sg-seam: 1.5px;
   /* The rim on the white ring's outer edge — the same hairline the desktop
      ring carries where it meets the greige surround. */
-  --wt-ring-edge: transparent;
+  --sg-ring-edge: transparent;
   /* Shared corner radius for the logo box and all header button boxes. */
-  --wt-box-radius: 2px;
+  --sg-box-radius: 2px;
   /* Inset frame around the header/tab bars — greige again: the sign sits in
      a greige surround, separated from it by a thin white ring (painted by
      the page-background gradient on desktop, the white page margins on
      mobile). */
-  --wt-frame: var(--ce-greige);
+  --sg-frame: var(--ce-greige);
   /* Iron texture for the header bar, extracted from "Iron texture.eps" (repo
      root). The EPS's brown is NOT used: a label-free band of the artwork was
      split against its median tone into darker-than-base marks (near-black
      alpha: pits/stains) and lighter-than-base marks (warm-white alpha:
      scratches/wear), so the bar's own orange paint shows through. */
-  --wt-iron: url("data:image/png;base64,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");
+  --sg-iron: url("data:image/png;base64,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");
 }
 /* 3px header padding + box-h + 2px seam = header height (65 / 53) — see the
    seam block. Split at 600/601 to match the header-height breakpoints (601-767
    uses the 65px tablet header, so it needs the tablet bar too). */
-@media (min-width: 601px) and (max-width: 1024px) { :root { --wt-box-h: 74px; --wt-box-my: 5px; } }
-@media (max-width: 600px) { :root { --wt-box-h: 58px; --wt-box-my: 6px; --wt-seam: 1px; }
+@media (min-width: 601px) and (max-width: 1024px) { :root { --sg-box-h: 74px; --sg-box-my: 5px; } }
+@media (max-width: 600px) { :root { --sg-box-h: 58px; --sg-box-my: 6px; --sg-seam: 1px; }
 }
 
 /* ---- "APPAREL" clean uppercase label next to the script logo ----
@@ -9332,16 +9332,16 @@ details[open] > .cart-drawer__checkout-title::after {
   align-items: center;
   margin-right: auto;
   flex-shrink: 0;
-  background: var(--wt-box);
-  border-radius: var(--wt-box-radius);
+  background: var(--sg-box);
+  border-radius: var(--sg-box-radius);
   padding: 0 8px 0 4px;
-  height: var(--wt-box-h);
+  height: var(--sg-box-h);
   box-sizing: border-box;
   /* Same vertical margin as the buttons → orange frames all boxes equally.
      margin-right: auto keeps the button cluster pushed to the right edge.
      No left margin so the gap left of the logo equals the gap right of the
      last button (both come from the header's symmetric inner padding). */
-  margin: var(--wt-box-my) auto var(--wt-box-my) 0;
+  margin: var(--sg-box-my) auto var(--sg-box-my) 0;
 }
 /* Sized close to the bar height so the logo fills most of the vertical space,
    leaving only a thin band above/below. */
@@ -9362,10 +9362,10 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header--white,
 .site-header--solid {
   /* Frame around the inset dark bar = the main-area page background (greige). */
-  background: var(--wt-frame) !important;
+  background: var(--sg-frame) !important;
   border-bottom: none !important;
-  padding-left: var(--wt-box-my) !important;
-  padding-right: var(--wt-box-my) !important;
+  padding-left: var(--sg-box-my) !important;
+  padding-right: var(--sg-box-my) !important;
 }
 /* The inner is the inset dark bar — depth cast on the LEFT and RIGHT edges only
    (negative vertical spread keeps the shadow off the top/bottom lines). */
@@ -9376,14 +9376,14 @@ details[open] > .cart-drawer__checkout-title::after {
      top — the texture reads as one continuous weathered surface across all
      three, not a restart per element. */
   background:
-    var(--wt-iron) left top / 100% auto no-repeat,
-    linear-gradient(var(--wt-box), var(--wt-box)),
-    var(--wt-orange) !important;
+    var(--sg-iron) left top / 100% auto no-repeat,
+    linear-gradient(var(--sg-box), var(--sg-box)),
+    var(--sg-orange) !important;
   /* Top corners rounded, bottom corners square. */
   border-radius: 6px 6px 0 0 !important;
-  height: var(--wt-box-h) !important;
-  margin-top: var(--wt-box-my) !important;
-  margin-bottom: var(--wt-box-my) !important;
+  height: var(--sg-box-h) !important;
+  margin-top: var(--sg-box-my) !important;
+  margin-bottom: var(--sg-box-my) !important;
   padding-left: 8px !important;
   padding-right: 6px !important;
   box-shadow:
@@ -9397,7 +9397,7 @@ details[open] > .cart-drawer__checkout-title::after {
    under the header bar, with a white divider slot cut across the junction.
 
    Geometry is whole pixels on purpose and sums exactly to the header's height:
-   4px above the bar + --wt-box-h + 3px seam = 64px phone / 67px tablet, putting
+   4px above the bar + --sg-box-h + 3px seam = 64px phone / 67px tablet, putting
    the dark-bar/tab junction exactly 3px above the strip — the slot's midpoint. The 3px above the bar is header PADDING, not inner margin — a top
    margin on the inner collapses through .site-header (no border/padding to
    stop it) at some breakpoints, rendering the bar at y=0 with white slack below.
@@ -9411,7 +9411,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header { padding-top: 1.6px !important; background-color: transparent !important; background-image: linear-gradient(#ffffff, #ffffff) !important; }
   .site-header__inner {
     margin-top: 0 !important;
-    margin-bottom: var(--wt-seam) !important;
+    margin-bottom: var(--sg-seam) !important;
     /* Outer depth on the left/right only (a downward cast would bleed into the
        seam). The inset shading is DIRECTIONAL — top + sides here, bottom + sides
        on the tab strip, identical side values — so the bar and the tabs read as
@@ -9435,7 +9435,7 @@ details[open] > .cart-drawer__checkout-title::after {
     content: '';
     position: absolute;
     /* Centred: equal frame slivers above and below the stroke. */
-    bottom: calc((var(--wt-seam) - 1.6px) / 2);
+    bottom: calc((var(--sg-seam) - 1.6px) / 2);
     height: 1.6px;
     z-index: 4;
     left: 13px;
@@ -9462,8 +9462,8 @@ details[open] > .cart-drawer__checkout-title::after {
        divider) — but stopping at the bar, not the screen: running it into the
        margins would cut the ring's rim and side shadow, breaking the card's
        edge where the strip passes the tab bar. */
-    left: var(--wt-box-my);
-    right: var(--wt-box-my);
+    left: var(--sg-box-my);
+    right: var(--sg-box-my);
     background: #ffffff;
     pointer-events: none;
     filter: drop-shadow(0 -1px 1px rgba(255, 255, 255, 0.3));
@@ -9490,8 +9490,8 @@ details[open] > .cart-drawer__checkout-title::after {
    bar and breadcrumb so the content area doesn't run full width past them. */
 @media (max-width: 1024px) {
   .product-detail {
-    margin-left: var(--wt-box-my);
-    margin-right: var(--wt-box-my);
+    margin-left: var(--sg-box-my);
+    margin-right: var(--sg-box-my);
   }
 }
 /* Logo + buttons ride ON the dark bar (transparent), no per-element boxes. */
@@ -9510,7 +9510,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header .site-header__search-btn {
   background: transparent !important;
   border: none !important;
-  height: calc(var(--wt-box-h) - 12px) !important;
+  height: calc(var(--sg-box-h) - 12px) !important;
   margin: 0 2px !important;
 }
 .site-header .locale-btn:hover,
@@ -9528,7 +9528,7 @@ details[open] > .cart-drawer__checkout-title::after {
    Pre-scroll it's opacity:0, so this stays invisible over the hero. */
 .site-header--hero-hidden,
 .site-header--hero-hidden.site-header--hero-visible {
-  background: var(--wt-frame) !important;
+  background: var(--sg-frame) !important;
   border-bottom: none !important;
 }
 
@@ -9536,7 +9536,7 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header .site-header__categories a,
 .site-header .site-header__nav a { color: #fff !important; }
 .site-header .site-header__categories a:hover,
-.site-header .site-header__nav a:hover { color: var(--wt-orange-hi) !important; }
+.site-header .site-header__nav a:hover { color: var(--sg-orange-hi) !important; }
 .site-header .site-header__categories a.active {
   color: #fff !important;
   text-decoration-color: #fff !important;
@@ -9555,13 +9555,13 @@ details[open] > .cart-drawer__checkout-title::after {
   color: #fff !important;
   box-shadow: none !important;
   border-radius: 4px !important;
-  height: calc(var(--wt-box-h) - 12px) !important;
+  height: calc(var(--sg-box-h) - 12px) !important;
   box-sizing: border-box !important;
   margin: 0 2px !important;
 }
 /* Edge padding equal to the vertical gap so the orange framing is uniform
    on every side, and the left-of-logo gap equals the right-of-last-button gap. */
-.site-header__inner { padding-left: var(--wt-box-my) !important; padding-right: var(--wt-box-my) !important; }
+.site-header__inner { padding-left: var(--sg-box-my) !important; padding-right: var(--sg-box-my) !important; }
 /* Mobile: a bit more room before the logo so the pinwheel isn't cut off at the edge. */
 @media (max-width: 1024px) {
   .site-header__inner { padding-left: 12px !important; }
@@ -9594,18 +9594,18 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header .logout-btn svg,
 .site-header .hamburger-btn svg,
 .site-header .site-header__search-btn svg { stroke: #fff !important; }
-.site-header .cart-btn__dot { border-color: var(--wt-orange) !important; }
+.site-header .cart-btn__dot { border-color: var(--sg-orange) !important; }
 
 /* Search field uses the same darker-orange overlay box as the logo/buttons.
    White text on that box is ~5.3:1 contrast (passes WCAG AA), and a brighter
    ring on focus keeps it keyboard-accessible. */
 .site-header .site-header__search {
-  background: var(--wt-box) !important;
+  background: var(--sg-box) !important;
   /* Thin white 1px hairline (was a dark rgba(0,0,0,0.12) line) — matches the
      white borders/seams used elsewhere, reading as a light frame on the blue
      bar rather than a black overlay edge. */
   border: 1px solid rgba(255, 255, 255, 0.5) !important;
-  border-radius: var(--wt-box-radius) !important;
+  border-radius: var(--sg-box-radius) !important;
 }
 /* Brighten the hairline a touch on focus, staying white. */
 .site-header .site-header__search:focus-within {
@@ -9638,7 +9638,7 @@ details[open] > .cart-drawer__checkout-title::after {
     box-sizing: border-box;
     margin: 0 !important;
     padding: 0 14px;
-    border-radius: var(--wt-box-radius) !important;
+    border-radius: var(--sg-box-radius) !important;
   }
   .site-header .site-header__search-input { flex: 1; min-width: 0; font-size: 0.9rem; }
   /* Permanent field — no close button (it never opens/closes here). */
@@ -9666,18 +9666,18 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Tab strip: greige frame (page bg) with an inset orange bar carrying the tabs,
    so the edge insets around the tabs match the main area (not orange). The
    greige fills full width (opaque) so scrolling content never peeks through. */
-.home-catalog__header { background: var(--wt-frame) !important; border-top: none !important; }
+.home-catalog__header { background: var(--sg-frame) !important; border-top: none !important; }
 @media (max-width: 1024px) {
   .home-catalog__tabs {
     /* Iron texture continues down from the header bar: the strip's top edge is
-       --wt-box-h + 3px (seam) below the bar's top, where the image anchors.
+       --sg-box-h + 3px (seam) below the bar's top, where the image anchors.
        Same width and 100%-auto scale as the bar, so the sample lines up. */
     background:
       radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-      var(--wt-orange) !important;
+      var(--sg-orange) !important;
     border-radius: 0 !important;
     align-self: stretch !important;
-    margin: 0 var(--wt-box-my) !important;
+    margin: 0 var(--sg-box-my) !important;
     /* Depth continuing the header bar's: same outer cast and side shading, with
        the roll-away edge on the BOTTOM only (the bar carries the top) — one
        pressed sign face across both. */
@@ -9698,7 +9698,7 @@ details[open] > .cart-drawer__checkout-title::after {
    selected tab reads as a recessed panel (2-shade system: orange + dark box,
    mirroring the header's own orange + button-box relationship). */
 .apparel-titlebar__tab.active,
-.home-catalog__tabs .apparel-titlebar__tab.active { color: #fff !important; background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange) !important; }
+.home-catalog__tabs .apparel-titlebar__tab.active { color: #fff !important; background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange) !important; }
 /* Desktop: the categories are a horizontal breadcrumb-style bar (see the
    1025px layout block) — sign orange with the iron texture continuing down
    from the header bar (the bar pins 52px below the header bar's top, where
@@ -9707,7 +9707,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .home-catalog__header {
     background:
       radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-      var(--wt-orange) !important;
+      var(--sg-orange) !important;
   }
   .home-catalog__tabs .apparel-titlebar__tab { margin: 0 !important; width: auto !important; border-radius: 0 !important; font-size: 1.05rem !important; color: #fff !important; }
   .home-catalog__tabs .apparel-titlebar__tab:hover { background: rgba(255,255,255,0.10) !important; color: #fff !important; }
@@ -9724,7 +9724,7 @@ details[open] > .cart-drawer__checkout-title::after {
     inset: 0 4px;
     width: auto;
     height: auto;
-    background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
+    background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange);
     border: none;
     border-radius: 0;
     z-index: -1;
@@ -9746,7 +9746,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Full height, sides inset only — as on tablet and desktop. A top/bottom
      inset leaves a band of the bar's lighter orange above the selected tab,
      which reads as extra bar height. */
-  .home-catalog__tabs .apparel-titlebar__tab.active::before { background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange) !important; inset: 0 2px !important; }
+  .home-catalog__tabs .apparel-titlebar__tab.active::before { background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange) !important; inset: 0 2px !important; }
 }
 /* Horizontal strip (mobile + tablet): thin white dividers between tabs, inset
    from top/bottom (not full-height). */
@@ -9792,12 +9792,12 @@ details[open] > .cart-drawer__checkout-title::after {
      toward the centre (edges keep more grain) via the solid-blue overlay that
      peaks at 50% and eases to transparent at both ends. */
   background:
-    linear-gradient(to right, transparent, var(--wt-orange) 50%, transparent),
+    linear-gradient(to right, transparent, var(--sg-orange) 50%, transparent),
     radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-    linear-gradient(var(--wt-box), var(--wt-box)),
-    var(--wt-orange);
+    linear-gradient(var(--sg-box), var(--sg-box)),
+    var(--sg-orange);
   border-radius: 0 0 6px 6px;
-  margin: var(--wt-box-my);
+  margin: var(--sg-box-my);
   box-shadow:
     -4px 0 6px -3px rgba(0,0,0,0.35),
     4px 0 6px -3px rgba(0,0,0,0.35),
@@ -9825,10 +9825,10 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 2px rgba(0, 0, 0, 0.04),
-      0 0 0 var(--wt-ring) transparent,
+      0 0 0 var(--sg-ring) transparent,
       /* Outer rim at the same weight as the bars' outline above. */
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22),
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22),
       inset 0 6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
@@ -9842,7 +9842,7 @@ details[open] > .cart-drawer__checkout-title::after {
 
 /* ---- Product-page breadcrumb: match the catalog tab bar ---- */
 .pdp-breadcrumb {
-  background: var(--wt-orange) !important;
+  background: var(--sg-orange) !important;
   border-top: none !important;
   border-bottom: none !important;
 }
@@ -9852,11 +9852,11 @@ details[open] > .cart-drawer__checkout-title::after {
    the same pin positions so the white slot straddles the junction here too. */
 @media (max-width: 1024px) {
   .pdp-breadcrumb {
-    margin-left: var(--wt-box-my) !important;
-    margin-right: var(--wt-box-my) !important;
+    margin-left: var(--sg-box-my) !important;
+    margin-right: var(--sg-box-my) !important;
     background:
       radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-      var(--wt-orange) !important;
+      var(--sg-orange) !important;
     box-shadow:
       /* Greige seam stuck to the bar's bottom edge, same as desktop/mobile. */
       0 1px 0 0 var(--ce-greige),
@@ -9921,7 +9921,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Full height — edge to edge between the white divider lines above and
      below the bar (like the active catalog tab); only the sides are inset. */
   inset: 0 7px;
-  background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
+  background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange);
   border-radius: 0;
   /* Parallelogram: the pill's sides lean at the same angle as the "/"
      separators in the trail — Montserrat's slash measures ~19.3° from
@@ -10113,7 +10113,7 @@ details[open] > .cart-drawer__checkout-title::after {
   border-right: 0;
 }
 /* Desktop: none at all. The panel already sits on the greige card with the
-   --wt-gap inset on every side, so a strip inside it just doubles the space —
+   --sg-gap inset on every side, so a strip inside it just doubles the space —
    the gap beside the photo should equal the gap above it. */
 @media (min-width: 1025px) {
   .product-detail .product-carousel {
@@ -10146,7 +10146,7 @@ details[open] > .cart-drawer__checkout-title::after {
     padding: 1px 13px !important;
   }
   /* Right-edge scroll cue, pinned on the wrapper so it doesn't scroll with
-     the tabs (the wrapper's white frame is --wt-box-my wider on each side):
+     the tabs (the wrapper's white frame is --sg-box-my wider on each side):
      the orange fade over the strip's right edge. At the scroll end
      (--tabs-end, toggled by the component) it lifts.
      There was a chevron here too (::after) — dropped: a half-visible tab at
@@ -10156,11 +10156,11 @@ details[open] > .cart-drawer__checkout-title::after {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: var(--wt-box-my);
+    right: var(--sg-box-my);
     width: 26px;
     pointer-events: none;
     z-index: 2;
-    background: linear-gradient(to right, rgba(37, 99, 235, 0), var(--wt-orange) 72%);
+    background: linear-gradient(to right, rgba(37, 99, 235, 0), var(--sg-orange) 72%);
     transition: opacity 0.25s ease;
   }
   .home-catalog__header--tabs-end::before { opacity: 0; }
@@ -10181,7 +10181,7 @@ details[open] > .cart-drawer__checkout-title::after {
        1px lap. It was a hardcoded 113px (a stale 4+64 header + 42px bar), 8px
        above where the bar now sits — so the filters scrolled ~8px under the bar
        before catching, which read as not sticking until a few px of scroll. */
-    top: calc(var(--wt-header-pin) + 44px - 1px);
+    top: calc(var(--sg-header-pin) + 44px - 1px);
     /* Medium light-gray sidebar surface — darker than the page/product panels so
        the filter column reads as a distinct block beside the product list. */
     background: #ebeef0;
@@ -10281,7 +10281,7 @@ details[open] > .cart-drawer__checkout-title::after {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    width: min(calc(var(--site-max) + 2 * var(--wt-ring)), 100%);
+    width: min(calc(var(--site-max) + 2 * var(--sg-ring)), 100%);
     height: auto;
     background: var(--ce-white);
     border-radius: 12px 12px 0 0;
@@ -10344,11 +10344,11 @@ details[open] > .cart-drawer__checkout-title::after {
          card, mirroring the sign surfaces' inset shading. */
       0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 2px rgba(0, 0, 0, 0.04),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.08),
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.08),
       /* Spread pushes the cast out past the ring's outer edge, so the white
          strip itself throws the depth onto the greige. */
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
   }
   /* Gaps between cards read as the sidebar gray (was the greige card showing
      through) — no card borders, just the gray gutter. */
@@ -10361,11 +10361,11 @@ details[open] > .cart-drawer__checkout-title::after {
          card, mirroring the sign surfaces' inset shading. */
       0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 2px rgba(0, 0, 0, 0.04),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.08),
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.08),
       /* Spread pushes the cast out past the ring's outer edge, so the white
          strip itself throws the depth onto the greige. */
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
   }
   /* The header's inner bar loses its own outer casts (the ring carries the
      depth now); only the weathered inset vignette stays. */
@@ -10374,31 +10374,31 @@ details[open] > .cart-drawer__checkout-title::after {
       /* Same thin grey outline the product-area card has at its edge. */
       0 0 0 1px rgba(0, 0, 0, 0.14),
       inset 0 0 14px rgba(10, 25, 55, 0.45) !important;
-    /* The band above the bar carried --wt-box-my (6px) of white PLUS the 4px
+    /* The band above the bar carried --sg-box-my (6px) of white PLUS the 4px
        greige strip above the header, so it read wider than the 6px white on
        the card's other sides. Halve the white to 3px and give those 3px back
        to the bar's height, so the bar's bottom edge — and every strip pinned
        under it — stays exactly where it was. */
     margin-top: 1px !important;
-    /* Trim the white band BELOW the bar (was --wt-box-my = 6px) to a thin 2px
+    /* Trim the white band BELOW the bar (was --sg-box-my = 6px) to a thin 2px
        seam, matching the top. margin-bottom sits BELOW the bar, so shrinking it
        pulls the hero/tab strip up without moving the bar's own bottom edge —
        the 67px pinned strips stay aligned. */
     margin-bottom: 2px !important;
-    height: calc(var(--wt-box-h) + 5px) !important;
+    height: calc(var(--sg-box-h) + 5px) !important;
   }
   /* Outside the card: greige surround with a thin white ring hugging the
      card's sides (matching the white rounded-corner margin around the sign).
      One horizontal gradient paints greige → white strip → greige column →
      white strip → greige, centered on the --site-max card. */
   html { background: var(--ce-greige); }
-  body { background: var(--wt-surround); }
+  body { background: var(--sg-surround); }
   /* A slim strip of the greige surround above the card — PERMANENT: the
      header pins at top: 4px (not 0) and its ::after paints the band above
      it, so the greige strip stays put while content scrolls beneath. The
      fixed-position hero header is exempt. */
   /* Taller header bar: more breathing room above/below the wordmark. */
-  :root { --wt-box-h: 56px; }
+  :root { --sg-box-h: 56px; }
   .site-header { height: 64px; }
   .site-header:not(.site-header--hero-hidden) {
     margin-top: 0;
@@ -10414,7 +10414,7 @@ details[open] > .cart-drawer__checkout-title::after {
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--wt-surround);
+    background: var(--sg-surround);
   }
   /* Pinned strips shift down with the header (its bottom sits at 68px now),
      and carry the same thin grey outline as the card and header bar. */
@@ -10431,7 +10431,7 @@ details[open] > .cart-drawer__checkout-title::after {
      One shared token so every full-width layer (page, body, header, strip)
      samples the identical gradient and stays seamless. */
   :root {
-    --wt-surround: linear-gradient(
+    --sg-surround: linear-gradient(
       to right,
       var(--ce-greige) 0,
       #f6f3ee calc(50% - var(--site-max) / 2),
@@ -10448,7 +10448,7 @@ details[open] > .cart-drawer__checkout-title::after {
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
       radial-gradient(circle, rgba(0, 0, 0, 0.04) 1.7px, transparent 1.7px),
-      var(--wt-surround);
+      var(--sg-surround);
     background-size: 100% 100%, 15px 15px, auto;
     background-position: 0 0, 0 0, center;
     background-repeat: no-repeat, repeat, no-repeat;
@@ -10472,7 +10472,7 @@ details[open] > .cart-drawer__checkout-title::after {
     background-image:
       linear-gradient(to right, transparent 0, var(--ce-greige) 13%, var(--ce-greige) 87%, transparent 100%),
       radial-gradient(circle, rgba(0, 0, 0, 0.04) 1.7px, transparent 1.7px),
-      var(--wt-surround) !important;
+      var(--sg-surround) !important;
     background-size: 100% 100%, 15px 15px, auto !important;
     background-position: 0 0, 0 0, center !important;
     background-repeat: no-repeat, repeat, no-repeat !important;
@@ -10485,7 +10485,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .pdp-breadcrumb {
     background:
       radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-      var(--wt-orange) !important;
+      var(--sg-orange) !important;
   }
   /* Card image panels are white on desktop. These live at the end of the
      file because the base (mobile greige) rules come later in the sheet than
@@ -10509,7 +10509,7 @@ details[open] > .cart-drawer__checkout-title::after {
       inset 0 -1px 0 rgba(255,255,255,0.55);
   }
   /* "More <category>" grid: thin gaps showing the greige section through. */
-  .related-items__grid { gap: var(--wt-gap-tight); }
+  .related-items__grid { gap: var(--sg-gap-tight); }
 
   /* Product page spacing, same tight gap as the catalog: every panel sits in
      the greige card with the SAME gap around it — under the breadcrumb, at the
@@ -10517,7 +10517,7 @@ details[open] > .cart-drawer__checkout-title::after {
      gap closing the column at the bottom matches too. It previously had no gap
      under the breadcrumb at all (the panels ran under the sticky bar), ran flush
      to the card's side edges, and left a 36px drop above "More <category>". */
-  .apparel-catalog:has(.product-detail) { padding: 0 0 var(--wt-gap-tight); }
+  .apparel-catalog:has(.product-detail) { padding: 0 0 var(--sg-gap-tight); }
   /* The breadcrumb used to be pulled up 1.4rem, which dragged the panels below
      it up too — they started underneath the sticky bar. It sits in flow now, so
      the gap under it is just the panel's own margin, like every other gap. */
@@ -10526,17 +10526,17 @@ details[open] > .cart-drawer__checkout-title::after {
     margin-bottom: 0;
   }
   .product-detail {
-    margin: var(--wt-gap-tight);
+    margin: var(--sg-gap-tight);
   }
   /* The image/details split is this grid, not .product-detail — its gutter was
      1px. Same gap as everywhere else, so the space between the image and the
      info reads equal to the space above the image and to the card's edge. */
   .product-modal__layout {
-    column-gap: var(--wt-gap-tight);
-    row-gap: var(--wt-gap-tight);
+    column-gap: var(--sg-gap-tight);
+    row-gap: var(--sg-gap-tight);
   }
   .product-detail .product-modal__details { margin-right: 0; }
-  .related-items { margin: var(--wt-gap-tight); }
+  .related-items { margin: var(--sg-gap-tight); }
   /* Tighter info-panel padding on desktop — the 1.25rem/1rem base left a lot of
      air inside the off-white panel next to the now-tight gaps around it. */
   .product-detail .product-modal__details { padding: 0.8rem 0.9rem 0.9rem; }
@@ -10590,18 +10590,18 @@ details[open] > .cart-drawer__checkout-title::after {
     content: '';
     position: absolute;
     /* Greige gutter outside the card on every side (was inset:0, i.e. the card
-       ran to the screen edge). --wt-box-my is larger to match, so the white ring
+       ran to the screen edge). --sg-box-my is larger to match, so the white ring
        keeps its width and the greige shows beyond it. Widened to 4px so a bit
        more greige shows around the card and its grey border. */
     inset: 4px;
     z-index: -1;
     background: var(--ce-white);
     /* Concentric with the card's 6px corners: the ring is inset 4px vs the
-       card's --wt-box-my, so its outer radius is 6px + that gap (box-my − 4px)
-       = var(--wt-box-my) + 2px. Was 6px + box-my, which over-rounded the ring
+       card's --sg-box-my, so its outer radius is 6px + that gap (box-my − 4px)
+       = var(--sg-box-my) + 2px. Was 6px + box-my, which over-rounded the ring
        relative to the header-top / footer-bottom corners it wraps. */
-    border-radius: calc(var(--wt-box-my) + 2px);
-    box-shadow: inset 0 0 0 1px var(--wt-ring-edge);
+    border-radius: calc(var(--sg-box-my) + 2px);
+    box-shadow: inset 0 0 0 1px var(--sg-ring-edge);
   }
   /* The card's edge shadow, cast onto the ring in ONE continuous column down
      the whole document. Every piece casting its own (header bar, tab strip,
@@ -10615,13 +10615,13 @@ details[open] > .cart-drawer__checkout-title::after {
        Square corners here would run the shadow straight past the card's curve
        and leave a stub of shading in each corner with nothing casting it. */
     top: 4px;
-    bottom: var(--wt-box-my);
-    left: var(--wt-box-my);
-    right: var(--wt-box-my);
+    bottom: var(--sg-box-my);
+    left: var(--sg-box-my);
+    right: var(--sg-box-my);
     border-radius: 6px;
     z-index: -1;
     pointer-events: none;
-    /* Tight: the margin is only --wt-box-my wide, so the bars' full 6px blur
+    /* Tight: the margin is only --sg-box-my wide, so the bars' full 6px blur
        flooded the whole strip grey. This hugs the card's edge and leaves the
        ring white. */
     box-shadow:
@@ -10630,7 +10630,7 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   /* Nothing below the header may paint over the margins, or it hides the ring
      and that column. Safe even for the sticky strip: the card's pieces are all
-     inset by --wt-box-my, so no content ever scrolls through the margin. */
+     inset by --sg-box-my, so no content ever scrolls through the margin. */
   .apparel-page,
   .home-page,
   .home-catalog__header { background: transparent !important; }
@@ -10653,11 +10653,11 @@ details[open] > .cart-drawer__checkout-title::after {
     bottom: 0;
     background: var(--ce-white);
     /* Concentric with the header bar's 6px top corners (see body::before). */
-    border-radius: calc(var(--wt-box-my) + 2px) calc(var(--wt-box-my) + 2px) 0 0;
+    border-radius: calc(var(--sg-box-my) + 2px) calc(var(--sg-box-my) + 2px) 0 0;
     box-shadow:
-      inset 1px 0 0 var(--wt-ring-edge),
-      inset -1px 0 0 var(--wt-ring-edge),
-      inset 0 1px 0 var(--wt-ring-edge);
+      inset 1px 0 0 var(--sg-ring-edge),
+      inset -1px 0 0 var(--sg-ring-edge),
+      inset 0 1px 0 var(--sg-ring-edge);
   }
   /* The header's cap hides the shadow column across its own rows, so the bar
      keeps casting there; every piece below it leaves the sideways cast to the
@@ -10698,7 +10698,7 @@ details[open] > .cart-drawer__checkout-title::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--wt-gap);
+    gap: var(--sg-gap);
     order: 2;
     margin: 6px 0 6px auto;
     align-self: center;
@@ -10706,9 +10706,9 @@ details[open] > .cart-drawer__checkout-title::after {
     flex-shrink: 0;
     position: relative;
     /* Dark overlay box, matching the search field beside it. */
-    background: var(--wt-box-strong);
-    border: 1px solid var(--wt-box-edge);
-    border-radius: var(--wt-box-radius);
+    background: var(--sg-box-strong);
+    border: 1px solid var(--sg-box-edge);
+    border-radius: var(--sg-box-radius);
     color: #fff;
     cursor: pointer;
     padding: 0 12px;
@@ -10768,8 +10768,8 @@ details[open] > .cart-drawer__checkout-title::after {
     top: 64px;
     /* left/right carry the card inset now; its own side margins would add to
        them and pull the bar in twice. */
-    left: var(--wt-box-my);
-    right: var(--wt-box-my);
+    left: var(--sg-box-my);
+    right: var(--sg-box-my);
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
@@ -10794,7 +10794,7 @@ details[open] > .cart-drawer__checkout-title::after {
   text-shadow: 0 1px 2px rgba(10, 25, 55, 0.45);
 }
 .site-footer__links a:hover {
-  color: var(--wt-orange-hi, #ffd9a3);
+  color: var(--sg-orange-hi, #ffd9a3);
 }
 .site-footer__links a:not(:last-child)::after {
   color: rgba(255, 255, 255, 0.55);
@@ -10838,7 +10838,7 @@ details[open] > .cart-drawer__checkout-title::after {
   /* Sides get the card inset; the TOP gets the seam — the same 2px white line
      the tab bar and the breadcrumb sit under. Using the (wider) side inset here
      pushed the orange strip down and read as a thick white band. */
-  margin: var(--wt-seam) var(--wt-box-my) var(--wt-box-my);
+  margin: var(--sg-seam) var(--sg-box-my) var(--sg-box-my);
   border-radius: 0;
   /* The header strip runs edge to edge inside the card, so the side padding
      moves onto the cells (below) rather than sitting on the container. */
@@ -10849,12 +10849,12 @@ details[open] > .cart-drawer__checkout-title::after {
 /* The column header: an orange strip, textured and lit like the other bars.
    The paint goes on the ROW, not the cells — a background on each <th> makes the
    texture restart at every cell, so the bar reads as three different pieces of
-   rust instead of one continuous face. Same inline --wt-iron and the same offset
+   rust instead of one continuous face. Same inline --sg-iron and the same offset
    the tab bar and breadcrumb use, so the grain continues from the header bar. */
 .cart-table thead tr {
   background:
-    var(--wt-iron) left calc(-1 * (var(--wt-box-h) + var(--wt-seam))) / 100% auto no-repeat,
-    var(--wt-orange);
+    var(--sg-iron) left calc(-1 * (var(--sg-box-h) + var(--sg-seam))) / 100% auto no-repeat,
+    var(--sg-orange);
   /* The white divider is drawn INSIDE the bar, not as a border: a table cell
      treats `height` as a minimum content height, so a border-bottom is added on
      top of it and the strip came out taller than the tab bar by exactly the
@@ -10877,8 +10877,8 @@ details[open] > .cart-drawer__checkout-title::after {
     box-shadow:
       -4px 0 0 0 transparent,
       4px 0 0 0 transparent,
-      -5px 0 0 0 var(--wt-ring-edge),
-      5px 0 0 0 var(--wt-ring-edge),
+      -5px 0 0 0 var(--sg-ring-edge),
+      5px 0 0 0 var(--sg-ring-edge),
       0 1px 0 0 var(--ce-greige),
       /* Milder inset matching the menu modal / tab bar (was a stronger 0.5/0.55
          inset stack that read as a heavier drop shadow). */
@@ -10932,11 +10932,11 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Desktop title bar ("CART"): the same strip. */
 .cart-drawer__header {
   background:
-    var(--wt-iron) left calc(-1 * (var(--wt-box-h) + var(--wt-seam))) / 100% auto no-repeat,
-    var(--wt-orange);
+    var(--sg-iron) left calc(-1 * (var(--sg-box-h) + var(--sg-seam))) / 100% auto no-repeat,
+    var(--sg-orange);
   /* Seam above (like the header/tab junction), card inset at the sides, and the
      same 42px height + 3px divider the desktop tab bar and breadcrumb have. */
-  margin: var(--wt-seam) var(--wt-box-my) 0;
+  margin: var(--sg-seam) var(--sg-box-my) 0;
   height: 42px;
   padding: 0 0.75rem;
   border-bottom: 3px solid transparent;
@@ -10947,7 +10947,7 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .cart-drawer__title { color: #fff; }
 .cart-drawer__header .modal__close { color: #fff; }
-.cart-drawer__empty { background: var(--ce-off-white); margin: var(--wt-box-my); }
+.cart-drawer__empty { background: var(--ce-off-white); margin: var(--sg-box-my); }
 /* Below desktop the drawer opens flush under the site header, which already
    paints the seam at its own bottom edge — so the strip must add NOTHING on
    top, or the two stack and the white line comes out twice as thick as the one
@@ -10995,13 +10995,13 @@ details[open] > .cart-drawer__checkout-title::after {
   .hamburger-btn { padding: 13px 7px; }
   .site-header__search-btn { padding: 13px 7px; }
   .locale-btn { padding: 12px 7px; }
-  /* Perfect squares: the flatten rules pin the height to (--wt-box-h − 12px);
+  /* Perfect squares: the flatten rules pin the height to (--sg-box-h − 12px);
      match the width to it and drop the side padding so the icon buttons are
      square, not taller-than-wide. */
   .site-header .cart-btn,
   .site-header .site-header__search-btn,
   .site-header .hamburger-btn {
-    width: calc(var(--wt-box-h) - 12px) !important;
+    width: calc(var(--sg-box-h) - 12px) !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     justify-content: center !important;
@@ -11084,7 +11084,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header--hero-hidden.site-header--hero-visible .cart-btn {
     background: #98aab6 !important;
     border: 1px solid rgba(0,0,0,0.18) !important;
-    border-radius: var(--wt-box-radius) !important;
+    border-radius: var(--sg-box-radius) !important;
     color: #fff !important;
     padding: 0 14px !important;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 1px 2px rgba(0,0,0,0.25) !important;
@@ -11096,7 +11096,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .cart-btn:hover,
   .site-header .cart-btn.cart-btn--active:hover,
   .site-header--hero-hidden .cart-btn:hover {
-    background: var(--wt-orange-dark) !important;
+    background: var(--sg-orange-dark) !important;
     /* Full shorthand, not just border-color — see the logout note above. */
     border: 1px solid rgba(0,0,0,0.28) !important;
     color: #fff !important;
@@ -11114,7 +11114,7 @@ details[open] > .cart-drawer__checkout-title::after {
    riding the bars (search, catalog toggle, cart, locale, logout) — so the
    proportions of the sign are unchanged, just larger.
 
-   Header height = --wt-box-my (6) + --wt-box-h (58) + 2px seam = 66px.
+   Header height = --sg-box-my (6) + --sg-box-h (58) + 2px seam = 66px.
    The seam is the white line showing between the dark bar's bottom edge and
    the tab strip pinned under it: it's whatever the header height leaves over
    after the top margin and the bar, so it must stay 2px (as it was at the old
@@ -11122,13 +11122,13 @@ details[open] > .cart-drawer__checkout-title::after {
    at 66 as a result.
    ============================================================ */
 @media (min-width: 1025px) {
-  :root { --wt-box-h: 58px; }
+  :root { --sg-box-h: 58px; }
 
   /* Header height and the strips' sticky `top` are BOTH derived from
-     --wt-header-h at the end of this file — don't set either here, or they can
+     --sg-header-h at the end of this file — don't set either here, or they can
      drift apart again. Only the offsets with no sticky counterpart stay: */
-  .apparel-sidebar { top: var(--wt-header-pin); max-height: calc(100vh - var(--wt-header-pin)); }
-  .not-found-page { min-height: calc(100vh - var(--wt-header-pin)); }
+  .apparel-sidebar { top: var(--sg-header-pin); max-height: calc(100vh - var(--sg-header-pin)); }
+  .not-found-page { min-height: calc(100vh - var(--sg-header-pin)); }
 
   /* Wordmark grows with the bar it rides in. */
   .site-header__logo-white { height: 52px; }
@@ -11147,7 +11147,7 @@ details[open] > .cart-drawer__checkout-title::after {
   .home-catalog__sidebar-search .apparel-titlebar__search-input { font-size: 0.95rem; }
 
   /* No height on these: the flattening rules near the end of this file set it
-     to calc(--wt-box-h - 12px) !important, which now resolves to 46px (was
+     to calc(--sg-box-h - 12px) !important, which now resolves to 46px (was
      38px) — already in step with the taller bar. */
   .site-header .cart-btn,
   .site-header .locale-btn,
@@ -11179,7 +11179,7 @@ details[open] > .cart-drawer__checkout-title::after {
    sidebar beside it) butt straight up against the tabs. This is the state a
    tab click scrolls into, so making it the resting state means the layout
    doesn't appear to shift when you switch categories. The left/column gaps
-   stay at --wt-gap-tight; only the y-gap under the bar goes. */
+   stay at --sg-gap-tight; only the y-gap under the bar goes. */
 @media (min-width: 1025px) {
   .home-catalog .apparel-grid { margin-top: 0; }
   .home-catalog__filters { margin-top: 0; }
@@ -11188,7 +11188,7 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Desktop: the product page gets the same treatment — no gap under the
    breadcrumb bar, so the image/details panels butt straight up against it the
    way the product grid now does against the catalog tabs. Only the TOP margin
-   goes: the side and bottom gaps around the panels stay at --wt-gap-tight so
+   goes: the side and bottom gaps around the panels stay at --sg-gap-tight so
    the panel still sits in the greige card on its other three edges. */
 @media (min-width: 1025px) {
   .product-detail { margin-top: 0; }
@@ -11224,14 +11224,14 @@ details[open] > .cart-drawer__checkout-title::after {
    The sticky strips (catalog tabs, apparel titlebar, product breadcrumb) pin
    directly under the header bar. Their `top` was hardcoded per breakpoint —
    58/61/64/67px scattered across a dozen rules — while the header's own height
-   is BUILT from --wt-box-h + the seam + the top padding. Every time the bar
+   is BUILT from --sg-box-h + the seam + the top padding. Every time the bar
    height changed, the two drifted apart and the strip pinned a few px too high,
    sliding under the header: the bar looks shorter the moment you scroll or
    click a tab, which is exactly the symptom.
 
-   --wt-header-h derives the pin from the same parts that lay the header out,
+   --sg-header-h derives the pin from the same parts that lay the header out,
    so they cannot disagree. Desktop has no top padding on the header (that rule
-   is <=1024 only) and a 2px seam; mobile/tablet have 4px padding + --wt-seam.
+   is <=1024 only) and a 2px seam; mobile/tablet have 4px padding + --sg-seam.
    !important because the values it replaces are spread through the sheet.
    ============================================================ */
 :root {
@@ -11240,35 +11240,35 @@ details[open] > .cart-drawer__checkout-title::after {
      read thin against the 3px line under the tab bar; 3px makes the two match.
      Because the seam is part of the header's height, widening it also moves
      every sticky pin down by 1px automatically. */
-  --wt-header-h: calc(var(--wt-box-my) + var(--wt-box-h) + 1px);
+  --sg-header-h: calc(var(--sg-box-my) + var(--sg-box-h) + 1px);
   /* Desktop header now sits FLUSH at the viewport top (was 4px down, which left
      a greige strip above the card that showed scrolling content on the hero page
      where the ::after cover is disabled). At 0 there's no gap above the header
      for content to peek through, and the pinned strips follow at its bottom
      edge (offset 0 + height). */
-  --wt-header-top: 0px;
+  --sg-header-top: 0px;
 }
 /* Mobile/tablet pin the header at 0 and pay for that 4px with PADDING inside
-   the box, which --wt-header-h already counts — so no extra offset here. */
+   the box, which --sg-header-h already counts — so no extra offset here. */
 @media (max-width: 1024px) {
   :root {
-    --wt-header-h: calc(4px + var(--wt-box-h) + var(--wt-seam));
-    --wt-header-top: 0px;
+    --sg-header-h: calc(4px + var(--sg-box-h) + var(--sg-seam));
+    --sg-header-top: 0px;
   }
 }
-:root { --wt-header-pin: calc(var(--wt-header-top) + var(--wt-header-h)); }
+:root { --sg-header-pin: calc(var(--sg-header-top) + var(--sg-header-h)); }
 .site-header,
 .site-header--white,
 .site-header--solid,
-.site-header--hero-hidden { height: var(--wt-header-h) !important; }
+.site-header--hero-hidden { height: var(--sg-header-h) !important; }
 .home-catalog__header,
 .apparel-titlebar,
-.pdp-breadcrumb { top: var(--wt-header-pin) !important; }
+.pdp-breadcrumb { top: var(--sg-header-pin) !important; }
 /* The apparel route pins these as `fixed` rather than sticky on phones — same
    offset, same source. */
 @media (max-width: 600px) {
   .apparel-page .home-catalog__header,
-  .apparel-page .pdp-breadcrumb { top: var(--wt-header-pin) !important; }
+  .apparel-page .pdp-breadcrumb { top: var(--sg-header-pin) !important; }
 }
 
 /* Desktop: tighten the product page's HORIZONTAL rhythm one step — the gutter
@@ -11276,7 +11276,7 @@ details[open] > .cart-drawer__checkout-title::after {
    them. One step down the same phi chain the other gaps use
    (4.236 / 1.618 = 2.618), so it stays in the system rather than becoming an
    arbitrary number. Vertical spacing is untouched: the row gap and the gap
-   closing the column at the bottom stay at --wt-gap-tight. */
+   closing the column at the bottom stay at --sg-gap-tight. */
 @media (min-width: 1025px) {
   /* WHOLE pixels here, deliberately breaking from the phi chain the larger
      gaps use. At this size the fractional values were the problem: a 2.618px
@@ -11285,7 +11285,7 @@ details[open] > .cart-drawer__checkout-title::after {
      pixel apart and shifted with zoom — visible as lopsidedness, not as a gap.
      The gutter runs between two 1px panel borders that eat into it, so it
      needs the extra pixel to read equal to the open-edged side margins. */
-  :root { --wt-gap-hair: 2px; }
+  :root { --sg-gap-hair: 2px; }
   /* Sides at 0: the panels run flush to the card edge, lining them up exactly
      with the breadcrumb bar above (both resolve to the same --site-max inset).
      A 1px sliver just made the panels look narrower than the bar. */
@@ -11293,7 +11293,7 @@ details[open] > .cart-drawer__checkout-title::after {
     margin-left: 0;
     margin-right: 0;
   }
-  .product-modal__layout { column-gap: var(--wt-gap-hair); }
+  .product-modal__layout { column-gap: var(--sg-gap-hair); }
 }
 /* Square corners on the two panels: with the gutter this tight, a radius on
    facing edges reads as a gap that isn't there. Only the panels themselves —
@@ -11308,7 +11308,7 @@ details[open] > .cart-drawer__checkout-title::after {
 /* Desktop: the gutter between the filter sidebar and the product grid, now at
    2px — the same gutter the product page uses between its image and info
    panels, so the whole desktop layout runs on one gap. Down from
-   --wt-gap-tight (4.236px), then 3px. Below this the grid's gray-200 background
+   --sg-gap-tight (4.236px), then 3px. Below this the grid's gray-200 background
    stops reading as a seam and the cards look like they're touching. */
 @media (min-width: 1025px) {
   .home-catalog__inner { column-gap: 2px; }
@@ -11505,40 +11505,40 @@ details[open] > .cart-drawer__checkout-title::after {
   /* The original Modern Niagara pinwheel colours (match the add-to-cart SVG's
      polygon fills, in nth-child order) — restored so the Add to Cart button's
      triangles read as the MN logo rather than the wills sign palette. */
-  --wt-pin-1: #ffe2a6;
-  --wt-pin-2: #ae1f2a;
-  --wt-pin-3: #d43950;
-  --wt-pin-4: #9ec069;
-  --wt-pin-5: #7fa244;
-  --wt-pin-6: #5f849c;
-  --wt-pin-7: #4d6f83;
-  --wt-pin-8: #ffd25b;
+  --sg-pin-1: #ffe2a6;
+  --sg-pin-2: #ae1f2a;
+  --sg-pin-3: #d43950;
+  --sg-pin-4: #9ec069;
+  --sg-pin-5: #7fa244;
+  --sg-pin-6: #5f849c;
+  --sg-pin-7: #4d6f83;
+  --sg-pin-8: #ffd25b;
 }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(1),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(1) { fill: var(--wt-pin-1); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(1) { fill: var(--sg-pin-1); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(2),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: var(--wt-pin-2); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(2) { fill: var(--sg-pin-2); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(3),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: var(--wt-pin-3); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(3) { fill: var(--sg-pin-3); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(4),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: var(--wt-pin-4); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(4) { fill: var(--sg-pin-4); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(5),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: var(--wt-pin-5); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(5) { fill: var(--sg-pin-5); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(6),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: var(--wt-pin-6); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(6) { fill: var(--sg-pin-6); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(7),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: var(--wt-pin-7); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(7) { fill: var(--sg-pin-7); }
 .product-modal__add--branded:active .product-modal__add-pinwheel polygon:nth-child(8),
-.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: var(--wt-pin-8); }
+.product-modal__add--added .product-modal__add-pinwheel polygon:nth-child(8) { fill: var(--sg-pin-8); }
 @media (hover: hover) {
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1) { fill: var(--wt-pin-1); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: var(--wt-pin-2); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: var(--wt-pin-3); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: var(--wt-pin-4); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: var(--wt-pin-5); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: var(--wt-pin-6); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: var(--wt-pin-7); }
-  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: var(--wt-pin-8); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(1) { fill: var(--sg-pin-1); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(2) { fill: var(--sg-pin-2); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(3) { fill: var(--sg-pin-3); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(4) { fill: var(--sg-pin-4); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(5) { fill: var(--sg-pin-5); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(6) { fill: var(--sg-pin-6); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(7) { fill: var(--sg-pin-7); }
+  .product-modal__add--branded:hover .product-modal__add-pinwheel polygon:nth-child(8) { fill: var(--sg-pin-8); }
 }
 /* The button face: the sign orange with a burnt-edge fall, and a shadow tinted
    from the same orange rather than the old blue one. Deeper on hover so the
@@ -11725,7 +11725,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    stretching the buttons alone does nothing — the nav has to stretch inside
    the inner first, hence align-self on the nav AND align-items on it.
    The heights carry !important because the flattening rules near the end of
-   this file pin every header button to calc(--wt-box-h - 12px) !important. */
+   this file pin every header button to calc(--sg-box-h - 12px) !important. */
 @media (min-width: 1025px) {
   .site-header__nav {
     align-self: stretch;
@@ -11745,7 +11745,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
     align-self: center !important;
     height: calc(100% - 16px) !important;
     margin: 0 !important;
-    border-radius: var(--wt-box-radius) !important;
+    border-radius: var(--sg-box-radius) !important;
   }
   .site-header .cart-btn,
   .site-header .cart-btn.cart-btn--active { padding: 0 20px !important; }
@@ -11754,8 +11754,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
   /* Ghost fill: the same dark overlay the logo box and search field use, so it
      reads as recessed into the bar rather than as a second orange action. */
   .site-header .logout-btn {
-    background: var(--wt-box) !important;
-    border: 1px solid var(--wt-box-edge) !important;
+    background: var(--sg-box) !important;
+    border: 1px solid var(--sg-box-edge) !important;
     color: #fff !important;
     /* Soft dark cast just inside the white divider, so the line reads as cut
        into the bar rather than laid on top of it — the same pressed-edge
@@ -11767,8 +11767,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
      shrinks the button by 2px — that collapse is the shift on hover, not a
      transform. Only the colour should change. */
   .site-header .logout-btn:hover {
-    background: var(--wt-box-strong) !important;
-    border: 1px solid var(--wt-box-edge) !important;
+    background: var(--sg-box-strong) !important;
+    border: 1px solid var(--sg-box-edge) !important;
     color: #fff !important;
     box-shadow: inset 4px 0 5px -3px rgba(0, 0, 0, 0.55) !important;
   }
@@ -11959,14 +11959,14 @@ body:has(.product-fullscreen) { overflow: hidden; }
        like every other view. Clickable now (an "outside" exists again): a click
        on the surround closes the cart, and also stops clicks falling through to
        the hidden catalog. */
-    background: var(--wt-surround);
+    background: var(--sg-surround);
     backdrop-filter: none;
     padding: 0;
     pointer-events: auto;
   }
   .drawer.cart-drawer {
     pointer-events: auto;
-    top: var(--wt-header-pin);
+    top: var(--sg-header-pin);
     /* A small greige gap at the bottom mirroring the strip above the header, so
        the card's bottom edge (and its ring) shows instead of running off the
        viewport edge — like the other cards' bottom margin. */
@@ -11984,9 +11984,9 @@ body:has(.product-fullscreen) { overflow: hidden; }
        the full 3px white shows with the grey rim outside it. */
     box-shadow:
       inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
   }
   /* The panel floats above the header (z 10001) so it stays interactive, but
      that also lifted the ring's TOP edge over the header's bottom seam — a
@@ -12137,7 +12137,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .drawer.cart-drawer {
     bottom: auto;
     height: auto;
-    max-height: calc(100dvh - var(--wt-header-pin) - 4px);
+    max-height: calc(100dvh - var(--sg-header-pin) - 4px);
   }
   .drawer.cart-drawer .cart-drawer__items { min-height: 0; }
 
@@ -12286,7 +12286,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
      header strip up top. */
   .cart-drawer__items { margin-bottom: 0; }
   .cart-drawer__footer {
-    margin: 0 var(--wt-box-my) var(--wt-box-my);
+    margin: 0 var(--sg-box-my) var(--sg-box-my);
     background: var(--ce-off-white);
     /* No border-top: the footer already carries the white edge ring, and the
        items panel above carries its own, so a grey rule here stacked a third
@@ -12295,7 +12295,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   /* The order-summary step (details view) shares the body's fill + inset too, so
      it sits in the card the same way instead of as a 2px white strip. */
   .cart-drawer__summary {
-    margin: 0 var(--wt-box-my) var(--wt-box-my);
+    margin: 0 var(--sg-box-my) var(--sg-box-my);
     background: var(--ce-off-white);
   }
 }
@@ -12313,7 +12313,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    active tab reads in, inverted.
    ============================================================ */
 .cart-drawer__order-btn.btn.btn--primary {
-  background: linear-gradient(var(--wt-box), var(--wt-box)), var(--wt-orange);
+  background: linear-gradient(var(--sg-box), var(--sg-box)), var(--sg-orange);
   color: #fff;
   /* Nearly square sign-panel corner (was 6px — user wanted it less rounded). */
   border-radius: 2px;
@@ -12328,7 +12328,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   text-shadow: 0 1px 1px rgba(10, 25, 55, 0.45);
 }
 .cart-drawer__order-btn.btn.btn--primary:hover {
-  background: var(--wt-orange);
+  background: var(--sg-orange);
   color: #fff;
   border-color: rgba(10, 25, 55, 0.35);
   box-shadow:
@@ -12340,14 +12340,14 @@ body:has(.product-fullscreen) { overflow: hidden; }
 /* Pressed: drop the cast shadow and deepen the inner shading so the panel
    reads as pushed into the bar. */
 .cart-drawer__order-btn.btn.btn--primary:active {
-  background: linear-gradient(var(--wt-box-strong), var(--wt-box-strong)), var(--wt-orange);
+  background: linear-gradient(var(--sg-box-strong), var(--sg-box-strong)), var(--sg-orange);
   box-shadow:
     inset 0 2px 4px rgba(10, 25, 55, 0.55),
     inset 0 0 10px rgba(10, 25, 55, 0.35);
   transform: translateY(1px);
 }
 .cart-drawer__order-btn.btn.btn--primary:focus-visible {
-  outline: 2px solid var(--wt-orange-hi);
+  outline: 2px solid var(--sg-orange-hi);
   outline-offset: 2px;
 }
 
@@ -12453,7 +12453,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
   border-radius: 0 0 4px 4px;
 }
 @media (max-width: 1024px) {
-  /* Mobile insets the bar by the full --wt-box-my, so it clears the curve on
+  /* Mobile insets the bar by the full --sg-box-my, so it clears the curve on
      its own and the card's white ring is what reads in the corner. */
   .cart-drawer__footer { border-radius: 0; }
 }
@@ -12521,7 +12521,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
     grid-template-columns: 1fr auto;
     align-items: baseline;
     row-gap: 0.25rem;
-    column-gap: var(--wt-gap);
+    column-gap: var(--sg-gap);
   }
   /* Flatten only the name-row so the title + price are the row-1 grid items. */
   .product-card__info:has(.product-card__color-size-row) > .product-card__name-row {
@@ -12671,10 +12671,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
     box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.12),
       0 0 0 2px rgba(0, 0, 0, 0.04),
-      0 0 0 var(--wt-ring) transparent,
+      0 0 0 var(--sg-ring) transparent,
       /* Was 0.08 — matched to the footer's outer rim. */
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
   }
   .site-header::before {
     box-shadow:
@@ -12755,20 +12755,20 @@ body:has(.product-fullscreen) { overflow: hidden; }
     box-shadow:
       /* The card's own edge, inside its box so it doesn't eat the white. */
       inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
       /* Depth shadow down the card's sides (the header caps the top, the footer
          the bottom — this is the middle section of one continuous card outline). */
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22);
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22);
     /* Sides only — no line across the header/content or content/footer joints. */
     clip-path: inset(0 -24px 0 -24px);
   }
   .site-footer {
     box-shadow:
       inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22),
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22),
       inset 0 6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 0 -6px 8px -4px rgba(10, 25, 55, 0.5),
       inset 5px 0 6px -4px rgba(10, 25, 55, 0.55),
@@ -12809,7 +12809,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    The card's ring is a white panel (body::before) inset 2px, with the card's
    pieces inset 6px — a 4px strip. Two things were eating it:
 
-   1. --wt-ring-edge, a 1px rgba(0,0,0,0.10) line inset into the panel (and
+   1. --sg-ring-edge, a 1px rgba(0,0,0,0.10) line inset into the panel (and
       repeated down the header cap's sides), which took the outermost quarter
       of the strip along its whole length. That's the grey x border still
       showing on the apparel route after the cards' own rims came off — same
@@ -12840,7 +12840,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    Phones: the card's edge cast comes off the strip too.
 
    body::after draws a shadow column down both sides of the card at exactly
-   --wt-box-my — the outer edge of the left product and of the right one. It
+   --sg-box-my — the outer edge of the left product and of the right one. It
    was meant as the card's depth, cast onto the ring as one continuous column
    rather than per-piece. But the 2px gutters BETWEEN the cards have no cast
    at all: they show the ring panel as clean white. So the grid read as white
@@ -12865,40 +12865,40 @@ body:has(.product-fullscreen) { overflow: hidden; }
    runs round the rest of the card; moving the bar down to y=6 is the one
    that keeps the frame uniform, and it makes the header 2px taller.
 
-   That cost is already handled: --wt-header-h is built from the same parts
-   that lay the header out (top padding + bar + seam), and --wt-header-pin
+   That cost is already handled: --sg-header-h is built from the same parts
+   that lay the header out (top padding + bar + seam), and --sg-header-pin
    derives from it, so raising the padding moves every sticky strip down in
    step automatically — the whole point of the token block above. Only the
    handful of places still carrying a literal 64px had to be moved onto the
    token; they're listed below.
    ============================================================ */
 @media (max-width: 1024px) {
-  /* Top strip = --wt-box-my, the SAME token the header's left/right padding
+  /* Top strip = --sg-box-my, the SAME token the header's left/right padding
      uses, so the white edge is uniform on all three sides instead of a
-     hardcoded 6px against 8px sides on phones. --wt-header-h is built from the
-     same token, so --wt-header-pin and every sticky strip follow automatically.
-     (var() resolves at use, so the phone override of --wt-box-my below still
+     hardcoded 6px against 8px sides on phones. --sg-header-h is built from the
+     same token, so --sg-header-pin and every sticky strip follow automatically.
+     (var() resolves at use, so the phone override of --sg-box-my below still
      applies here.) */
-  :root { --wt-header-h: calc(var(--wt-box-my) + var(--wt-box-h) + var(--wt-seam)); }
-  .site-header { padding-top: var(--wt-box-my) !important; }
+  :root { --sg-header-h: calc(var(--sg-box-my) + var(--sg-box-h) + var(--sg-seam)); }
+  .site-header { padding-top: var(--sg-box-my) !important; }
 }
 @media (max-width: 600px) {
   /* Flow space given back where the header and strips go position: fixed. */
-  .apparel-page { padding-top: var(--wt-header-pin); }
+  .apparel-page { padding-top: var(--sg-header-pin); }
   /* Viewport-pinned pieces that sit directly under the header. */
   .modal-overlay,
-  .modal-overlay:has(.cart-drawer) { top: var(--wt-header-pin); }
-  .cart-drawer__back-btn { top: var(--wt-header-pin); }
-  .cart-table thead { top: var(--wt-header-pin); }
+  .modal-overlay:has(.cart-drawer) { top: var(--sg-header-pin); }
+  .cart-drawer__back-btn { top: var(--sg-header-pin); }
+  .cart-table thead { top: var(--sg-header-pin); }
   /* The footer matches the header + tab strip; the header half is a token. */
-  .site-footer { min-height: calc(var(--wt-header-pin) + 44px); height: auto; padding-bottom: 1.5rem; }
+  .site-footer { min-height: calc(var(--sg-header-pin) + 44px); height: auto; padding-bottom: 1.5rem; }
 }
 
 /* ============================================================
    Phones: the ring's bottom edge, below the footer.
 
    Every other side of the ring works because the panel is inset 2px while the
-   card's pieces are inset --wt-box-my (6px), leaving 4px of white. The bottom
+   card's pieces are inset --sg-box-my (6px), leaving 4px of white. The bottom
    doesn't: the footer's 6px bottom margin COLLAPSES out of body, so body's
    bottom edge lands exactly on the footer's, and the panel's 2px inset then
    stops 2px INSIDE the footer — the card ended on orange with no white under
@@ -12918,7 +12918,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 /* ============================================================
    Phones: put the ring's edge line back — OUTSIDE the white.
 
-   Removing --wt-ring-edge stopped it eating the strip, but it was also the
+   Removing --sg-ring-edge stopped it eating the strip, but it was also the
    only thing separating the white from the greige beyond it. Down the sides
    that doesn't matter: the cards' greige sits against the white and the strip
    reads on that contrast alone. Below the footer there's nothing to read
@@ -12930,9 +12930,9 @@ body:has(.product-fullscreen) { overflow: hidden; }
    every side and the card has a defined edge again.
    ============================================================ */
 @media (max-width: 600px) {
-  body::before { box-shadow: 0 0 0 1px var(--wt-ring-edge); }
+  body::before { box-shadow: 0 0 0 1px var(--sg-ring-edge); }
   .site-header::before {
-    box-shadow: 0 0 0 1px var(--wt-ring-edge);
+    box-shadow: 0 0 0 1px var(--sg-ring-edge);
     /* The hairline is the sign's OUTER edge — top and sides only. Spread draws
        it on all four, and the bottom one landed at the header/tab junction,
        reading as a grey rule across the white slot between the two strips. Clip
@@ -12965,7 +12965,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    Desktop: a 2px greige seam below the breadcrumb, above the product panels.
 
    The breadcrumb bar butted straight against the image/info panels, while the
-   two panels are divided from each other by a 2px greige gutter (--wt-gap-hair,
+   two panels are divided from each other by a 2px greige gutter (--sg-gap-hair,
    the same seam the whole desktop layout runs on). The horizontal junction
    under the bar should read the same as that vertical one — so open a 2px gap
    there and let the catalog's greige show through it.
@@ -12986,8 +12986,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
 @media (min-width: 1025px) {
   .cart-drawer__back-btn {
     background:
-      var(--wt-iron) left calc(-1 * (var(--wt-box-h) + var(--wt-seam))) / 100% auto no-repeat,
-      var(--wt-orange);
+      var(--sg-iron) left calc(-1 * (var(--sg-box-h) + var(--sg-seam))) / 100% auto no-repeat,
+      var(--sg-orange);
     color: #fff;
     /* Match the other desktop sign bars (tab bar, breadcrumb, cart strip). */
     height: 50px;
@@ -13007,8 +13007,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
       inset -5px 0 6px -4px rgba(10, 25, 55, 0.55);
   }
   .cart-drawer__back-btn svg { stroke: #fff; }
-  .cart-drawer__back-btn:hover { color: var(--wt-orange-hi); }
-  .cart-drawer__back-btn:hover svg { stroke: var(--wt-orange-hi); }
+  .cart-drawer__back-btn:hover { color: var(--sg-orange-hi); }
+  .cart-drawer__back-btn:hover svg { stroke: var(--sg-orange-hi); }
 }
 
 /* ============================================================
@@ -13059,14 +13059,14 @@ body:has(.product-fullscreen) { overflow: hidden; }
 
 /* ============================================================
    Phones: the whole sign card sits a touch further in, so a bit more greige
-   shows around it and its grey border. --wt-box-my (the card/bar inset) goes
+   shows around it and its grey border. --sg-box-my (the card/bar inset) goes
    6px → 8px; paired with the 4px greige gutter above, the white ring stays 4px
    (8 − 4) while the greige surround grows. The mobile header height derives
    from box-h + seam, not box-my, so the bar heights and sticky pins are
    unchanged.
    ============================================================ */
 @media (max-width: 600px) {
-  :root { --wt-box-my: 8px; }
+  :root { --sg-box-my: 8px; }
 }
 
 /* ============================================================
@@ -13131,15 +13131,15 @@ body:has(.product-fullscreen) { overflow: hidden; }
      instead of hugging one button. Height is pinned to the 64px header (and the
      header is overflow:hidden here), so a band can never spill onto the tab
      bar below. */
-  .site-header .site-header__categories { margin-right: var(--wt-seam); }
-  .site-header .site-header__nav { gap: var(--wt-seam); }
+  .site-header .site-header__categories { margin-right: var(--sg-seam); }
+  .site-header .site-header__nav { gap: var(--sg-seam); }
   .site-header .site-header__nav .logout-form { margin-left: 0; }
   .site-header .site-header__nav .cart-btn::before,
   .site-header .site-header__nav .cart-btn::after {
     content: '';
     position: absolute;
     top: 50%;
-    width: var(--wt-seam);
+    width: var(--sg-seam);
     height: 64px;
     background: var(--ce-white);
     pointer-events: none;
@@ -13245,7 +13245,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 /* ============================================================
    Modern Niagara two-tone bars.
    The header and all chrome bars (header, nav-drawer, login modal,
-   cart drawer, footer) carry the deep brand blue set on --wt-orange
+   cart drawer, footer) carry the deep brand blue set on --sg-orange
    in :root. Each PAGE's secondary bar — the category tab strip and
    the product breadcrumb — takes Modern Niagara's lighter brand blue.
    The shared iron texture overlays whichever blue the bar scopes.
@@ -13259,7 +13259,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 .pdp-breadcrumb,
 .nav-drawer__header,
 .cart-table thead,
-.cart-drawer__back-btn { --wt-orange: #98aab6; }
+.cart-drawer__back-btn { --sg-orange: #98aab6; }
 
 /* Brand-cluster wordmark reads white on the deep-blue sign bars. */
 .site-header__inner .brand-cluster__word,
@@ -13354,13 +13354,13 @@ body:has(.product-fullscreen) { overflow: hidden; }
 
 /* ============================================================
    Modern Niagara — mobile/tablet: the wills "sign" framed each bar in a greige
-   surround (--wt-frame) with a white edge strip. With the blue header + lighter
+   surround (--sg-frame) with a white edge strip. With the blue header + lighter
    blue tab bar, the surround should just read as a plain white page margin, not
    a greige/white sign frame. Whiten the surround variable (covers the header AND
-   the tab bar, which both paint var(--wt-frame)) and drop the white seam strokes.
+   the tab bar, which both paint var(--sg-frame)) and drop the white seam strokes.
    ============================================================ */
 @media (max-width: 1024px) {
-  :root { --wt-frame: var(--ce-white); }
+  :root { --sg-frame: var(--ce-white); }
   /* The header's own background shows as the thin top edge above the blue bar —
      make it white (was greige, which read gray) so the top border matches the
      other white seams. */
@@ -13383,7 +13383,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
 }
 
 /* Mobile/tablet: EDGE TO EDGE. The wills "sign" framed the whole site in a
-   --wt-box-my white page margin (header frame padding, catalog inner padding,
+   --sg-box-my white page margin (header frame padding, catalog inner padding,
    with the tab bar bleeding back out). Zero every horizontal inset so the header,
    tab bar, breadcrumb, hero and catalog all run flush to the screen edges — no
    white edge strip anywhere. */
@@ -13407,7 +13407,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
      the white strip. Zero it so the lighter-blue bar itself runs full width. */
   .home-catalog__tabs { margin-left: 0 !important; margin-right: 0 !important; }
   /* Overlay bars — menu drawer, cart drawer and the checkout step (which reuses
-     the cart-drawer header) carry the same --wt-box-my side inset. Flush them so
+     the cart-drawer header) carry the same --sg-box-my side inset. Flush them so
      they match the header above, like the page bars. */
   .nav-drawer__header,
   .cart-drawer__header,
@@ -13433,13 +13433,13 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ============================================================ */
 @media (max-width: 1024px) {
   /* Thin the white strip ABOVE the bar to match the ~2px seam below it. Keep the
-     header's total height (--wt-header-pin) unchanged by growing the bar to fill
+     header's total height (--sg-header-pin) unchanged by growing the bar to fill
      the 6px reclaimed from the top padding, so the sticky tab bar/breadcrumb stay
      pinned flush to the header. */
   .site-header,
   .site-header--white,
   .site-header--solid { padding-top: 2px !important; }
-  .site-header__inner { height: calc(var(--wt-box-h) + 6px) !important; }
+  .site-header__inner { height: calc(var(--sg-box-h) + 6px) !important; }
 }
 @media (max-width: 600px) {
   /* Bigger brand wordmark so the three lines fill the bar height like the
@@ -13456,17 +13456,17 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ============================================================ */
 @media (max-width: 1024px) {
   /* Secondary bar height — mobile AND tablet share this block (40px). */
-  :root { --wt-bar2-h: 40px; }
+  :root { --sg-bar2-h: 40px; }
   .home-catalog__header,
   .home-catalog__tabs,
   .pdp-breadcrumb,
   .nav-drawer__header,
-  .cart-drawer__back-btn { height: var(--wt-bar2-h) !important; min-height: var(--wt-bar2-h) !important; }
+  .cart-drawer__back-btn { height: var(--sg-bar2-h) !important; min-height: var(--sg-bar2-h) !important; }
   .cart-table thead th,
-  .cart-table thead tr { height: var(--wt-bar2-h) !important; }
+  .cart-table thead tr { height: var(--sg-bar2-h) !important; }
   .cart-drawer__details-step,
   .cart-drawer__items,
-  .apparel-page .apparel-catalog { padding-top: var(--wt-bar2-h) !important; }
+  .apparel-page .apparel-catalog { padding-top: var(--sg-bar2-h) !important; }
   /* The 601-1024 breadcrumb rule leaves a 0.1rem bottom margin + a top border
      that the tab bar doesn't carry here, so the breadcrumb read a hair shorter
      with extra white below it. Clear both so all five bars are identical 40px
@@ -13482,7 +13482,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
    block above (which includes mobile); scoped here so mobile is untouched. */
 @media (min-width: 601px) and (max-width: 1024px) {
   /* Taller secondary bars on tablet (40px was cramped against the larger text). */
-  :root { --wt-bar2-h: 50px; }
+  :root { --sg-bar2-h: 50px; }
   /* Tab labels use the tablet variant (shorter "Office Kit" for New Hire Kit). */
   .apparel-titlebar__tab-tablet { display: inline; }
   .apparel-titlebar__tab-short,
@@ -13628,18 +13628,18 @@ body:has(.product-fullscreen) { overflow: hidden; }
 
 /* The selected/active category tab takes the darker header blue (#4c6070) rather
    than the lighter tab-bar blue, so the active tab reads as the header colour.
-   Scoped --wt-orange resolves inside the active tab's background gradient (and
+   Scoped --sg-orange resolves inside the active tab's background gradient (and
    its ::before, which inherits the variable). */
-.home-catalog__tabs .apparel-titlebar__tab.active { --wt-orange: #7893a4; }
+.home-catalog__tabs .apparel-titlebar__tab.active { --sg-orange: #7893a4; }
 
 /* ============================================================
    Desktop: header a golden step TALLER than the secondary bars.
-   Bar = --wt-box-h + 3px → 71px; secondary bars → 44px (71/44 ≈ φ 1.618).
-   --wt-box-h also feeds --wt-header-pin (the tab/breadcrumb sticky top), so
+   Bar = --sg-box-h + 3px → 71px; secondary bars → 44px (71/44 ≈ φ 1.618).
+   --sg-box-h also feeds --sg-header-pin (the tab/breadcrumb sticky top), so
    they stay pinned flush under the taller header.
    ============================================================ */
 @media (min-width: 1025px) {
-  :root { --wt-box-h: 60px; }
+  :root { --sg-box-h: 60px; }
   /* All desktop secondary bars share ONE height: the tab bar, PDP breadcrumb,
      the cart PRODUCT/TOTAL strip and the checkout back bar. */
   .home-catalog__header,
@@ -13730,9 +13730,9 @@ body:has(.nav-drawer-overlay) .site-header__logo {
   .cart-drawer__back-btn {
     box-shadow:
       inset 0 0 0 1px rgba(0, 0, 0, 0.12),
-      0 0 0 var(--wt-ring) transparent,
-      0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-      0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22) !important;
+      0 0 0 var(--sg-ring) transparent,
+      0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+      0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22) !important;
   }
 }
 
@@ -13749,14 +13749,14 @@ body:has(.nav-drawer-overlay) .site-header__logo {
 /* Header: the darker blue sign (a φ-step below the lighter tab-bar blue) with the
    iron texture + restored pressed/raised depth. Deep bg → white content (below). */
 .site-header__inner {
-  --wt-orange: #7893a4;
+  --sg-orange: #7893a4;
   /* Dots fade toward the centre (a solid-blue overlay peaks at 50% and eases to
      transparent at both ends), so the dot texture reads strongest at the left/
      right edges and clears through the middle. */
   background:
-    linear-gradient(to right, transparent, var(--wt-orange) 50%, transparent),
+    linear-gradient(to right, transparent, var(--sg-orange) 50%, transparent),
     radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
-    var(--wt-orange) !important;
+    var(--sg-orange) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.75),        /* top sheen (raised edge) */
     inset 0 7px 12px -7px rgba(0, 0, 0, 0.10),       /* subtle inner top depth */
@@ -13765,8 +13765,8 @@ body:has(.nav-drawer-overlay) .site-header__logo {
     /* Continuous card ring — this is the TOP of the one card outline, so the
        ring + depth wrap the top and both sides (the bottom joins the content). */
     0 0 0 1px rgba(0, 0, 0, 0.12),
-    0 0 0 calc(var(--wt-ring) + 1px) rgba(0, 0, 0, 0.14),
-    0 6px 16px var(--wt-ring) rgba(0, 0, 0, 0.22) !important;
+    0 0 0 calc(var(--sg-ring) + 1px) rgba(0, 0, 0, 0.14),
+    0 6px 16px var(--sg-ring) rgba(0, 0, 0, 0.22) !important;
   /* Show ring/depth on top + sides, clip the bottom so it meets the content flush. */
   clip-path: inset(-24px -24px 0 -24px);
 }
@@ -14038,15 +14038,15 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 }
 
 /* The view-mode toggle and the tab-bar search fill themselves with a
-   semi-transparent overlay (--wt-box-strong) over the tab bar, so the page's
+   semi-transparent overlay (--sg-box-strong) over the tab bar, so the page's
    dot-pattern layer bled THROUGH them and showed dots inside the boxes (visible
    on the desktop "Catalog" button and the tablet search field). Composite the
-   same overlay over an OPAQUE copy of the bar colour (--wt-orange resolves to
+   same overlay over an OPAQUE copy of the bar colour (--sg-orange resolves to
    the brand blue #98aab6 in this scope) — identical appearance, but now opaque
    so no dots leak through. */
 .home-catalog__viewmode,
 .home-catalog__sidebar-search {
-  background: linear-gradient(var(--wt-box-strong), var(--wt-box-strong)), var(--wt-orange) !important;
+  background: linear-gradient(var(--sg-box-strong), var(--sg-box-strong)), var(--sg-orange) !important;
 }
 
 /* ============================================================

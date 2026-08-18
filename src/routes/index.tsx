@@ -196,12 +196,12 @@ export const head: DocumentHead = ({ resolveValue }) => {
       { property: "og:title", content: brand },
       { property: "og:description", content: `Premium Branded ${brand}` },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://modernniagaraapparel.ca/" },
-      { property: "og:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
+      { property: "og:url", content: "https://synergygroupapparel.ca/" },
+      { property: "og:image", content: "https://synergygroupapparel.ca/favicon-512.png" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: brand },
       { name: "twitter:description", content: `Premium Branded ${brand}` },
-      { name: "twitter:image", content: "https://modernniagaraapparel.ca/modernniagara-logo.png" },
+      { name: "twitter:image", content: "https://synergygroupapparel.ca/favicon-512.png" },
     ],
   };
 };

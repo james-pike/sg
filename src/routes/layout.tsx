@@ -248,7 +248,7 @@ export const useSubmitOrder = routeAction$(
 
     const provinceName = PROVINCE_NAMES[province] || province;
     const fromAddress = env.get("RESEND_FROM") || env.get("VITE_RESEND_FROM") || "Synergy Group <onboarding@resend.dev>";
-    const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "cs@safetyhouse.ca")
+    const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "info@synergygroupapparel.ca")
       .split(",").map((a) => a.trim()).filter(Boolean);
 
     // Absolute origin for the email logo (hosted raster, since email can't
@@ -764,7 +764,7 @@ export default component$(() => {
     track(() => loc.url.pathname);
     // Where the strip pins, read from the strip itself rather than a table of
     // per-breakpoint header heights. Those were 64/67/66 literals, and they
-    // silently desynced the moment the header's height changed: --wt-header-h
+    // silently desynced the moment the header's height changed: --sg-header-h
     // is built from the bar + seam + top padding, so widening any of them moves
     // the pin, and the strip then rests one or two pixels BELOW the number this
     // compared against. The test never passed, --tabs-stuck never got set, and
