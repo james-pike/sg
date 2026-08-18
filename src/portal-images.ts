@@ -36,6 +36,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-17": { img: "/portals/M585L-as.jpg", imgs: ["/portals/M585L-as.jpg"] },
     "SG-18": { img: "/portals/56795-as.jpg", imgs: ["/portals/56795-as.jpg"] },
     "SG-19": { img: "/portals/g8800-as.jpg", imgs: ["/portals/g8800-as.jpg"] },
+    "SG-20": { img: "/portals/M723-as.jpg", imgs: ["/portals/M723-as.jpg"] },
   },
   portal2: {
     "SG-1": { img: "/portals/g2000-cf.jpg", imgs: ["/portals/g2000-cf.jpg"] },
@@ -90,6 +91,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-17": { img: "/portals/M585L-ps.jpg", imgs: ["/portals/M585L-ps.jpg"] },
     "SG-18": { img: "/portals/56795-ps.jpg", imgs: ["/portals/56795-ps.jpg"] },
     "SG-19": { img: "/portals/g8800-ps.jpg", imgs: ["/portals/g8800-ps.jpg"] },
+    "SG-20": { img: "/portals/M723-ps.jpg", imgs: ["/portals/M723-ps.jpg"] },
   },
 };
 

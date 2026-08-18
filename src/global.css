@@ -14016,6 +14016,12 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   object-fit: contain;
   display: block;
 }
+/* Powered's reversed wordmark bakes POWERED over SYNERGY as TWO lines, so it
+   needs ~2x the single-line height to stay legible. Targeted by filename so the
+   other portals' single-line wordmarks keep the shared 16px. */
+.site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] {
+  height: 30px !important;
+}
 .site-header .brand-cluster--split .brand-cluster__apparel {
   font-size: 1.05rem !important;
   font-weight: 500 !important;
@@ -14042,6 +14048,9 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   }
   .site-header .brand-cluster--split .brand-cluster__split-word {
     height: 15px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] {
+    height: 27px !important;
   }
   .site-header .brand-cluster--split .brand-cluster__apparel {
     font-size: 0.9rem !important;

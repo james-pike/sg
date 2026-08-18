@@ -37,12 +37,12 @@ export interface Portal {
 }
 
 export const PORTALS: Portal[] = [
-  { id: "portal1", name: "Airtech", sub: "Synergy", logo: "/portals/portal1.png", accent: "#1f6fb2", dark: true, hero: "/airtech-hero.webp" },
+  { id: "portal1", name: "Airtech", sub: "Synergy", logo: "/portals/portal1.png", headerMark: "/airtech-mark.png", headerWord: "/airtech-word.png", accent: "#1f6fb2", dark: true, hero: "/airtech-hero.webp" },
   // All logos are reversed to white on a dark tile (matching Airtech), so every
   // portal is dark:true. Corflow's hero is a placeholder (its site is down).
   { id: "portal2", name: "Corflow", sub: "Synergy", logo: "/corflow-reversed.png", headerMark: "/corflow-mark.png", headerWord: "/corflow-word.png", accent: "#ae1f2a", dark: true, hero: "/airtech-chillers.webp" },
-  { id: "portal4", name: "Powered", sub: "Synergy", logo: "/powered-reversed.png", accent: "#d9a441", dark: true, hero: "/powered-hero.webp" },
-  { id: "portal3", name: "Wired", sub: "Synergy", logo: "/wired-lockup.png", accent: "#4f8a4d", dark: true, hero: "/wired-hero.webp" },
+  { id: "portal4", name: "Powered", sub: "Synergy", logo: "/powered-reversed.png", headerMark: "/powered-mark.png", headerWord: "/powered-word.png", accent: "#d9a441", dark: true, hero: "/powered-hero.webp" },
+  { id: "portal3", name: "Wired", sub: "Synergy", logo: "/wired-lockup.png", headerMark: "/wired-mark.png", headerWord: "/wired-word.png", accent: "#4f8a4d", dark: true, hero: "/wired-hero.webp" },
 ];
 
 export const PORTAL_IDS = PORTALS.map((p) => p.id);
