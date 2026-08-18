@@ -40,6 +40,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-20": { img: "/portals/M723-as.jpg", imgs: ["/portals/M723-as.jpg"] },
     "SG-21": { img: "/portals/88193-as.jpg", imgs: ["/portals/88193-as.jpg"] },
     "SG-22": { img: "/portals/16398-as.png", imgs: ["/portals/16398-as.png"] },
+    "SG-23": { img: "/portals/viceball-as.jpg", imgs: ["/portals/viceball-as.jpg"] },
   },
   portal2: {
     "SG-1": { img: "/portals/g2000-cf.jpg", imgs: ["/portals/g2000-cf.jpg"] },
@@ -79,6 +80,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
     "SG-20": { img: "/portals/M723-ws.jpg", imgs: ["/portals/M723-ws.jpg"] },
     "SG-21": { img: "/portals/88193-ws.jpg", imgs: ["/portals/88193-ws.jpg"] },
     "SG-22": { img: "/portals/16398-ws.png", imgs: ["/portals/16398-ws.png"] },
+    "SG-23": { img: "/portals/viceball-ws.jpg", imgs: ["/portals/viceball-ws.jpg"] },
   },
   portal4: {
     "SG-1": { img: "/portals/g2000-ps.jpg", imgs: ["/portals/g2000-ps.jpg"] },
