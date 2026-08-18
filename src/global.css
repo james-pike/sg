@@ -3448,16 +3448,32 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
   animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* Desktop only: a step wider than the site content, locked to 16:9 (height
-   grows with width), leaving a margin for the dot texture in the surround. */
+/* Desktop only: fill the full viewport height and let the width follow to keep a
+   true 16:9 (so it's a bit wider than before). Width is capped at 100vw so it
+   never overflows horizontally on tall/narrow monitors. */
 @media (min-width: 1025px) {
+  .login-overlay { padding: 0; }
   .login-modal.login-modal--split {
-    width: 94vw;
-    max-width: 1600px;
+    width: auto;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
     aspect-ratio: 16 / 9;
-    height: auto;
-    max-height: 92vh;
   }
+  /* Keep the sign-in cluster vertically centred, but lift the SELECTED logo up a
+     touch into the space above it — a visual transform only, so the tiles/form
+     stay centred. */
+  .login-modal.login-modal--split .login-card__brand {
+    transform: translateY(clamp(-1.75rem, -2.4vh, -0.9rem));
+  }
+  /* Trim the pane's side padding and size the headline to the pane height so
+     "SYNERGY APPAREL" fills the width edge-to-edge like the selected logos.
+     (.login-modal.login-modal--split so it wins over the base title/padding.) */
+  .login-modal.login-modal--split .login-card {
+    padding-left: clamp(1.1rem, 1.8vw, 1.75rem);
+    padding-right: clamp(1.1rem, 1.8vw, 1.75rem);
+  }
+  .login-modal.login-modal--split .login-card__title { font-size: 5.6vh; }
 }
 .login-modal--split .login-modal__form-pane {
   flex: 0 0 34%;
@@ -3482,8 +3498,12 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
    (Airtech portal1, Wired portal3) already fill the pane width; Corflow (portal2)
    and Powered (portal4) are taller/narrower marks, so scale them up to read at a
    similar full-width size. */
-.login-modal--split .login-card__brandmark--portal2 { transform: scale(1.4); transform-origin: center; }
-.login-modal--split .login-card__brandmark--portal4 { transform: scale(1.4); transform-origin: center; }
+/* Per-portal fine-tuning of the selected logo. Corflow + Wired nudge up a touch,
+   Airtech nudges down a touch; Powered just scales up. */
+.login-modal--split .login-card__brandmark--portal1 { transform: translateY(0.6rem); transform-origin: center; }
+.login-modal--split .login-card__brandmark--portal2 { transform: translateY(-0.8rem) scale(1.4); transform-origin: center; }
+.login-modal--split .login-card__brandmark--portal3 { transform: translateY(-0.8rem); transform-origin: center; }
+.login-modal--split .login-card__brandmark--portal4 { transform: scale(1.55); transform-origin: center; }
 /* Carousel pane — the portal field photos cross-fading on the right. */
 .login-modal__carousel {
   flex: 1 1 66%;
@@ -3501,50 +3521,73 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .login-modal__slide.is-active { opacity: 1; }
 .login-modal__dots {
-  position: absolute; bottom: 14px; left: 0; right: 0;
-  display: flex; justify-content: center; gap: 8px; z-index: 2;
+  position: absolute; bottom: clamp(1.25rem, 3.2vh, 2rem); right: clamp(1.35rem, 2.3vw, 2.1rem); left: auto;
+  display: flex; justify-content: flex-end; gap: 9px; z-index: 2;
 }
 .login-modal__dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  width: 12px; height: 12px; border-radius: 3px;
+  background: rgba(255, 255, 255, 0.32);
   transition: background var(--transition-fast), transform var(--transition-fast);
 }
-.login-modal__dot.is-active { background: #fff; transform: scale(1.25); }
-/* Phone: stack the form over a short carousel band. */
-@media (max-width: 767px) {
+.login-modal__dot.is-active { background: #fff; transform: scale(1.15); }
+/* Mobile + tablet (<=1024): restore the old full-bleed "blended landing" — the
+   field photo fills the screen and the sign-in floats over a dark scrim (the
+   side-by-side split is desktop-only, >=1025). */
+@media (max-width: 1024px) {
+  .login-overlay { padding: 0; }
+  .login-overlay::before { display: none; }   /* no margin dot-texture full-bleed */
   .login-modal.login-modal--split {
+    position: relative;
     flex-direction: column;
-    /* Drop the 16:9 lock on mobile so the stacked carousel + form can grow to
-       their natural height (otherwise the ratio clamps the card short and only
-       the carousel shows). */
-    aspect-ratio: auto;
-    height: auto;
-    max-height: calc(100dvh - 24px);
-    width: calc(100% - 1rem);
-    overflow: auto;
+    aspect-ratio: auto;                        /* the 16:9 lock is desktop-only */
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
   }
-  .login-modal--split .login-modal__form-pane { flex: none; max-width: 100%; order: 2; }
-  /* Carousel image at the TOP of the stacked card on mobile, above the form. */
-  .login-modal__carousel { flex: none; width: 100%; height: 180px; order: 1; }
-  /* The desktop card vertically-centres its content and reserves a tall fixed
-     block for the title/logo (fine in the full-height panel). Stacked on mobile
-     that becomes a big empty gap under the carousel — so top-align the card and
-     let the title/logo block size to its content, pulling everything up snug to
-     the carousel. */
+  /* The photo fills the whole screen behind the sign-in. */
+  .login-modal__carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .login-modal__slide { object-position: 58% 50%; }
+  .login-modal__dots { display: none; }
+  /* Sign-in overlays the photo on a vertical scrim — lighter at the top so the
+     photo reads, darker toward the bottom for form legibility. */
+  .login-modal--split .login-modal__form-pane {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    max-width: 100%;
+    display: flex;
+    background: linear-gradient(180deg, rgba(9, 20, 28, 0.5) 0%, rgba(9, 20, 28, 0.8) 46%, rgba(9, 20, 28, 0.95) 100%);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+  /* Centre the sign-in group in the full-height panel (as the old landing did),
+     with the reserved title block restored. */
   .login-modal--split .login-card {
-    height: auto;
-    justify-content: flex-start;
-    padding-top: 1.4rem;
-    padding-bottom: 1.6rem;
+    height: 100%;
+    justify-content: center;
+    background: transparent;
+    padding: clamp(2rem, 7vh, 3.5rem) clamp(1.5rem, 7vw, 2.75rem) clamp(2rem, 6vh, 3rem);
   }
   .login-modal--split .login-card__title,
   .login-modal--split .login-card__brand {
-    height: auto;
-    justify-content: center;
-    padding-bottom: 0;
-    margin-bottom: 1rem;
+    height: var(--login-brand-h);
+    justify-content: flex-end;
+    padding-bottom: 8px;
+    margin-bottom: 1.3rem;
   }
+  .login-modal--split .login-card__title { font-size: clamp(2rem, 9vw, 2.9rem); }
 }
 
 /* Signature — the eyebrow set like a stencilled equipment tag. */
@@ -13069,6 +13112,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
   .cart-drawer__details-step > .checkout-modal__form { grid-column: 1; grid-row: 2; margin: 0 !important; }
   .cart-drawer__details-step > .checkout-modal__pay { grid-column: 1; grid-row: 3; margin: 0 !important; }
   .cart-drawer__details-step > .cart-drawer__summary { grid-column: 2; grid-row: 2 / 4; align-self: start; margin: 0 !important; }
+  /* The place-order bar sits in the LEFT column right under the payment panel —
+     next to the fields — instead of a full-width bar below both columns. */
+  .cart-drawer__details-step > .cart-drawer__error { grid-column: 1; grid-row: 4; margin: 4px 0 0 !important; }
+  .cart-drawer__details-step > .cart-drawer__footer { grid-column: 1; grid-row: 5; margin: 0 !important; }
 }
 
 /* ============================================================
@@ -13107,10 +13154,10 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ============================================================ */
 .tablet-notice { display: none; }
 @media (max-width: 1024px) {
-  /* Mobile + tablet are hidden behind a "coming soon" cover while their login /
-     layout is being finished — only desktop (>=1025px) renders the site. */
+  /* Mobile + tablet unlocked while their login/layout is reworked. Flip this
+     back to `flex` to re-enable the coming-soon cover. */
   .tablet-notice {
-    display: flex;
+    display: none;
     position: fixed;
     inset: 0;
     z-index: 100000;

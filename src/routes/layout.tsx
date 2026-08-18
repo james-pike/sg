@@ -1054,6 +1054,11 @@ export default component$(() => {
                   </button>
                 </Form>
               </div>
+              <div class="login-modal__dots">
+                {PORTALS.map((p) => (
+                  <span key={p.id} class={`login-modal__dot ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
+                ))}
+              </div>
             </div>
             <div class="login-modal__carousel" aria-hidden="true">
               {PORTALS.map((p) => (
@@ -1061,11 +1066,6 @@ export default component$(() => {
                      loading="eager" decoding="sync"
                      class={`login-modal__slide ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
               ))}
-              <div class="login-modal__dots">
-                {PORTALS.map((p) => (
-                  <span key={p.id} class={`login-modal__dot ${(selectedPortal.value || PORTALS[heroIndex.value].id) === p.id ? "is-active" : ""}`} />
-                ))}
-              </div>
             </div>
           </div>
         </div>
@@ -1701,7 +1701,6 @@ export default component$(() => {
                       </div>
                     </div>
                   </div>
-                </div>
                 {formError.value && (
                   <div class="cart-drawer__error" role="alert">{formError.value}</div>
                 )}
@@ -1726,6 +1725,7 @@ export default component$(() => {
                       </>
                     )}
                   </button>
+                </div>
                 </div>
               </>
             )}
