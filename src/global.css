@@ -3527,6 +3527,24 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   .login-modal--split .login-modal__form-pane { flex: none; max-width: 100%; order: 2; }
   /* Carousel image at the TOP of the stacked card on mobile, above the form. */
   .login-modal__carousel { flex: none; width: 100%; height: 180px; order: 1; }
+  /* The desktop card vertically-centres its content and reserves a tall fixed
+     block for the title/logo (fine in the full-height panel). Stacked on mobile
+     that becomes a big empty gap under the carousel — so top-align the card and
+     let the title/logo block size to its content, pulling everything up snug to
+     the carousel. */
+  .login-modal--split .login-card {
+    height: auto;
+    justify-content: flex-start;
+    padding-top: 1.4rem;
+    padding-bottom: 1.6rem;
+  }
+  .login-modal--split .login-card__title,
+  .login-modal--split .login-card__brand {
+    height: auto;
+    justify-content: center;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+  }
 }
 
 /* Signature — the eyebrow set like a stencilled equipment tag. */
