@@ -1075,7 +1075,6 @@ export default component$(() => {
           601px and 1024px, so only mobile and desktop render the site. */}
       <div class="tablet-notice" aria-live="polite">
         <span class="tablet-notice__title">{t("tablet.title", locale.value)}</span>
-        <span class="tablet-notice__sub">{t("tablet.sub", locale.value)}</span>
       </div>
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
