@@ -13106,12 +13106,11 @@ body:has(.product-fullscreen) { overflow: hidden; }
    keep the site to mobile and desktop only.
    ============================================================ */
 .tablet-notice { display: none; }
-@media (min-width: 601px) and (max-width: 1024px) {
-  /* Tablet layout is now built out — the "coming soon" placeholder is disabled
-     and scrolling stays unlocked. The .tablet-notice styling below is inert
-     (display:none). */
+@media (max-width: 1024px) {
+  /* Mobile + tablet are hidden behind a "coming soon" cover while their login /
+     layout is being finished — only desktop (>=1025px) renders the site. */
   .tablet-notice {
-    display: none;
+    display: flex;
     position: fixed;
     inset: 0;
     z-index: 100000;
@@ -13121,10 +13120,7 @@ body:has(.product-fullscreen) { overflow: hidden; }
     gap: 0.75rem;
     padding: 2rem;
     text-align: center;
-    background:
-      var(--wt-iron) center / cover no-repeat,
-      linear-gradient(var(--wt-box), var(--wt-box)),
-      var(--wt-orange);
+    background: linear-gradient(180deg, #12232e 0%, #0b161e 100%);
     color: #fff;
     font-family: var(--font-sans);
   }
