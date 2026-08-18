@@ -208,7 +208,7 @@ const translations = {
   "pay.gift.card.remaining": { en: "Remaining on card", fr: "Solde restant sur la carte" },
   "pay.gift.short": { en: "This gift card doesn't cover the full order — choose \"Gift card + credit card\" to pay the balance.", fr: "Cette carte-cadeau ne couvre pas la totalité — choisissez « Carte-cadeau + carte de crédit » pour payer le solde." },
   // Split payment (50% card now / 50% invoiced to the company)
-  "pay.split.note": { en: "You pay half today by credit card. The remaining half is invoiced to your company.", fr: "Vous payez la moitié aujourd'hui par carte de crédit. L'autre moitié est facturée à votre entreprise." },
+  "pay.split.note": { en: "Pay 50% and invoice 50% to", fr: "Payez 50 % et facturez 50 % à" },
   "pay.split.paynow": { en: "You pay today (card)", fr: "À payer aujourd'hui (carte)" },
   "pay.split.company": { en: "Invoiced to", fr: "Facturé à" },
   "pay.split.half": { en: "50%", fr: "50 %" },

@@ -1678,7 +1678,7 @@ export default component$(() => {
                       pick — this panel just shows the split before the card step. */}
                   <div class="checkout-modal__pay">
                     <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
-                    <p class="checkout-modal__pay-note">{t("pay.split.note", locale.value)}</p>
+                    <p class="checkout-modal__pay-note">{t("pay.split.note", locale.value)} {companyName.value}</p>
                     <div class="checkout-modal__split">
                       <div class="checkout-modal__split-row">
                         <span class="checkout-modal__split-label">
