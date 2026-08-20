@@ -186,7 +186,10 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = ({ resolveValue }) => {
-  const brand = portalBrand(resolveValue(useAuthCheck).loginType);
+  const auth = resolveValue(useAuthCheck);
+  // Until a portal is logged into, the login window is the neutral group site —
+  // show "Synergy Group Apparel", not the default portal's brand (Airtech).
+  const brand = auth.loggedIn ? portalBrand(auth.loginType) : "Synergy Group Apparel";
   return {
     title: brand,
     meta: [

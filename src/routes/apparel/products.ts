@@ -90,7 +90,7 @@ export const allProducts = [
   },
   {
     "sku": "SG-6",
-    "name": "Cole Harbour Soft Shell Jacket",
+    "name": "Coal Harbour Soft Shell Jacket",
     "category": "Jackets",
     "sizes": "XS - 6XL",
     "badge": "",
@@ -227,20 +227,20 @@ export const allProducts = [
   },
   {
     "sku": "SG-14",
-    "name": "Flexfit 110® Mesh-Back Cap",
+    "name": "Embroidered Cap - Black",
     "category": "Headwear",
     "sizes": "One Size",
     "badge": "",
     "colors": [
       "#1a1a18"
     ],
-    "price": 17,
-    "img": "/portals/110M-as.jpg",
+    "price": 23.5,
+    "img": "/portals/i8502-cf.webp",
     "imgs": [
-      "/portals/110M-as.jpg"
+      "/portals/i8502-cf.webp"
     ],
-    "material": "74/26 polyester/cotton",
-    "details": "Structured, six-panel, mid-profile, Permacurv® visor, silver undervisor, Flexfit® Tech + snapback closure, #110M"
+    "material": "Poly/spandex with performance mesh",
+    "details": "Structured mid-profile 6-panel Flexfit 110®, Shapeable pre-curved visor, Plastic snapback closure, UV protection, Moisture wicking, Contrasting grey undervisor, #i8502"
   },
   {
     "sku": "SG-15",
@@ -329,20 +329,20 @@ export const allProducts = [
   },
   {
     "sku": "SG-20",
-    "name": "Harriton Unisex ClimaBloc® Station Vest",
+    "name": "Men's Carhartt Washed Duck Mock-Neck Vest",
     "category": "Jackets",
-    "sizes": "XS - 5XL",
+    "sizes": "S - 5XL",
     "badge": "",
     "colors": [
       "#1a1a18"
     ],
-    "price": 77,
-    "img": "/portals/M723-cf.png",
+    "price": 89.99,
+    "img": "/portals/104277-cf.webp",
     "imgs": [
-      "/portals/M723-cf.png"
+      "/portals/104277-cf.webp"
     ],
-    "material": "65/35 polyester/cotton twill, 13.4 oz/L yd (CA)",
-    "details": "Durable water-repellent (DWR) finish, Polyester taffeta lining with diamond quilting, Double patch pockets with flap closures, Lower zippered pockets, Inner storage pocket, #M723"
+    "material": "12-ounce, 100% ringspun cotton washed duck",
+    "details": "Loose fit, Sherpa lining for warmth, Map pocket on left chest with zipper closure, Two large sherpa-lined front pockets, Two inside pockets, Droptail hem for added coverage, Back length: Large Regular 29.25\" / Large Tall 31.25\", Replaces V33, #104277"
   },
   {
     "sku": "SG-21",
@@ -392,6 +392,23 @@ export const allProducts = [
     ],
     "material": "",
     "details": "Box of 12 custom-printed Vice Pro Plus golf balls"
+  },
+  {
+    "sku": "SG-24",
+    "name": "Men's Carhartt Iconic J140 Firm Duck Active Jac",
+    "category": "Jackets",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 129.99,
+    "img": "/portals/106673-cf.webp",
+    "imgs": [
+      "/portals/106673-cf.webp"
+    ],
+    "material": "12-ounce, heavyweight firm-hand, 100% ring-spun cotton duck",
+    "details": "Warmth Rating: Level 3 - Warmest, Loose fit, Quilted-flannel lining in body, Quilted-nylon lining in sleeves, Filling: 100% polyester, Attached quilted-flannel-lined hood with draw-cord closure, Two inside pockets for additional storage, Rib-knit cuffs and waist keep out the cold, Back length: Regular Medium 29\" / Tall Medium 31\", Formerly known as the J140, Imported, #106673"
   }
 ];
 
@@ -420,6 +437,9 @@ const colorNames: Record<string, Record<string, string>> = {
   "#c0392b": { en: "Red", fr: "Rouge" },
   "#1e40af": { en: "Royal", fr: "Bleu royal" },
   "#8a5d3b": { en: "Carhartt Brown", fr: "Brun Carhartt" },
+  "#3b2a1d": { en: "Dark Brown", fr: "Brun foncé" },
+  "#a9a295": { en: "Gravel", fr: "Gravier" },
+  "#172033": { en: "Dark Navy", fr: "Marine foncé" },
   "#00b5e2": { en: "Sky Blue", fr: "Bleu ciel" },
   "#0047ab": { en: "Cobalt", fr: "Cobalt" },
   "#0f52ba": { en: "Sapphire", fr: "Saphir" },

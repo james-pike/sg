@@ -138,10 +138,11 @@ const BRAND_BY_SKU: Record<string, string> = {
   "SG-10": "Canada Sportswear", // CSW 24/7 "Flux" #L00545
   "SG-11": "Canada Sportswear", // CSW 24/7 "Surfer" #L00555
   "SG-12": "Scout",             // Hi-Vis "Scout" #L01150 vest (shown as Scout, not the CX2 maker)
+  "SG-14": "Cap America",       // Embroidered Cap #i8502 (Flexfit 110 style; Cap America supplier, like MN-5)
   "SG-16": "Harriton",          // Advantage IL SS work shirt #M585
   "SG-17": "Harriton",          // Advantage IL workshirt #M585L
-  // SG-19 DryBlend (Gildan, in name) + SG-20 ClimaBloc (Harriton, in name) need
-  // no override. The three below carry brands not in their display names.
+  // SG-19 DryBlend (Gildan) + SG-20/SG-24 (Carhartt) all carry their brand in the
+  // display name, so they match by name and need no override.
   "SG-21": "Core 365",          // Operate LS twill shirt #88193
   "SG-22": "Trimark",           // Dade SS polo #M-DADE
   "SG-23": "Vice Golf",         // Vice Pro Plus Golf Balls (12)

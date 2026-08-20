@@ -96,12 +96,22 @@ export default component$(() => {
       "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
       "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
     },
+    // Carhartt 104277 Washed Duck Mock-Neck Vest — Regular S-5XL, Tall M-4XL.
+    "SG-20": {
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
+      "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
+    },
+    // Carhartt 106673 Iconic J140 Firm Duck Active Jac — Regular S-5XL, Tall M-4XL.
+    "SG-24": {
+      "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
+      "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"],
+    },
   };
   const variantSkus = new Set(Object.keys(variantSizesBySku));
   // Per-variant price overrides. The Tall cut runs a higher price on some SKUs
   // (e.g. Gildan 2000 talls are $18 vs $8 regular); everything else keeps the
   // product's base price for both variants.
-  const TALL_PRICE: Record<string, number> = { "SG-1": 18 };
+  const TALL_PRICE: Record<string, number> = { "SG-1": 18, "SG-20": 99.99, "SG-24": 139.99 };
   const effectivePrice = useComputed$(() => {
     const p = product.value;
     if (!p) return 0;

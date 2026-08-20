@@ -1397,7 +1397,6 @@ export default component$(() => {
         <div class="site-footer__inner">
           <div class="site-footer__brand brand-cluster brand-cluster--lockup">
             <img class="brand-cluster__mark brand-cluster__mark--img brand-cluster__mark--lockup" src={portal.value.logo} alt={`${portal.value.name} ${portal.value.sub}`} width="400" height="100" loading="lazy" decoding="async" />
-            <span class="brand-cluster__word brand-cluster__word--muted brand-cluster__apparel">{t("logo.apparel", locale.value).toUpperCase()}</span>
           </div>
           <div class="site-footer__col">
           {loginType.value === "safety" && (
@@ -1523,7 +1522,7 @@ export default component$(() => {
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
-                    onClick$={() => { summaryOpen.value = window.innerWidth > 1024 && cart.items.length <= 4; checkoutStep.value = "details"; }}
+                    onClick$={() => { summaryOpen.value = window.innerWidth > 1024; checkoutStep.value = "details"; }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {t("cart.checkout", locale.value)}
@@ -1679,7 +1678,10 @@ export default component$(() => {
                       pick — this panel just shows the split before the card step. */}
                   <div class="checkout-modal__pay">
                     <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
-                    <p class="checkout-modal__pay-note">{t("pay.split.note", locale.value)} {companyName.value}</p>
+                    <div class="checkout-modal__pay-header">
+                      <p class="checkout-modal__pay-note">{t("pay.split.note", locale.value)} {companyName.value}</p>
+                      <span class="checkout-modal__pay-pickup">{t("cart.pickup", locale.value)}</span>
+                    </div>
                     <div class="checkout-modal__split">
                       <div class="checkout-modal__split-row">
                         <span class="checkout-modal__split-label">

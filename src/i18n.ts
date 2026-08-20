@@ -215,6 +215,7 @@ const translations = {
   "cart.checkout": { en: "Checkout", fr: "Passer à la caisse" },
   "cart.backtocart": { en: "Back to Cart", fr: "Retour au panier" },
   "cart.ordersummary": { en: "Order Summary", fr: "Résumé de la commande" },
+  "cart.pickup": { en: "Pickup in store", fr: "Ramassage en magasin" },
 
   // Cart errors
   "cart.error.both": { en: "Employee number and name are required", fr: "Le numéro d'employé et le nom sont requis" },

@@ -3483,8 +3483,30 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   overflow: hidden;
   background: linear-gradient(180deg, #12232e 0%, #0b161e 100%);
 }
+/* Faint white dot grid over the steel pane (the mn2 login treatment) — masked to
+   fade toward the pane's centre so it reads only as soft texture near the edges.
+   Sits under the sign-in content (the card is lifted to z-index 1 below). */
+.login-modal--split .login-modal__form-pane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1.5px);
+  background-size: 14px 14px;
+  -webkit-mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.35) 14%, transparent 42%, transparent 58%, rgba(0,0,0,0.35) 86%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.35) 12%, transparent 40%, transparent 60%, rgba(0,0,0,0.35) 88%, #000 100%);
+  -webkit-mask-composite: source-over;
+  mask-image:
+    linear-gradient(to right, #000 0%, rgba(0,0,0,0.35) 14%, transparent 42%, transparent 58%, rgba(0,0,0,0.35) 86%, #000 100%),
+    linear-gradient(to bottom, #000 0%, rgba(0,0,0,0.35) 12%, transparent 40%, transparent 60%, rgba(0,0,0,0.35) 88%, #000 100%);
+  mask-composite: add;
+}
 /* The pane now carries the surface, so the card inside goes flat/transparent. */
 .login-modal--split .login-card {
+  position: relative;
+  z-index: 1;   /* above the pane's dot texture */
   height: 100%;
   background: transparent;
   backdrop-filter: none;
@@ -3530,9 +3552,12 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   transition: background var(--transition-fast), transform var(--transition-fast);
 }
 .login-modal__dot.is-active { background: #fff; transform: scale(1.15); }
-/* Mobile + tablet (<=1024): restore the old full-bleed "blended landing" — the
-   field photo fills the screen and the sign-in floats over a dark scrim (the
-   side-by-side split is desktop-only, >=1025). */
+/* Mobile + tablet (<=1024): SOLID STEEL, NO CAROUSEL ─────────────────────────
+   Full-screen steel portal sign-in (no field photo) on both tablet and mobile —
+   the title/selected-logo over the steel pane, the portal picker + password
+   below, everything in the first 100dvh with no scroll. Tablet keeps a centred
+   content column; mobile fills the full viewport width. (Mirrors the mn2 login
+   after its mobile/tablet rework; the side-by-side photo split is >=1025 only.) */
 @media (max-width: 1024px) {
   .login-overlay { padding: 0; }
   .login-overlay::before { display: none; }   /* no margin dot-texture full-bleed */
@@ -3550,35 +3575,31 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     box-shadow: none;
     overflow: hidden;
   }
-  /* The photo fills the whole screen behind the sign-in. */
-  .login-modal__carousel {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .login-modal__slide { object-position: 58% 50%; }
+  .login-modal__carousel { display: none; }    /* no carousel on tablet or mobile */
   .login-modal__dots { display: none; }
-  /* Sign-in overlays the photo on a vertical scrim — lighter at the top so the
-     photo reads, darker toward the bottom for form legibility. */
+  /* The steel pane fills the whole viewport — no photo, so no scrim or blur.
+     Same steel gradient the desktop form-pane carries. */
   .login-modal--split .login-modal__form-pane {
     position: relative;
     z-index: 1;
     flex: 1 1 auto;
+    width: 100%;
     max-width: 100%;
     display: flex;
-    background: linear-gradient(180deg, rgba(9, 20, 28, 0.5) 0%, rgba(9, 20, 28, 0.8) 46%, rgba(9, 20, 28, 0.95) 100%);
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    background: linear-gradient(180deg, #12232e 0%, #0b161e 100%);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
-  /* Centre the sign-in group in the full-height panel (as the old landing did),
-     with the reserved title block restored. */
+  /* Centre the sign-in group in the full-height pane. A centred content column
+     keeps the title, tiles and fields to one tidy width on the wide tablet pane;
+     inert on mobile (the viewport is already narrower than the cap). */
   .login-modal--split .login-card {
     height: 100%;
     justify-content: center;
     background: transparent;
-    padding: clamp(2rem, 7vh, 3.5rem) clamp(1.5rem, 7vw, 2.75rem) clamp(2rem, 6vh, 3rem);
+    max-width: 560px;
+    margin-inline: auto;
+    padding: clamp(1.75rem, 5vh, 3.25rem) clamp(1.5rem, 6vw, 2.5rem);
   }
   .login-modal--split .login-card__title,
   .login-modal--split .login-card__brand {
@@ -3587,7 +3608,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     padding-bottom: 8px;
     margin-bottom: 1.3rem;
   }
-  .login-modal--split .login-card__title { font-size: clamp(2rem, 9vw, 2.9rem); }
+  .login-modal--split .login-card__title { font-size: clamp(1.9rem, 7vw, 2.7rem); }
 }
 
 /* Signature — the eyebrow set like a stencilled equipment tag. */
@@ -6206,12 +6227,28 @@ details[open] > .cart-drawer__checkout-title::after {
 }
 .checkout-modal__pay .checkout-modal__form-title { margin-bottom: 0.6rem; }
 
+/* Payment header row: the "Save 50% from …" note on the left, the "Pickup in
+   store" indicator right-aligned on the same line. */
+.checkout-modal__pay-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.7rem;
+}
+.checkout-modal__pay-pickup {
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ce-gray-800);
+  white-space: nowrap;
+}
 /* Split-payment summary (50% card now / 50% invoiced to the company). */
 .checkout-modal__pay-note {
   font-size: 0.8rem;
   line-height: 1.35;
   color: var(--ce-gray-600);
-  margin: 0 0 0.7rem;
+  margin: 0;
 }
 .checkout-modal__split {
   display: flex;
@@ -13154,8 +13191,8 @@ body:has(.product-fullscreen) { overflow: hidden; }
    ============================================================ */
 .tablet-notice { display: none; }
 @media (max-width: 1024px) {
-  /* Mobile + tablet hidden behind a coming-soon cover while their layout is
-     reworked. Flip this back to `none` to unlock them again. */
+  /* Mobile + tablet hidden behind the coming-soon cover — only desktop (>1024px)
+     renders the site in prod. Flip this to `none` to re-enable mobile + tablet. */
   .tablet-notice {
     display: flex;
     position: fixed;
@@ -13758,7 +13795,6 @@ body:has(.nav-drawer-overlay) .site-header__logo {
     radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 9px 9px,
     var(--sg-orange) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.75),        /* top sheen (raised edge) */
     inset 0 7px 12px -7px rgba(0, 0, 0, 0.10),       /* subtle inner top depth */
     inset 0 -7px 12px -6px rgba(0, 0, 0, 0.22),      /* pressed inner bottom depth */
     0 3px 8px -2px rgba(0, 0, 0, 0.26),              /* drop shadow */
@@ -14206,6 +14242,13 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   width: auto !important;
   object-fit: contain;
 }
+/* Corflow's square symbol reads a touch large and sits a hair right of the
+   other portals' marks — scale it down slightly and nudge it left. Targeted by
+   filename so only Corflow is affected. */
+.site-header .brand-cluster--split .brand-cluster__split-mark[src*="corflow-mark"] {
+  height: 38px !important;
+  margin-left: -4px !important;
+}
 .site-header .brand-cluster--split .brand-cluster__split-text {
   display: flex !important;
   flex-direction: row !important;
@@ -14241,6 +14284,10 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   }
   .site-header .brand-cluster--split .brand-cluster__split-mark {
     height: 35px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-mark[src*="corflow-mark"] {
+    height: 32px !important;
+    margin-left: -3px !important;
   }
   .site-header .brand-cluster--split .brand-cluster__split-text {
     flex-direction: column !important;
@@ -14296,5 +14343,342 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   }
   .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__apparel {
     font-size: 0.92rem !important; margin-left: -4px !important;
+  }
+}
+
+/* ============================================================
+   Secondary bars — light blue-gray, dark text (ported from the mn2 rework).
+   The five page/chrome secondary bars (category tab strip, product breadcrumb,
+   cart table head, cart back bar, menu-drawer header) drop the steel-blue
+   iron-sign treatment for a light blue-gray with DARK text; the steel-blue
+   PRIMARY colour is kept only for the header + the active-tab / breadcrumb pill.
+   The header controls (Search, FR, My Cart, logout) are unified into one solid
+   silver-blue fill with a recessed inset ring and one shared hover. Appended
+   last so it wins the many per-breakpoint rules above.
+   ============================================================ */
+:root {
+  /* Light blue-gray fill shared by every secondary bar (matches the sidebar /
+     product-card panel tint) — same value the mn2 bars use. */
+  --sg-bar-bg: #e0e3e6;
+  /* A touch darker: the subtle highlight fill for selected / control chips on
+     the light bars (active tab, breadcrumb category, Catalog toggle, search). */
+  --sg-bar-hi: #cfd5d9;
+}
+.home-catalog__header,
+.home-catalog__tabs,
+.pdp-breadcrumb,
+.nav-drawer__header,
+.cart-table thead,
+.cart-table thead tr,
+.cart-drawer__back-btn {
+  background: var(--sg-bar-bg) !important;  /* shorthand also clears the iron texture */
+  box-shadow: none !important;              /* no white seam line under the header */
+  color: var(--ce-gray-700) !important;
+  border-color: var(--ce-gray-200) !important;
+  border-top: none !important;
+}
+/* The breadcrumb's current-category pill matches the active-tab pill: the gentle
+   gray highlight with dark text, instead of the old steel-blue fill. */
+.pdp-breadcrumb__cat { color: var(--ce-gray-900) !important; }
+.pdp-breadcrumb__cat::before { background: var(--sg-bar-hi) !important; }
+/* Dark labels / icons across all five bars. */
+.home-catalog__tabs .apparel-titlebar__tab,
+.pdp-breadcrumb__back,
+.pdp-breadcrumb__link,
+.pdp-breadcrumb__sku,
+.nav-drawer__header,
+.nav-drawer__header *,
+.cart-table thead th,
+.cart-drawer__back-btn,
+.cart-drawer__back-btn * { color: var(--ce-gray-700) !important; }
+.pdp-breadcrumb svg,
+.nav-drawer__header svg,
+.cart-drawer__back-btn svg { stroke: var(--ce-gray-700) !important; }
+.home-catalog__tabs .apparel-titlebar__tab:hover { background: rgba(0, 0, 0, 0.05) !important; color: var(--ce-gray-900) !important; }
+/* Active tab = a gentle gray HIGHLIGHT with the dark tab text kept (bolded) —
+   not white text, not the dark steel-blue. */
+.home-catalog__tabs .apparel-titlebar__tab.active { color: var(--ce-gray-900) !important; }
+.home-catalog__tabs .apparel-titlebar__tab.active,
+.home-catalog__tabs .apparel-titlebar__tab.active::before {
+  background: var(--sg-bar-hi) !important;
+}
+/* The Catalog / view-mode toggle and the tab-bar search: a touch darker gray
+   than the bar with dark text (a subtle control, not a bold blue chip). */
+.home-catalog__viewmode,
+.home-catalog__sidebar-search {
+  background: var(--sg-bar-hi) !important;
+  color: var(--ce-gray-900) !important;
+  border: 1px solid var(--ce-gray-200) !important;
+  box-shadow: none !important;
+}
+.home-catalog__viewmode svg,
+.home-catalog__sidebar-search svg { stroke: var(--ce-gray-700) !important; color: var(--ce-gray-700) !important; }
+.home-catalog__sidebar-search .apparel-titlebar__search-input { color: var(--ce-gray-900) !important; }
+.home-catalog__sidebar-search .apparel-titlebar__search-input::placeholder { color: var(--ce-gray-500) !important; }
+
+/* ─ Uniform header controls — Search, FR, My Cart, logout ─────────────────────
+   My Cart follows the other header buttons: one solid silver-blue fill with the
+   same recessed inset ring the FR / logout / search controls carry (it was flat,
+   so its edge read as a faint outline). Uses the :has(.home-catalog) variants +
+   this late position to beat the earlier CTA rules. */
+body .site-header .cart-btn,
+body .site-header .cart-btn.cart-btn--active,
+body:has(.home-catalog) .site-header .cart-btn,
+body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
+  background: #39627c !important;      /* match the FR / logout header buttons */
+  border: none !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+}
+/* All header controls share one hover highlight (like the logout button). */
+body .site-header .locale-btn:hover,
+body .site-header .logout-btn:hover,
+body .site-header .cart-btn:hover,
+body:has(.home-catalog) .site-header .cart-btn:hover,
+body .site-header .site-header__search:hover,
+body .site-header .site-header__search:focus-within {
+  background: #47708c !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+}
+body .site-header .locale-btn:hover svg,
+body .site-header .logout-btn:hover svg,
+body .site-header .cart-btn:hover svg,
+body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #fff !important; }
+body .site-header .cart-btn svg,
+body:has(.home-catalog) .site-header .cart-btn svg { stroke: #fff !important; }
+body .site-header .cart-btn .cart-btn__label,
+body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !important; }
+body .site-header .cart-btn:hover,
+body:has(.home-catalog) .site-header .cart-btn:hover { background: #47708c !important; color: #fff !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.16) !important; }
+body:has(.home-catalog) .site-header .cart-btn:hover svg { stroke: #fff !important; }
+/* My Cart: no white outline (clean fill like a solid header control). */
+body .site-header .cart-btn,
+body:has(.home-catalog) .site-header .cart-btn { border: none !important; }
+
+/* Header search: brighter (whiter) icon + placeholder so they read clearly on
+   the dark search field. */
+.site-header__search > svg { color: rgba(255, 255, 255, 0.85) !important; }
+.site-header__search-input { color: #fff !important; }
+.site-header__search-input::placeholder { color: rgba(255, 255, 255, 0.72) !important; }
+
+/* Breadcrumb links keep DARK text (+ dark icon) on hover — the bar is light now. */
+.pdp-breadcrumb__link:hover,
+.pdp-breadcrumb__back:hover,
+.pdp-breadcrumb__link:hover *,
+.pdp-breadcrumb__back:hover * { color: var(--ce-gray-900) !important; }
+.pdp-breadcrumb__link:hover svg,
+.pdp-breadcrumb__back:hover svg { stroke: var(--ce-gray-900) !important; }
+
+/* The menu / cart-drawer close ("cart") button: no background, like the search + X. */
+.cart-drawer__site-header .cart-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--ce-gray-900) !important;
+}
+.cart-drawer__site-header .cart-btn svg { stroke: var(--ce-gray-900) !important; }
+
+/* Catalog / view-mode toggle: the gray HIGHLIGHT fill + DARK icon on every
+   breakpoint (tablet kept a steel-blue fill with a white icon — it lives on
+   .home-catalog__right / .apparel-titlebar__action--tablet-cols there). */
+body .home-catalog__viewmode,
+body .home-catalog__right,
+body .apparel-titlebar__action--tablet-cols { background: var(--sg-bar-hi) !important; color: var(--ce-gray-900) !important; }
+body .home-catalog__viewmode svg,
+body .home-catalog__right svg,
+body .apparel-titlebar__action--tablet-cols svg { color: var(--ce-gray-700) !important; stroke: var(--ce-gray-700) !important; }
+
+/* Remove the thin white seam line under the header (the ::after divider) — it was
+   there to separate the dark blue bars; the light secondary bars don't need it. */
+body:has(.home-catalog__header, .apparel-titlebar, .pdp-breadcrumb) .site-header::after { display: none !important; }
+/* Straight top edge on the header (was a rounded top on .site-header__inner). */
+body .site-header__inner { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+/* Remove the white seam STRIPS that framed the bars (top ::before / bottom
+   ::after white lines) — they were for the dark blue bars. */
+.home-catalog__header::before,
+.home-catalog__header::after,
+.pdp-breadcrumb::before,
+.pdp-breadcrumb::after { display: none !important; }
+
+/* Mobile: the header cart button is icon-only (label hidden), so it should read
+   as a plain icon like the search / hamburger buttons, not a solid blue box.
+   Drop the uniform-header fill + ring here (the >=601px header keeps it). Covers
+   the resting AND --active states (the catalog route flags the cart --active even
+   when the drawer is closed). */
+@media (max-width: 600px) {
+  body .site-header .cart-btn,
+  body .site-header .cart-btn.cart-btn--active,
+  body:has(.home-catalog) .site-header .cart-btn,
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Desktop: force every header control (search field, FR, My Cart, logout) to the
+   SAME height with centered content so the cluster reads as one uniform set —
+   the FR / locale button was intrinsically taller (55px vs the others' 47px). */
+@media (min-width: 1025px) {
+  body .site-header .site-header__search,
+  body .site-header .locale-btn,
+  body .site-header .cart-btn,
+  body .site-header .cart-btn.cart-btn--active,
+  body:has(.home-catalog) .site-header .cart-btn,
+  body:has(.home-catalog) .site-header .cart-btn.cart-btn--active,
+  body .site-header .logout-btn {
+    height: 44px !important;
+    min-height: 44px !important;
+    align-self: center !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Tablet (601–1024): the FR / locale button used a translucent dark-overlay chip
+   while My Cart + logout are solid #39627c — unify it to the same solid fill so
+   every header control matches (they carry no inset ring at this width). */
+@media (min-width: 601px) and (max-width: 1024px) {
+  body .site-header .locale-btn,
+  body .site-header .locale-btn--header {
+    background: #39627c !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Desktop: enlarge the header brand lockup + APPAREL so the wordmark and text
+   fill more of the header height (the 42px mark left a lot of empty space above
+   and below). Desktop only — tablet/mobile keep their compact sizes. */
+@media (min-width: 1025px) {
+  .site-header .brand-cluster--split .brand-cluster__split-mark {
+    height: 54px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-word {
+    height: 21px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] {
+    height: 39px !important;
+  }
+  .site-header .brand-cluster--split .brand-cluster__apparel {
+    font-size: 1.4rem !important;
+  }
+  .site-header .brand-cluster--small.brand-cluster--lockup .brand-cluster__mark--lockup[src*="powered-lockup"] + .brand-cluster__apparel {
+    font-size: 1.48rem !important;
+  }
+}
+
+/* ─ Late header fixes (win over the accumulated state rules above) ────────────
+   1. Corflow: APPAREL sat a hair low of the CORFLOW SYNERGY wordmark baseline —
+      nudge it up 2px so their caps line up. Targeted by the adjacent wordmark's
+      filename so only Corflow is affected. */
+.site-header .brand-cluster--split .brand-cluster__split-word[src*="corflow-word"] + .brand-cluster__apparel {
+  transform: translateY(-2px) !important;
+}
+/* The wordmark + APPAREL block sits ~2px high of the header's vertical center
+   (the square mark is centered) — nudge the whole text group down to center it,
+   keeping the word/APPAREL alignment above intact. Corflow only. */
+.site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="corflow-word"]) .brand-cluster__split-text {
+  transform: translateY(2px) !important;
+}
+/* Airtech: APPAREL sits 2px low of the AIRTECH SYNERGY wordmark — nudge it up to
+   align, and a few px left to tighten the gap. Targeted by the airtech wordmark. */
+.site-header .brand-cluster--split .brand-cluster__split-word[src*="airtech-word"] + .brand-cluster__apparel {
+  transform: translate(-4px, -1px) !important;
+}
+/* Wired: scale the square mark down a touch, and pull APPAREL closer to the
+   WIRED SYNERGY wordmark (left) + align it to the wordmark. */
+.site-header .brand-cluster--split .brand-cluster__split-mark[src*="wired-mark"] {
+  height: 32px !important;
+}
+/* Powered: scale the square mark down (it read large next to the wordmark). */
+.site-header .brand-cluster--split .brand-cluster__split-mark[src*="powered-mark"] {
+  height: 44px !important;
+}
+/* Powered: scale the POWERED/SYNERGY wordmark up slightly, and drop APPAREL onto
+   the lower (SYNERGY) line's baseline so it reads as a continuation of SYNERGY. */
+.site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] {
+  height: 44px !important;
+}
+.site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] + .brand-cluster__apparel {
+  /* Match APPAREL's cap height to the SYNERGY line, pull it left, and sit it on
+     the SYNERGY baseline. */
+  font-size: 1.24rem !important;
+  transform: translate(-5px, -4px) !important;
+}
+/* Center the POWERED/SYNERGY + APPAREL block vertically (it sat ~2px high). */
+.site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="powered-word"]) .brand-cluster__split-text {
+  transform: translateY(2px) !important;
+}
+.site-header .brand-cluster--split .brand-cluster__split-word[src*="wired-word"] + .brand-cluster__apparel {
+  transform: translate(-4px, -1px) !important;
+}
+/* Wired: the wordmark + APPAREL block sits ~2px high of center — nudge it down to
+   vertically center it against the mark. */
+.site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="wired-word"]) .brand-cluster__split-text {
+  transform: translateY(2px) !important;
+}
+
+/* 2. Uniform hover for every header control. The cart used to jump to a bright
+      #8fa4b2 while logout/FR barely changed — now all share one gentle lift to
+      #47708c (one step up from the #39627c resting fill). High-specificity + late
+      position beats the earlier .cart-btn--active:hover / desktop-block rules. */
+body .site-header .locale-btn:hover,
+body .site-header .logout-btn:hover,
+body .site-header .cart-btn:hover,
+body .site-header .cart-btn.cart-btn--active:hover,
+body:has(.home-catalog) .site-header .cart-btn:hover,
+body:has(.home-catalog) .site-header .cart-btn.cart-btn--active:hover,
+body .site-header .site-header__search:hover,
+body .site-header .site-header__search:focus-within {
+  background: #47708c !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.16) !important;
+}
+body .site-header .locale-btn:hover svg,
+body .site-header .logout-btn:hover svg,
+body .site-header .cart-btn:hover svg,
+body .site-header .cart-btn.cart-btn--active:hover svg { stroke: #fff !important; }
+
+/* 3. Tighten the FR ↔ My Cart ↔ logout gaps to match the thinner Search ↔ FR gap
+      (the locale button's 4px margin-left). They were 7px. */
+@media (min-width: 1025px) {
+  body .site-header .cart-btn,
+  body .site-header .cart-btn.cart-btn--active { margin-left: 4px !important; }
+  body .site-header .logout-form { margin-left: 4px !important; }
+}
+
+/* 4. Footer brand: APPAREL text removed — scale the lockup up so it reads at a
+      confident size (it was small with lots of empty bar around it). Uses a
+      transform (not height) so the enlarged logo overflows into the footer's
+      existing padding WITHOUT making the footer bar any taller. */
+.site-footer .brand-cluster--lockup .brand-cluster__mark--lockup {
+  transform: scale(1.85);
+  transform-origin: left center;
+}
+/* Airtech's footer lockup (portal1.png) is a fuller logo than the others, so the
+   shared 1.85× makes it oversized — scale it down to sit in line with them. */
+.site-footer .brand-cluster--lockup .brand-cluster__mark--lockup[src*="portal1"] {
+  transform: scale(1.05);
+}
+/* Wired's footer lockup (wired-logo-white-text.png) is also fuller than Corflow's
+   — scale it down from the shared 1.85×. */
+.site-footer .brand-cluster--lockup .brand-cluster__mark--lockup[src*="wired-logo"] {
+  transform: scale(1.15);
+}
+/* Powered's footer lockup (powered-reversed.png) renders small — scale it UP past
+   the shared 1.85× so it reads at a confident size (transform only, so the footer
+   bar height is unchanged). */
+.site-footer .brand-cluster--lockup .brand-cluster__mark--lockup[src*="powered-reversed"] {
+  transform: scale(2.4);
+}
+
+/* Header: drop the light strip above the bar — the slate bar now fills to the
+   very top edge (no top gutter, square top corners) so there's no white/greige
+   top border on the header. Desktop. */
+@media (min-width: 1025px) {
+  .site-header__inner {
+    margin-top: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
   }
 }
