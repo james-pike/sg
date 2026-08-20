@@ -138,7 +138,8 @@ const BRAND_BY_SKU: Record<string, string> = {
   "SG-10": "Canada Sportswear", // CSW 24/7 "Flux" #L00545
   "SG-11": "Canada Sportswear", // CSW 24/7 "Surfer" #L00555
   "SG-12": "Scout",             // Hi-Vis "Scout" #L01150 vest (shown as Scout, not the CX2 maker)
-  "SG-14": "Cap America",       // Embroidered Cap #i8502 (Flexfit 110 style; Cap America supplier, like MN-5)
+  // SG-14 Flexfit Embroidered Cap (#i8502) carries "Flexfit" in the name, so it
+  // matches the Flexfit facet by name and needs no override.
   "SG-16": "Harriton",          // Advantage IL SS work shirt #M585
   "SG-17": "Harriton",          // Advantage IL workshirt #M585L
   // SG-19 DryBlend (Gildan) + SG-20/SG-24 (Carhartt) all carry their brand in the

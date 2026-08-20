@@ -227,7 +227,7 @@ export const allProducts = [
   },
   {
     "sku": "SG-14",
-    "name": "Embroidered Cap - Black",
+    "name": "Flexfit Embroidered Cap - Black",
     "category": "Headwear",
     "sizes": "One Size",
     "badge": "",
@@ -329,7 +329,7 @@ export const allProducts = [
   },
   {
     "sku": "SG-20",
-    "name": "Men's Carhartt Washed Duck Mock-Neck Vest",
+    "name": "Carhartt Washed Duck Mock-Neck Vest",
     "category": "Jackets",
     "sizes": "S - 5XL",
     "badge": "",
