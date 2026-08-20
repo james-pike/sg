@@ -14592,6 +14592,11 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
 .site-header .brand-cluster--split .brand-cluster__split-word[src*="airtech-word"] + .brand-cluster__apparel {
   transform: translate(-4px, -1px) !important;
 }
+/* Airtech: the AIRTECH SYNERGY wordmark + APPAREL block sat ~1-2px high — nudge
+   the whole block down to vertically center it against the mark. */
+.site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="airtech-word"]) .brand-cluster__split-text {
+  transform: translateY(1px) !important;
+}
 /* Wired: scale the square mark down a touch, and pull APPAREL closer to the
    WIRED SYNERGY wordmark (left) + align it to the wordmark. */
 .site-header .brand-cluster--split .brand-cluster__split-mark[src*="wired-mark"] {
@@ -14619,10 +14624,10 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
 .site-header .brand-cluster--split .brand-cluster__split-word[src*="wired-word"] + .brand-cluster__apparel {
   transform: translate(-4px, -1px) !important;
 }
-/* Wired: the wordmark + APPAREL block sits ~2px high of center — nudge it down to
-   vertically center it against the mark. */
+/* Wired: the wordmark + APPAREL block — nudge down to vertically center it. (+2px
+   read a touch low, so +1px.) */
 .site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="wired-word"]) .brand-cluster__split-text {
-  transform: translateY(2px) !important;
+  transform: translateY(1px) !important;
 }
 
 /* 2. Uniform hover for every header control. The cart used to jump to a bright
