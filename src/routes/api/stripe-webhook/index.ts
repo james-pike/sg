@@ -13,7 +13,7 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
 import { createClient } from "@libsql/client";
 import { verifyAndParseWebhook } from "../../../lib/stripe";
-import { sendConfirmationEmail } from "../../../lib/orders";
+import { sendConfirmationEmail, assignSynergyOrderNumber } from "../../../lib/orders";
 import type { OrderEmailData, OrderItem } from "../../../lib/orders";
 
 export const onPost: RequestHandler = async ({ request, env, json }) => {
@@ -74,6 +74,11 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
     args: [orderId as any],
   });
 
+  // The order is paid — NOW assign its SG number (once; idempotent on retries).
+  // Cancelled/abandoned orders never reach this point, so they never burn a
+  // number and paid numbers stay gap-free.
+  const orderNumber = await assignSynergyOrderNumber(db, orderId as any);
+
   // Send the confirmation email (items from DB, everything else from metadata).
   const apiKey = env.get("RESEND_API_KEY") || env.get("VITE_RESEND_API_KEY");
   if (apiKey) {
@@ -83,7 +88,7 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
     const staffAddresses = (env.get("ORDER_NOTIFY_TO") || env.get("VITE_ORDER_NOTIFY_TO") || "info@synergygroupapparel.ca")
       .split(",").map((a) => a.trim()).filter(Boolean);
     const emailData: OrderEmailData = {
-      orderNumber: m.order_number || "",
+      orderNumber,
       date: m.date || "",
       employee: {
         name: m.employee_name || "",

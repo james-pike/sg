@@ -186,3 +186,26 @@ export async function sendConfirmationEmail(cfg: SendEmailConfig, o: OrderEmailD
     console.error("Failed to send order email:", err);
   }
 }
+
+/**
+ * Assign the Synergy Group order number — ONCE, at payment time. Called from the
+ * Stripe webhook (real payment) and the dev simulated-payment path, right after
+ * the order is marked paid. Guarded by `order_no IS NULL` so webhook retries
+ * never reassign, and uses MAX(order_no)+1 (not a row count) so cancelled /
+ * abandoned orders never consume a number and paid numbers stay sequential with
+ * no gaps, regardless of the order payments actually land in. Returns "SG-<n>".
+ */
+export async function assignSynergyOrderNumber(
+  db: { execute: (q: { sql: string; args: any[] }) => Promise<{ rows: any[] }> },
+  orderId: number | bigint | string,
+): Promise<string> {
+  await db.execute({
+    sql: `UPDATE orders
+          SET order_no = (SELECT COALESCE(MAX(order_no), 0) + 1 FROM orders WHERE vendor LIKE 'synergygroup%')
+          WHERE id = ? AND order_no IS NULL`,
+    args: [orderId as any],
+  });
+  const r = await db.execute({ sql: "SELECT order_no FROM orders WHERE id = ?", args: [orderId as any] });
+  const n = Number((r.rows[0] as any)?.order_no) || 0;
+  return n ? `SG-${n}` : "";
+}

@@ -6,21 +6,39 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import { routeLoader$, Link } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { createClient } from "@libsql/client";
 import { retrieveCheckoutSession } from "../../../lib/stripe";
 import { useAuthCheck } from "../../layout";
 import { portalBrand } from "../../../portals";
 
 export const useSession = routeLoader$(async ({ query, env }) => {
+  // Dev simulated-payment path carries the assigned number directly (no Stripe).
+  const devOrder = query.get("order") || "";
+  if (devOrder) return { ok: true as const, orderNumber: devOrder, paid: true };
+
   const sessionId = query.get("session_id") || "";
   const stripeKey = env.get("STRIPE_SECRET_KEY");
   if (!sessionId || !stripeKey) return { ok: false as const, orderNumber: "", paid: false };
   try {
     const s = await retrieveCheckoutSession(stripeKey, sessionId);
-    return {
-      ok: true as const,
-      orderNumber: s.metadata?.order_number || "",
-      paid: s.payment_status === "paid",
-    };
+    const paid = s.payment_status === "paid";
+    // The SG number is assigned by the webhook at payment, so read it from the DB
+    // by order_id (it's no longer in Stripe metadata). May be empty if the webhook
+    // hasn't landed yet when this page loads — the confirmation email always
+    // carries the number regardless.
+    let orderNumber = "";
+    const orderId = s.metadata?.order_id || "";
+    const tursoUrl = env.get("TURSO_URL") || env.get("VITE_TURSO_URL");
+    const tursoToken = env.get("TURSO_AUTH_TOKEN") || env.get("VITE_TURSO_AUTH_TOKEN");
+    if (orderId && tursoUrl) {
+      try {
+        const db = createClient({ url: tursoUrl, authToken: tursoToken || undefined });
+        const r = await db.execute({ sql: "SELECT order_no FROM orders WHERE id = ?", args: [orderId] });
+        const n = Number((r.rows[0] as any)?.order_no) || 0;
+        if (n) orderNumber = `SG-${n}`;
+      } catch { /* ignore — fall back to the generic confirmation message */ }
+    }
+    return { ok: true as const, orderNumber, paid };
   } catch {
     return { ok: false as const, orderNumber: "", paid: false };
   }

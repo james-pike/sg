@@ -18,7 +18,7 @@ import type { Locale, TranslationKey } from "../i18n";
 import { allProducts, colorName } from "./apparel/products";
 import { PORTALS, PORTAL_IDS, getPortal } from "../portals";
 import { portalizeProduct } from "../portal-images";
-import { sendConfirmationEmail } from "../lib/orders";
+import { sendConfirmationEmail, assignSynergyOrderNumber } from "../lib/orders";
 import type { OrderEmailData } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
 
@@ -233,14 +233,10 @@ export const useSubmitOrder = routeAction$(
         ],
       });
       orderId = (result.lastInsertRowid as any) ?? null;
-      if (orderId != null) {
-        const seq = await db.execute({
-          sql: "SELECT COUNT(*) AS n FROM orders WHERE vendor LIKE 'synergygroup%' AND id <= ?",
-          args: [orderId as any],
-        });
-        const n = Number((seq.rows[0] as any)?.n) || Number(orderId);
-        orderNumber = `SG-${n}`;
-      }
+      // NB: the SG-<n> order number is NOT assigned here — the row is still only
+      // 'awaiting_payment'. It's assigned once, at payment time (dev simulated
+      // path below / the Stripe webhook), so cancelled orders never burn a number
+      // and paid numbers stay gap-free. See assignSynergyOrderNumber().
     } catch (err) {
       console.error("Failed to save order to database:", err);
       return fail(500, { message: "Order could not be saved. Please try again." });
@@ -292,9 +288,11 @@ export const useSubmitOrder = routeAction$(
         sql: "UPDATE orders SET status = 'paid', paid_at = datetime('now') WHERE id = ?",
         args: [orderId as any],
       });
+      // Payment (simulated) succeeded — NOW the order earns its SG number.
+      orderNumber = await assignSynergyOrderNumber(db, orderId as any);
       if (apiKey) await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, buildEmailData());
       console.warn(`[DEV] Simulated card payment for order ${orderNumber} — no Stripe key set.`);
-      return { redirectUrl: `${siteUrl}/checkout/success/?test=1`, orderNumber };
+      return { redirectUrl: `${siteUrl}/checkout/success/?test=1&order=${encodeURIComponent(orderNumber)}`, orderNumber };
     }
 
     // ---- Hand off the customer's half to Stripe Checkout ----
@@ -303,15 +301,17 @@ export const useSubmitOrder = routeAction$(
         secretKey: stripeKey!,
         amountCents: customerCents,
         currency: "cad",
-        description: `${companyName} apparel order ${orderNumber} — 50% deposit (remaining 50% invoiced to ${companyName})`,
+        // No SG number in the description — it isn't assigned until this payment
+        // completes (the webhook assigns it and puts it in the email).
+        description: `${companyName} apparel order — 50% deposit (remaining 50% invoiced to ${companyName})`,
         successUrl: `${siteUrl}/checkout/success/?session_id={CHECKOUT_SESSION_ID}`,
         cancelUrl: `${siteUrl}/checkout/cancelled/`,
         customerEmail: (employee.email || "").trim() || undefined,
         // Everything the webhook needs to finalize + email, WITHOUT storing PII
-        // in our DB. Items are loaded from the order row by id.
+        // in our DB. Items are loaded from the order row by id; the order number
+        // is assigned by the webhook at payment (not carried here).
         metadata: {
           order_id: String(orderId ?? ""),
-          order_number: orderNumber,
           employee_name: employee.name || "",
           customer_email: (employee.email || "").trim(),
           customer_phone: employee.phone || "",
