@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { LocaleContext, t } from "../../../i18n";
 import { allProducts, colorName, categoryLabel } from "../products";
+import { TALL_PRICE } from "../../../lib/pricing";
 import { portalizeProduct } from "../../../portal-images";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../utils";
 import { LoginTypeContext, useAuthCheck } from "../../layout";
@@ -111,7 +112,8 @@ export default component$(() => {
   // Per-variant price overrides. The Tall cut runs a higher price on some SKUs
   // (e.g. Gildan 2000 talls are $18 vs $8 regular); everything else keeps the
   // product's base price for both variants.
-  const TALL_PRICE: Record<string, number> = { "SG-1": 18, "SG-20": 99.99, "SG-24": 139.99 };
+  // Tall upcharges live in src/lib/pricing.ts — the same source the server prices
+  // orders from, so the display and the charge can't drift.
   const effectivePrice = useComputed$(() => {
     const p = product.value;
     if (!p) return 0;

@@ -336,13 +336,13 @@ export const allProducts = [
     "colors": [
       "#1a1a18"
     ],
-    "price": 89.99,
+    "price": 90,
     "img": "/portals/104277-cf.webp",
     "imgs": [
       "/portals/104277-cf.webp"
     ],
-    "material": "12-ounce, 100% ringspun cotton washed duck",
-    "details": "Loose fit, Sherpa lining for warmth, Map pocket on left chest with zipper closure, Two large sherpa-lined front pockets, Two inside pockets, Droptail hem for added coverage, Back length: Large Regular 29.25\" / Large Tall 31.25\", Replaces V33, #104277"
+    "material": "100% ringspun cotton washed duck",
+    "details": "Warm Sherpa lining, Map pocket on left chest with zipper closure, Two large sherpa-lined front pockets, Droptail hem for added coverage,  #104277"
   },
   {
     "sku": "SG-21",
@@ -379,6 +379,23 @@ export const allProducts = [
     "details": "Moisture-wicking performance pique, Anti-odor finish, Self-fabric collar, Three-button placket with dyed-to-match buttons, Open hem sleeves, #16398"
   },
   {
+    "sku": "SG-24",
+    "name": "Carhartt Iconic Firm Duck Active Jac",
+    "category": "Jackets",
+    "sizes": "S - 5XL",
+    "badge": "",
+    "colors": [
+      "#1a1a18"
+    ],
+    "price": 120,
+    "img": "/portals/106673-cf.webp",
+    "imgs": [
+      "/portals/106673-cf.webp"
+    ],
+    "material": "100% ring-spun cotton duck",
+    "details": "Quilted-flannel lining in body, Quilted-nylon lining in sleeves, Attached quilted-flannel-lined hood with draw-cord closure, Two inside pockets for additional storage, Rib-knit cuffs, #106673"
+  },
+  {
     "sku": "SG-23",
     "name": "Vice Pro Plus Golf Balls (12)",
     "category": "Accessories",
@@ -392,23 +409,6 @@ export const allProducts = [
     ],
     "material": "",
     "details": "Box of 12 custom-printed Vice Pro Plus golf balls"
-  },
-  {
-    "sku": "SG-24",
-    "name": "Men's Carhartt Iconic J140 Firm Duck Active Jac",
-    "category": "Jackets",
-    "sizes": "S - 5XL",
-    "badge": "",
-    "colors": [
-      "#1a1a18"
-    ],
-    "price": 129.99,
-    "img": "/portals/106673-cf.webp",
-    "imgs": [
-      "/portals/106673-cf.webp"
-    ],
-    "material": "12-ounce, heavyweight firm-hand, 100% ring-spun cotton duck",
-    "details": "Warmth Rating: Level 3 - Warmest, Loose fit, Quilted-flannel lining in body, Quilted-nylon lining in sleeves, Filling: 100% polyester, Attached quilted-flannel-lined hood with draw-cord closure, Two inside pockets for additional storage, Rib-knit cuffs and waist keep out the cold, Back length: Regular Medium 29\" / Tall Medium 31\", Formerly known as the J140, Imported, #106673"
   }
 ];
 

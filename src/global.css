@@ -5540,7 +5540,9 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #ffffff
 .product-modal__actions {
   display: flex;
   gap: 0.5rem;
-  margin-top: 1rem;
+  /* A few px more than the field rhythm so the gap above Add to Cart matches the
+     gap above the QUANTITY label (the qty control sits tight to its label). */
+  margin-top: calc(1rem + 3px);
 }
 .product-modal__add {
   display: inline-flex;

@@ -21,6 +21,14 @@ import { portalizeProduct } from "../portal-images";
 import { sendConfirmationEmail, assignSynergyOrderNumber } from "../lib/orders";
 import type { OrderEmailData } from "../lib/orders";
 import { createCheckoutSession } from "../lib/stripe";
+import { signPortal, verifyPortal } from "../lib/session";
+import { unitPrice } from "../lib/pricing";
+
+/** Secret used to sign the auth cookie. MUST be set in production (Cloudflare
+ *  env); the dev fallback keeps local `npm run dev` working but is not secret. */
+function sessionSecret(env: { get: (k: string) => string | undefined }): string {
+  return env.get("APP_SESSION_SECRET") || env.get("VITE_APP_SESSION_SECRET") || "sg-dev-insecure-session-secret";
+}
 
 const AUTH_COOKIE = "ce_auth"; // v2: orders persist to db
 const LOCALE_COOKIE = "ce_locale";
@@ -82,18 +90,20 @@ export const useLocaleLoader = routeLoader$(({ cookie }) => {
 // so the many `loginType.value === "..."` comparisons across the app still work.
 type LoginType = string | null;
 
-function getLoginType(cookie: Cookie): LoginType {
-  const val = cookie.get(AUTH_COOKIE)?.value;
-  if (val && PORTAL_IDS.includes(val)) return val;
+async function getLoginType(cookie: Cookie, secret: string): Promise<LoginType> {
+  // The cookie must carry a valid HMAC signature — a bare "portal2" (or any
+  // forged value) fails verification and reads as logged-out.
+  const portalId = await verifyPortal(cookie.get(AUTH_COOKIE)?.value, secret);
+  if (portalId && PORTAL_IDS.includes(portalId)) return portalId;
   return null;
 }
 
-function isAuthenticated(cookie: Cookie): boolean {
-  return getLoginType(cookie) !== null;
+async function isAuthenticated(cookie: Cookie, secret: string): Promise<boolean> {
+  return (await getLoginType(cookie, secret)) !== null;
 }
 
-export const useAuthCheck = routeLoader$(({ cookie }) => {
-  const loginType = getLoginType(cookie);
+export const useAuthCheck = routeLoader$(async ({ cookie, env }) => {
+  const loginType = await getLoginType(cookie, sessionSecret(env));
   return { loggedIn: loginType !== null, loginType: loginType || PORTALS[0].id };
 });
 
@@ -102,7 +112,7 @@ export const useCartCountLoader = routeLoader$(({ cookie }) => {
 });
 
 export const useLogin = routeAction$(
-  ({ portal, password }, { cookie, fail, env }) => {
+  async ({ portal, password }, { cookie, fail, env }) => {
     // Each portal has its own password. Configure them via env vars
     // PORTAL1_PASSWORD … PORTAL4_PASSWORD (VITE_-prefixed also accepted). When a
     // portal's env var is unset, its dev fallback is the portal id itself, so a
@@ -115,7 +125,8 @@ export const useLogin = routeAction$(
       env.get(`${key}_PASSWORD`) || env.get(`VITE_${key}_PASSWORD`) || portal;
 
     if (password === expected) {
-      cookie.set(AUTH_COOKIE, portal, {
+      // Store a SIGNED value (portalId.<hmac>) so the cookie can't be forged.
+      cookie.set(AUTH_COOKIE, await signPortal(portal, sessionSecret(env)), {
         path: "/",
         httpOnly: true,
         secure: true,
@@ -140,10 +151,10 @@ export const useLogout = routeAction$(async (_, { cookie }) => {
 
 export const useSubmitOrder = routeAction$(
   async (data, { fail, env, cookie, url }) => {
-    if (!isAuthenticated(cookie)) {
+    const portalId = await getLoginType(cookie, sessionSecret(env));
+    if (!portalId) {
       return fail(401, { message: "Not authenticated" });
     }
-    const portalId = getLoginType(cookie);
     const vendor = "synergygroup"; // Synergy Group orders (numbered SG-<n>).
     // The remaining half is invoiced to the SIGNED-IN portal's company, e.g.
     // "Corflow Synergy". This is the AR party we later push to QuickBooks.
@@ -167,7 +178,20 @@ export const useSubmitOrder = routeAction$(
     }
     const taxRate = PROVINCE_TAX[province];
     const taxPct = +(taxRate * 100).toFixed(3);
-    const subtotal = items.reduce((sum, i) => sum + (Number(i.price) || 0) * i.quantity, 0);
+    // SECURITY: price every line from the catalog by SKU — NEVER the client's
+    // `price` (a tampered request could set it to anything). Reject the order if
+    // any line references an unknown SKU, and stamp each line with the authoritative
+    // price so what's stored/emailed matches what's charged.
+    const pricedItems: typeof items = [];
+    for (const it of items) {
+      const p = unitPrice(it.sku, it.variant);
+      if (p == null) {
+        return fail(400, { message: "One or more items are no longer available. Please refresh your cart and try again." });
+      }
+      pricedItems.push({ ...it, price: p });
+    }
+    const items2 = pricedItems;
+    const subtotal = items2.reduce((sum, i) => sum + i.price * i.quantity, 0);
     const tax = subtotal * taxRate;
     const total = +(subtotal + tax).toFixed(2);
 
@@ -220,7 +244,7 @@ export const useSubmitOrder = routeAction$(
           employee.name || "",
           "",
           "",
-          JSON.stringify(items),
+          JSON.stringify(items2),
           total,
           status,
           "split",
@@ -266,7 +290,7 @@ export const useSubmitOrder = routeAction$(
         department: employee.department, provinceName, provinceCode: province,
         address1: employee.address1, city: employee.city, postal: employee.postal, po: employee.po,
       },
-      items: items as any,
+      items: items2 as any,
       subtotal, taxPct, tax, total,
       payment: { method: "split", customerAmount, companyAmount, companyName },
     });
