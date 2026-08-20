@@ -642,12 +642,17 @@ export default component$(() => {
       {imgFullscreen.value && (
         <div class="product-fullscreen" onClick$={() => (imgFullscreen.value = false)}>
           <button class="product-fullscreen__close" aria-label="Close fullscreen" onClick$={(e) => { e.stopPropagation(); imgFullscreen.value = false; }}>&times;</button>
-          <img
-            src={(viewImgs.value)[imgIndex.value]}
-            alt={p.name}
-            class="product-fullscreen__img"
-            onClick$={(e) => e.stopPropagation()}
-          />
+          {/* Serve the optimized .webp sibling (like the carousel) so the enlarged
+              view doesn't fall back to a stale/unoptimized .jpg/.png original. */}
+          <picture>
+            <source srcset={(viewImgs.value)[imgIndex.value].replace(/\.(jpe?g|png)$/i, ".webp")} type="image/webp" />
+            <img
+              src={(viewImgs.value)[imgIndex.value]}
+              alt={p.name}
+              class="product-fullscreen__img"
+              onClick$={(e) => e.stopPropagation()}
+            />
+          </picture>
         </div>
       )}
     </div>
