@@ -355,11 +355,25 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
   const searchOpen = useSignal(false); // tablet: search field opens over the tab bar
   const tabletCols = useSignal<number | "list">(3);
 
+  // Map a URL hash back to a category. The PDP breadcrumb links to
+  // `/apparel/#<slug>` where slug = category.toLowerCase().replace(/\s+/g,"-"),
+  // so we DERIVE the slugs from the live tab list — a hardcoded map silently
+  // drifted from the real categories and sent every crumb but "jackets" to All.
+  // The legacy footer-link hashes (fr/shirts/hats/swag/new-hire-kit) are kept
+  // on top so those links keep working.
+  const slugifyCat = (c: string) => c.toLowerCase().replace(/\s+/g, "-");
   const HASH_TO_CAT: Record<string, string> = isSingleCat.value
     ? {}
-    : isSafety.value
-      ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
-      : { "new-hire-kit": "New Hire Kit", "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" };
+    : {
+        ...(isSafety.value
+          ? { "shirts": "Shirts", "hats": "Hats", "fr": "Flame Resistant" }
+          : { "new-hire-kit": "New Hire Kit", "shirts": "Shirts", "jackets": "Jackets", "hats": "Hats", "swag": "SWAG" }),
+        ...Object.fromEntries(
+          (isSafety.value ? SAFETY_CATEGORIES : CLOTHING_CATEGORIES)
+            .filter((c) => c !== "All")
+            .map((c) => [slugifyCat(c), c]),
+        ),
+      };
 
   const baseProducts = useComputed$(() => {
     // Same SKUs for every portal — only the images differ, resolved per portal.
