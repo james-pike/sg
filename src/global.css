@@ -3971,6 +3971,13 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   background: var(--ce-white);
   position: relative;
 }
+/* Catalog listing: the product grid carries its own min-height (calc(100vh - …))
+   sized to leave room for the footer within the first viewport. .apparel-page's
+   100vh is measured from its OWN top (which sits below the fixed header), so it
+   overshoots by that offset and opens a dot-pattern gap between a short grid and
+   the footer. Drop the 100vh here so the grid's fill drives the height and the
+   footer meets the grid. */
+.apparel-page:has(.home-catalog) { min-height: 0; }
 
 .apparel-catalog {
   max-width: var(--site-max);
