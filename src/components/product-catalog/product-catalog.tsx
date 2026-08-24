@@ -446,7 +446,12 @@ export const ProductCatalog = component$<{ class?: string }>(({ "class": cls }) 
       // re-scrolling while the keyboard opens leaves a gap above the tabs.
       const catalog = document.querySelector(".home-catalog") as HTMLElement | null;
       if (!catalog) return;
-      const headerH = window.innerWidth < 601 ? 64 : window.innerWidth <= 1024 ? 67 : 66;
+      // Measure the header's pinned bottom (same source scrollProductsBelowBar +
+      // the header search button use). The old hardcoded 67 was ~15px short of
+      // the real tablet header, so on the always-pinned apparel route it computed
+      // a target ~15px below the current spot, cleared the 8px threshold, and
+      // scrolled the items up under the tab bar on every search-open.
+      const headerH = stickyTop();
       const stickyPos = catalog.getBoundingClientRect().top + window.scrollY - headerH;
       // Only scroll for a MEANINGFUL gap (the hero case). The hardcoded headerH
       // drifts a few px from the catalog's real pinned top, so the old +2 fudge

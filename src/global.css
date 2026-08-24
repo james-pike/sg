@@ -6310,7 +6310,9 @@ details[open] > .cart-drawer__checkout-title::after {
 .cart-drawer__summary,
 .checkout-modal__form,
 .checkout-modal__pay {
-  background: #ebeef0 !important;
+  /* Neutral, lighter panel (was the blue-grey #ebeef0) so the cart/checkout
+     read like the lighter PDP info area rather than distinctly blue. */
+  background: #f2f2f1 !important;
   border: none !important;
   border-radius: 0 !important;
   margin: 4px 4px 0 !important;
@@ -14061,7 +14063,7 @@ body:has(.cart-drawer) .pdp-breadcrumb {
 /* Cart page (item list) shares the checkout page's panel background so the two
    steps match — the cart view was plain white against the checkout's blue/gray. */
 .cart-drawer__items {
-  background: #ebeef0 !important;
+  background: #f2f2f1 !important;
 }
 @media (min-width: 1025px) {
   .cart-drawer__items {
