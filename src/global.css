@@ -4697,6 +4697,12 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   /* Search field takes the hamburger's space too: hide it while search is open
      so the flex field expands over it (the field's own X closes search). */
   .site-header--search-open .hamburger-btn { display: none; }
+  /* When the MENU is open, the hamburger toggles to an X and a rule forces it
+     back to display:flex (body:has(.nav-drawer-overlay) …). So opening search
+     with the menu open left that X sitting over the field. Hide it here too —
+     higher specificity so it beats the menu-open force — so the search field
+     covers the X exactly as it covers the hamburger when the menu is closed. */
+  body:has(.nav-drawer-overlay) .site-header.site-header--search-open .hamburger-btn { display: none !important; }
 }
 /* Narrow phones (incl. iPhone SE, 375px): drop the logo gap so the field
    keeps its width. */
@@ -7672,7 +7678,10 @@ details[open] > .cart-drawer__checkout-title::after {
   .modal-overlay:has(.cart-drawer) {
     position: fixed;
     inset: 0;
-    top: 82px;
+    /* 1px under the header's bottom (was flush at 82px) so the cart's secondary
+       bar overlaps the header instead of meeting it edge-to-edge — closes the
+       sub-pixel seam where scrolled content flashed through. */
+    top: 81px;
     background: var(--ce-gray-200);
     backdrop-filter: none;
     z-index: 99;
@@ -7887,15 +7896,16 @@ details[open] > .cart-drawer__checkout-title::after {
   .site-header .cart-btn svg,
   .site-header .logout-btn svg { width: 20px; height: 20px; }
   /* Tablet: the open search field absolutely overlays the nav (pixel-perfect,
-     zero shift) — buttons stay as visibility:hidden to hold the nav width. The
-     negative left extends the field past the nav toward the logo (a moderate
-     amount) without reaching it; right inset matches the 1px top/bottom. */
+     zero shift) — buttons stay as visibility:hidden to hold the nav width. It
+     stays WITHIN the nav (positive left inset, not a negative pull toward the
+     logo): the old left:-90px extended the field over the portal logo. A small
+     positive left leaves a clear gap between the logo and the field. */
   .site-header--search-open .site-header__nav > :not(.site-header__search) { visibility: hidden; }
   .site-header--search-open .site-header__search {
     position: absolute;
     top: 1px;
     bottom: 1px;
-    left: -90px;
+    left: 12px;
     right: 2px;
   }
   /* Cart button always gets the yellow recessed shade when the header is visible
@@ -11306,12 +11316,19 @@ details[open] > .cart-drawer__checkout-title::after {
 .site-header--hero-hidden { height: var(--sg-header-h) !important; }
 .home-catalog__header,
 .apparel-titlebar,
-.pdp-breadcrumb { top: var(--sg-header-pin) !important; }
+.pdp-breadcrumb {
+  /* Pin 1px UNDER the header's bottom edge rather than flush against it.
+     Flush (top: --sg-header-pin) leaves a shared seam line where, at fractional
+     scroll offsets, the header and this strip round to positions 1px apart and
+     the scrolling content behind flashes through. Overlapping the header by 1px
+     means one of the two opaque bars always covers that row. */
+  top: calc(var(--sg-header-pin) - 1px) !important;
+}
 /* The apparel route pins these as `fixed` rather than sticky on phones — same
-   offset, same source. */
+   offset, same source (and the same 1px lap to close the seam). */
 @media (max-width: 600px) {
   .apparel-page .home-catalog__header,
-  .apparel-page .pdp-breadcrumb { top: var(--sg-header-pin) !important; }
+  .apparel-page .pdp-breadcrumb { top: calc(var(--sg-header-pin) - 1px) !important; }
 }
 
 /* Desktop: tighten the product page's HORIZONTAL rhythm one step — the gutter
@@ -13944,7 +13961,10 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     padding: 0 !important;
   }
   .apparel-titlebar__action.apparel-titlebar__action--tablet-cols {
-    background: #98aab6 !important;
+    /* Selected-tab highlight (--sg-bar-hi), not the light-blue #98aab6 — a subtle
+       grey control on the grey bar, matching the active tab / desktop Catalog
+       button, with a dark icon (see the every-breakpoint svg rule below). */
+    background: var(--sg-bar-hi) !important;
     align-self: stretch !important;
     height: auto !important;
     display: flex !important;
@@ -13958,8 +13978,10 @@ body:has(.home-catalog) .site-header .cart-btn .cart-btn__label { color: #fff !i
     border-radius: 0 !important;
     box-shadow: none !important;
   }
-  /* Square cell (width = the 50px bar height) so the toggle reads as a square. */
-  .home-catalog__right { width: 50px !important; min-width: 50px !important; flex: 0 0 50px !important; }
+  /* Square cell (width = the 50px bar height) so the toggle reads as a square.
+     Drop the base .home-catalog__right margin-right so the toggle sits flush to
+     the bar's right edge, like the tabs sit flush on the left. */
+  .home-catalog__right { width: 50px !important; min-width: 50px !important; flex: 0 0 50px !important; margin-right: 0 !important; }
   /* Big, obvious white icon centered in the square blue toggle cell. */
   .apparel-titlebar__action--tablet-cols svg { stroke: #fff !important; width: 30px !important; height: 30px !important; stroke-width: 2.2 !important; }
   /* Scale the header logo up so it fills more of the tablet header height. */
@@ -14279,34 +14301,97 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   margin: 0 !important;
   transform: none !important;
 }
-/* Mobile: stack the wordmark ABOVE APPAREL so the two lines together rise to
-   the symbol's height. */
+/* Mobile: scaled-down lockup, and APPAREL sits BESIDE the wordmark (row, like
+   desktop) rather than stacked below it — a shorter, tighter header logo. */
 @media (max-width: 600px) {
   .site-header .brand-cluster--split {
-    gap: 0.45rem !important;
+    gap: 0.4rem !important;
   }
   .site-header .brand-cluster--split .brand-cluster__split-mark {
-    height: 35px !important;
+    height: 25px !important;
   }
   .site-header .brand-cluster--split .brand-cluster__split-mark[src*="corflow-mark"] {
-    height: 32px !important;
+    height: 25px !important;
     margin-left: -3px !important;
   }
+  /* Wired's square mark read too large; bring it down. `body` prefix so it beats
+     the base 32px wired-mark rule that sits later in the file. */
+  body .site-header .brand-cluster--split .brand-cluster__split-mark[src*="wired-mark"] {
+    height: 22px !important;
+  }
   .site-header .brand-cluster--split .brand-cluster__split-text {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    gap: 4px !important;
+    /* Row: APPAREL sits to the RIGHT of the wordmark (…SYNERGY), not below it. */
+    flex-direction: row !important;
+    align-items: baseline !important;
+    justify-content: flex-start !important;
+    gap: 0.32rem !important;
   }
   .site-header .brand-cluster--split .brand-cluster__split-word {
-    height: 15px !important;
+    height: 13px !important;
   }
-  .site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] {
-    height: 27px !important;
+  /* Powered (mobile): scale the 2-line POWERED/SYNERGY wordmark + square mark
+     down from the oversized base rules. `body` prefix so these beat the base
+     powered rules later in the file (44px each). The mark stays at 28px; the
+     wordmark + APPAREL are scaled up a touch from their smallest so they read
+     midway. */
+  body .site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] {
+    height: 32px !important;
+  }
+  body .site-header .brand-cluster--split .brand-cluster__split-mark[src*="powered-mark"] {
+    height: 32px !important;
+  }
+  body .site-header .brand-cluster--split .brand-cluster__split-word[src*="powered-word"] + .brand-cluster__apparel {
+    font-size: 1rem !important;
+    /* Base pulls it to translate(-5px,-4px); drop it down a couple px. */
+    transform: translate(-5px, -2px) !important;
   }
   .site-header .brand-cluster--split .brand-cluster__apparel {
-    font-size: 0.9rem !important;
+    font-size: 0.82rem !important;
     letter-spacing: 0.02em !important;
+    transform: none !important;
+  }
+  /* Corflow: APPAREL BELOW the wordmark (stacked), left-aligned under it —
+     overrides the shared row layout above for this portal only. */
+  .site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="corflow-word"]) .brand-cluster__split-text {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 2px !important;
+  }
+  /* Airtech: like Corflow — APPAREL stacked below the wordmark — plus a slightly
+     larger square mark. Reset the base airtech APPAREL nudge so it aligns left
+     under the wordmark instead of being pulled -4px in. */
+  .site-header .brand-cluster--split .brand-cluster__split-mark[src*="airtech-mark"] {
+    height: 40px !important;
+  }
+  .site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="airtech-word"]) .brand-cluster__split-text {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 2px !important;
+  }
+  /* Align APPAREL's left edge with the wordmark's start. The base airtech rule
+     pulls it -4px (for the desktop/tablet row layout) and, sitting later in the
+     file, wins over a same-specificity mobile rule — so add `body` to outrank it
+     here. transform:none leaves APPAREL flush at the column's flex-start, exactly
+     under the AIRTECH wordmark above it. */
+  body .site-header .brand-cluster--split .brand-cluster__split-word[src*="airtech-word"] + .brand-cluster__apparel {
+    transform: none !important;
+  }
+  /* Wired: like the others — APPAREL stacked BELOW the wordmark (not to the
+     right). Nudge APPAREL right a touch to sit under the visible "WIRED" (its
+     wordmark image has a small transparent lead-in). */
+  .site-header .brand-cluster--split:has(.brand-cluster__split-word[src*="wired-word"]) .brand-cluster__split-text {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 2px !important;
+  }
+  /* `body` prefix so it beats the later base wired apparel rule. The wired
+     wordmark image has ~1.4px (displayed) transparent lead-in, so nudge APPAREL
+     right that much to sit under the visible "WIRED". */
+  body .site-header .brand-cluster--split .brand-cluster__split-word[src*="wired-word"] + .brand-cluster__apparel {
+    transform: translateX(2px) !important;
   }
 }
 /* The Powered lockup's wordmark is a hair smaller, so trim APPAREL beside it to
@@ -14693,3 +14778,9 @@ body .site-header .cart-btn.cart-btn--active:hover svg { stroke: #fff !important
 
 /* PDP uses the same even card outline as the cart/catalog (defined above) — no
    separate override, so every container's border + shadow reads the same. */
+
+/* ── Tablet header: square the logout button corners to match the (square) cart,
+   ported from mn2. A late rule so it wins the base 4px header-button radius. */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .site-header .logout-btn { border-radius: 0 !important; }
+}

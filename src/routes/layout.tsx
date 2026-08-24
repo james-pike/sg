@@ -14,8 +14,9 @@ import {
 import type { Cookie } from "@builder.io/qwik-city";
 import { createClient } from "@libsql/client";
 import { LocaleContext, t } from "../i18n";
-import type { Locale, TranslationKey } from "../i18n";
-import { allProducts, colorName } from "./apparel/products";
+import type { Locale } from "../i18n";
+import { allProducts, colorName, categoryLabel } from "./apparel/products";
+import { CLOTHING_CATEGORIES, CATEGORY_ICONS } from "../components/product-catalog/product-catalog";
 import { PORTALS, PORTAL_IDS, getPortal } from "../portals";
 import { portalizeProduct } from "../portal-images";
 import { sendConfirmationEmail, assignSynergyOrderNumber } from "../lib/orders";
@@ -1095,11 +1096,9 @@ export default component$(() => {
         </div>
       )}
 
-      {/* Tablet widths aren't finished — CSS shows this over everything between
-          601px and 1024px, so only mobile and desktop render the site. */}
-      <div class="tablet-notice" aria-live="polite">
-        <span class="tablet-notice__title">{t("tablet.title", locale.value)}</span>
-      </div>
+      {/* Mobile + tablet cover removed while building out those layouts. The
+          .tablet-notice CSS (max-width:1024px) remains, ready to restore if the
+          <=1024px "not finished" cover is needed again. */}
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
       <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
@@ -1342,19 +1341,16 @@ export default component$(() => {
                 </Link>
               )}
               {loginType.value !== "tech" && (() => {
-                // Mirror the catalog tabs (CLOTHING_CATEGORIES in
-                // product-catalog.tsx, minus "All") so the menu's categories and
-                // labels always match the tab bar. "Footwear" is the tab that
-                // groups the Safety Boots / Safety Shoes data categories.
-                const NAV_CATS: { key: TranslationKey; cat: string; icon: string }[] = [
-                  { key: "cat.Jackets", cat: "Jackets", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l5 6v12a2 2 0 01-2 2h-3V12h-6v10H6a2 2 0 01-2-2V8l5-6"/><path d="M9 2a3 3 0 006 0"/><line x1="12" y1="12" x2="12" y2="22"/></svg>' },
-                  { key: "cat.Sweaters", cat: "Sweaters", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 3 4 6 2 9.5 5 12v9h14v-9l3-2.5L20 6l-4.5-3-1.3 1.7a3.4 3.4 0 0 1-4.4 0z"/><path d="M9 4.2c.9 1.2 4.1 1.2 5 0"/></svg>' },
-                  { key: "cat.Shirts",  cat: "Shirts",  icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>' },
-                  { key: "cat.Polos",   cat: "Polos",   icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2l-4 4-4-4-4.38 1.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/><path d="M12 6v5"/></svg>' },
-                  { key: "cat.CapsBeanies", cat: "Hats", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 00-7 7c0 3 2 5 3 6h8c1-1 3-3 3-6a7 7 0 00-7-7z"/><path d="M5 15h14"/><path d="M6 18h12"/></svg>' },
-                  { key: "cat.SWAG",    cat: "SWAG",    icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>' },
-                  ...(loginType.value !== "safety" ? [{ key: "nav.officewelcomekit" as TranslationKey, cat: "New Hire Kit", icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>' }] : []),
-                ];
+                // Derive straight from the tab list (CLOTHING_CATEGORIES minus
+                // "All") + its icon map, so the menu's categories, order and
+                // labels always mirror the tab bar and can't drift (they used to
+                // be a hardcoded mn2 list that still carried Office Welcome Kit).
+                const NAV_CATS = CLOTHING_CATEGORIES
+                  .filter((c) => c !== "All")
+                  .map((cat) => ({ cat, icon: CATEGORY_ICONS[cat] || "" }));
+                // The catalog groups the Safety Boots / Safety Shoes data
+                // categories under a "Footwear" tab; every other tab is a direct
+                // category match.
                 const catMatches = (pCat: string, tabCat: string) =>
                   tabCat === "Footwear"
                     ? (pCat === "Safety Boots" || pCat === "Safety Shoes")
@@ -1387,7 +1383,7 @@ export default component$(() => {
                                 }}
                               >
                                 <span class="nav-drawer__cat-icon" dangerouslySetInnerHTML={c.icon} />
-                                {t(c.key, locale.value)}
+                                {categoryLabel(c.cat, locale.value)}
                               </span>
                               <svg class="nav-drawer__cat-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                             </Accordion.Trigger>
