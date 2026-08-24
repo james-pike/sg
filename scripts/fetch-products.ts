@@ -18,12 +18,13 @@ async function fetchAndWrite() {
     authToken: process.env.TURSO_AUTH_TOKEN || process.env.VITE_TURSO_AUTH_TOKEN || undefined,
   });
   // Display overrides applied on top of the DB rows. The DB is the source of
-  // truth for most fields, but these title/category tweaks live here so they
-  // survive every regeneration — editing products.ts directly does NOT persist
-  // (this script overwrites it on every build). Update the DB to retire one.
-  // The synergygroup rows are seeded already-clean (see scripts/seed-synergygroup.ts),
-  // so no overrides are needed yet.
-  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string }>> = {};
+  // truth for most fields, but these tweaks live here so they survive every
+  // regeneration — editing products.ts directly does NOT persist (this script
+  // overwrites it on every build). Update the DB to retire one.
+  // SG-23 (Vice Pro Plus golf balls) is priced $50 here until the DB row is set.
+  const OVERRIDES: Record<string, Partial<{ name: string; category: string; sizes: string; price: number }>> = {
+    "SG-23": { price: 50 },
+  };
 
   try {
     const result = await db.execute(

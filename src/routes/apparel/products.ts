@@ -402,7 +402,7 @@ export const allProducts = [
     "sizes": "Box of 12",
     "badge": "",
     "colors": [],
-    "price": 0,
+    "price": 50,
     "img": "/portals/viceball-cf.png",
     "imgs": [
       "/portals/viceball-cf.png"
