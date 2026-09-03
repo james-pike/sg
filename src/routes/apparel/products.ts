@@ -10,7 +10,9 @@ export const allProducts = [
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#1f2a44",
+      "#b02b2c"
     ],
     "price": 8,
     "img": "/sku/tshirt.png",
@@ -44,7 +46,9 @@ export const allProducts = [
     "sizes": "S - 5XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#1f2a44",
+      "#b02b2c"
     ],
     "price": 15,
     "img": "/2400.jpg",
@@ -70,7 +74,7 @@ export const allProducts = [
     "imgs": [
       "/portals/1370399-as.jpg"
     ],
-    "material": "100% polyester, 8.8 oz/L yd ",
+    "material": "100% polyester",
     "details": "Anti-odor technology, Soft light and breathable fabric, Self-fabric collar, Three-button placket, #1370399"
   },
   {
@@ -429,6 +433,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#ffffff": { en: "White", fr: "Blanc" },
   "#393e5d": { en: "Navy", fr: "Marine" },
   "#c90a29": { en: "Red", fr: "Rouge" },
+  "#1f2a44": { en: "Navy", fr: "Marine" },
+  "#b02b2c": { en: "Red", fr: "Rouge" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#6e6e6e": { en: "Grey", fr: "Gris" },
   "#ff6600": { en: "Safety Orange", fr: "Orange sécurité" },

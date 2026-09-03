@@ -67,6 +67,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#ffffff": { en: "White", fr: "Blanc" },
   "#393e5d": { en: "Navy", fr: "Marine" },
   "#c90a29": { en: "Red", fr: "Rouge" },
+  "#1f2a44": { en: "Navy", fr: "Marine" },
+  "#b02b2c": { en: "Red", fr: "Rouge" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#6e6e6e": { en: "Grey", fr: "Gris" },
   "#ff6600": { en: "Safety Orange", fr: "Orange sécurité" },
