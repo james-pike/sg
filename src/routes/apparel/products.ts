@@ -61,7 +61,9 @@ export const allProducts = [
     "sizes": "S - 4XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#393e5d",
+      "#c90a29"
     ],
     "price": 60,
     "img": "/portals/1370399-as.jpg",
@@ -425,6 +427,8 @@ const colorNames: Record<string, Record<string, string>> = {
   "#00703c": { en: "Green", fr: "Vert" },
   "#1a1a18": { en: "Black", fr: "Noir" },
   "#ffffff": { en: "White", fr: "Blanc" },
+  "#393e5d": { en: "Navy", fr: "Marine" },
+  "#c90a29": { en: "Red", fr: "Rouge" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#6e6e6e": { en: "Grey", fr: "Gris" },
   "#ff6600": { en: "Safety Orange", fr: "Orange sécurité" },

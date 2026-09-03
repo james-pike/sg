@@ -503,7 +503,23 @@ export default component$(() => {
                       key={color}
                       class={`product-modal__color ${selectedColor.value === color ? "active" : ""}`}
                       style={{ background: color }}
-                      onClick$={() => (selectedColor.value = color)}
+                      onClick$={() => {
+                        selectedColor.value = color;
+                        // Switch the main image to this colour's photo, matched
+                        // by the colour-name slug in the filename (e.g. "navy" →
+                        // 1370399-navy-cf.png). The first/darkest colour, whose
+                        // base image carries no colour token, falls back to 0.
+                        const imgs = viewImgs.value;
+                        const slug = colorName(color, "en")
+                          .toLowerCase()
+                          .replace(/[^a-z0-9]+/g, "");
+                        let idx = imgs.findIndex((s) =>
+                          new RegExp(`-${slug}[-.]`, "i").test(s),
+                        );
+                        if (idx < 0 && color === sortColorsWhiteLast(p.colors)[0])
+                          idx = 0;
+                        if (idx >= 0) imgIndex.value = idx;
+                      }}
                       aria-label={colorName(color, locale.value)}
                       title={colorName(color, locale.value)}
                     />
