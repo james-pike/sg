@@ -1,12 +1,18 @@
 // Utility functions that won't be overwritten by auto-generation
 
-// White (#ffffff) is always rendered after every other swatch.
+const BLACK_HEXES = new Set(["#1a1a18", "#000000", "#000", "#111111", "#0a0a0a"]);
+
+// Black is always first and white (#ffffff) always last; every other swatch
+// keeps its existing (DB) order — so e.g. navy stays ahead of red. Array.sort
+// is stable in modern engines, so equal-rank colours are not reshuffled.
 export function sortColorsWhiteLast(colors: readonly string[]): string[] {
-  return [...colors].sort((a, b) => {
-    const aw = a.toLowerCase() === "#ffffff" ? 1 : 0;
-    const bw = b.toLowerCase() === "#ffffff" ? 1 : 0;
-    return aw - bw;
-  });
+  const rank = (h: string) => {
+    const hex = h.toLowerCase();
+    if (BLACK_HEXES.has(hex)) return -1; // black first
+    if (hex === "#ffffff" || hex === "#fff") return 1; // white last
+    return 0;
+  };
+  return [...colors].sort((a, b) => rank(a) - rank(b));
 }
 
 const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL", "7XL"];

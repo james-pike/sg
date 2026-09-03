@@ -126,11 +126,35 @@ export default component$(() => {
   const viewImgs = useComputed$<string[]>(() => {
     const p = product.value;
     if (!p) return [];
-    const list = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
+    let list = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
     if (p.sku === "SG-1" && selectedVariant.value === "Tall") {
-      return list.map((s) => s.replace(/g2000-/i, "g2000T-"));
+      list = list.map((s) => s.replace(/g2000-/i, "g2000T-"));
     }
-    return list;
+    // Order the gallery to match the colour swatches (black first … white last),
+    // matching each colour to its image by the colour-name slug in the filename
+    // (the first/darkest colour claims the base image, which has no colour
+    // token). Images that map to no colour — spec sheets, extra angles — keep
+    // their order at the end.
+    const order = sortColorsWhiteLast(p.colors);
+    const used = new Set<number>();
+    const out: string[] = [];
+    order.forEach((c, ci) => {
+      const slug = colorName(c, "en")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "");
+      let idx = list.findIndex(
+        (s, i) => !used.has(i) && new RegExp(`-${slug}[-.]`, "i").test(s),
+      );
+      if (idx < 0 && ci === 0) idx = list.findIndex((_, i) => !used.has(i));
+      if (idx >= 0) {
+        used.add(idx);
+        out.push(list[idx]);
+      }
+    });
+    list.forEach((s, i) => {
+      if (!used.has(i)) out.push(s);
+    });
+    return out;
   });
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
   // Per-SKU waist + inseam runs. MN-1 (Carhartt 102291 Rigby) and MNFR-1
