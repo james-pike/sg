@@ -128,7 +128,11 @@ export default component$(() => {
     if (!p) return [];
     let list = (p.imgs && p.imgs.length ? p.imgs : [p.img]) as string[];
     if (p.sku === "SG-1" && selectedVariant.value === "Tall") {
-      list = list.map((s) => s.replace(/g2000-/i, "g2000T-"));
+      // Only the black shot has a Tall version (g2000T-); navy/red have no tall
+      // image yet, so drop them (they'd 404) and show black only for Tall.
+      list = list
+        .filter((s) => !/g2000-(navy|red)-/i.test(s))
+        .map((s) => s.replace(/g2000-/i, "g2000T-"));
     }
     // Order the gallery to match the colour swatches (black first … white last),
     // matching each colour to its image by the colour-name slug in the filename
