@@ -26,7 +26,7 @@ export const CLOTHING_CATEGORIES = ["All", "T-Shirts", "Polos", "Jackets", "Swea
 const SAFETY_SKU_PREFIX = "MNFR-";
 const SAFETY_EXTRA_SKUS = new Set(["MN-2", "MN-3", "MN-5", "MN-6"]);
 const SAFETY_HIDDEN_SKUS = new Set(["MNFR-5", "MNFR-6"]); // FR Insulated Bib & Jacket
-const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
+export const SAFETY_CATEGORIES = ["All", "Flame Resistant", "Shirts", "Hats"];
 // Explicit display order for the Safety "All" view: FR shirt + hoodies,
 // FR pants, then the standard-SKU allowlist (short-sleeve tee,
 // long-sleeve tee, ball cap, toque).

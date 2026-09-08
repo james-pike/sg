@@ -29,7 +29,8 @@ export const allProducts = [
     "sizes": "S - 3XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#1f2a44"
     ],
     "price": 16,
     "img": "/tshirtblack.png",

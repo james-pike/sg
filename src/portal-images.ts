@@ -24,7 +24,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
   // portal1 = Airtech, portal2 = Corflow, portal3 = Wired, portal4 = Powered.
   portal1: {
     "SG-1": { img: "/portals/g2000-as.jpg", imgs: ["/portals/g2000-as.jpg", "/portals/g2000-navy-as.png", "/portals/g2000-red-as.png"] },
-    "SG-2": { img: "/portals/g2300-as.jpg", imgs: ["/portals/g2300-as.jpg"] },
+    "SG-2": { img: "/portals/g2300-as.jpg", imgs: ["/portals/g2300-as.jpg", "/portals/g2300-navy-as.png"] },
     "SG-3": { img: "/portals/g2400-as.jpg", imgs: ["/portals/g2400-as.jpg", "/portals/g2400-navy-as.png", "/portals/g2400-red-as.png"] },
     "SG-4": { img: "/portals/1370399-as.jpg", imgs: ["/portals/1370399-as.jpg", "/portals/1370399-red-as.png", "/portals/1370399-navy-as.png"] },
     "SG-5": { img: "/portals/106674-as.png", imgs: ["/portals/106674-as.png"] },
@@ -50,7 +50,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
   },
   portal2: {
     "SG-1": { img: "/portals/g2000-cf.jpg", imgs: ["/portals/g2000-cf.jpg", "/portals/g2000-navy-cf.png", "/portals/g2000-red-cf.png"] },
-    "SG-2": { img: "/portals/g2300-cf.jpg", imgs: ["/portals/g2300-cf.jpg"] },
+    "SG-2": { img: "/portals/g2300-cf.jpg", imgs: ["/portals/g2300-cf.jpg", "/portals/g2300-navy-cf.png"] },
     "SG-3": { img: "/portals/g2400-cf.jpg", imgs: ["/portals/g2400-cf.jpg", "/portals/g2400-navy-cf.png", "/portals/g2400-red-cf.png"] },
     "SG-4": { img: "/portals/1370399-cf.jpg", imgs: ["/portals/1370399-cf.jpg", "/portals/1370399-red-cf.png", "/portals/1370399-navy-cf.png"] },
     "SG-5": { img: "/portals/106674-cf.png", imgs: ["/portals/106674-cf.png"] },
@@ -75,7 +75,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
   },
   portal3: {
     "SG-1": { img: "/portals/g2000-ws.jpg", imgs: ["/portals/g2000-ws.jpg", "/portals/g2000-navy-ws.png", "/portals/g2000-red-ws.png"] },
-    "SG-2": { img: "/portals/2300-ws.jpg", imgs: ["/portals/2300-ws.jpg"] },
+    "SG-2": { img: "/portals/2300-ws.jpg", imgs: ["/portals/2300-ws.jpg", "/portals/g2300-navy-ws.png"] },
     "SG-3": { img: "/portals/g2400-ws.jpg", imgs: ["/portals/g2400-ws.jpg", "/portals/g2400-navy-ws.png", "/portals/g2400-red-ws.png"] },
     "SG-4": { img: "/portals/1370399-ws.jpg", imgs: ["/portals/1370399-ws.jpg", "/portals/1370399-red-ws.png", "/portals/1370399-navy-ws.png"] },
     "SG-5": { img: "/portals/106674-ws.jpg", imgs: ["/portals/106674-ws.jpg"] },
@@ -101,7 +101,7 @@ export const PORTAL_SKU_IMAGES: Record<string, Record<string, PortalImageOverrid
   },
   portal4: {
     "SG-1": { img: "/portals/g2000-ps.jpg", imgs: ["/portals/g2000-ps.jpg", "/portals/g2000-navy-ps.png", "/portals/g2000-red-ps.png"] },
-    "SG-2": { img: "/portals/g2300-ps.jpg", imgs: ["/portals/g2300-ps.jpg"] },
+    "SG-2": { img: "/portals/g2300-ps.jpg", imgs: ["/portals/g2300-ps.jpg", "/portals/g2300-navy-ps.png"] },
     "SG-3": { img: "/portals/g2400-ps.jpg", imgs: ["/portals/g2400-ps.jpg", "/portals/g2400-navy-ps.png", "/portals/g2400-red-ps.png"] },
     "SG-4": { img: "/portals/1370399-ps.jpg", imgs: ["/portals/1370399-ps.jpg", "/portals/1370399-red-ps.png", "/portals/1370399-navy-ps.png"] },
     "SG-5": { img: "/portals/106674-ps.png", imgs: ["/portals/106674-ps.png"] },

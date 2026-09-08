@@ -6,6 +6,7 @@ import { LocaleContext, t } from "../../../i18n";
 import { allProducts, colorName, categoryLabel } from "../products";
 import { TALL_PRICE } from "../../../lib/pricing";
 import { portalizeProduct } from "../../../portal-images";
+import { CLOTHING_CATEGORIES, SAFETY_CATEGORIES } from "../../../components/product-catalog/product-catalog";
 import { expandSizes, sizeGroups, sortColorsWhiteLast } from "../utils";
 import { LoginTypeContext, useAuthCheck } from "../../layout";
 import { portalBrand } from "../../../portals";
@@ -589,15 +590,17 @@ export default component$(() => {
         // Apparel" pulled from every visible category, instead of a
         // single-category list with a "cat.Pants" / "cat.Work Wear"
         // un-translated heading.
-        // Must mirror the catalog's category tabs (product-catalog.tsx:
-        // CLOTHING_CATEGORIES / SAFETY_CATEGORIES, minus "All"). When a product's
-        // category isn't listed here it's treated as "not a tab" and the carousel
-        // falls back to broad "More Apparel" — which is why Polos / Sweaters / the
-        // Office kit were reverting to Apparel instead of showing their own run.
+        // Derived STRAIGHT from the catalog's own category tabs so it can't go
+        // stale: safety logins use SAFETY_CATEGORIES, tech is a single "Work Wear"
+        // catalog, everything else uses CLOTHING_CATEGORIES (both minus "All").
+        // A hardcoded copy previously drifted out of sync — it omitted T-Shirts,
+        // Headwear, Accessories & Safety, so those PDPs fell back to the broad
+        // "More Apparel" run instead of their own category.
+        const dropAll = (cats: string[]) => cats.filter((c) => c !== "All");
         const visibleByLogin: Record<string, string[]> = {
-          clothing: ["Jackets", "Sweaters", "Shirts", "Polos", "Hats", "SWAG", "New Hire Kit"],
+          clothing: dropAll(CLOTHING_CATEGORIES),
           tech: ["Work Wear"],
-          safety: ["Flame Resistant", "Shirts", "Hats"],
+          safety: dropAll(SAFETY_CATEGORIES),
         };
         const visible = visibleByLogin[loginType.value] || visibleByLogin.clothing;
         const sameCategory = allProducts.filter((r) => r.sku !== p.sku && r.sku !== "CAR-12" && r.category === p.category).slice(0, 8);

@@ -6520,6 +6520,7 @@ details[open] > .cart-drawer__checkout-title::after {
   color: #fff;
 }
 .checkout-result__icon--ok { background: #1f9d55; }
+.checkout-result__icon--warn { background: #d97706; }
 .checkout-result__icon--cancel { background: var(--ce-gray-400); }
 .checkout-result__title { font-size: 1.4rem; font-weight: 800; color: var(--ce-gray-900); margin: 0 0 0.6rem; }
 .checkout-result__text { font-size: 0.95rem; line-height: 1.6; color: var(--ce-gray-600); margin: 0 0 1.5rem; }

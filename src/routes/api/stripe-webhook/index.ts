@@ -65,21 +65,35 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
     return;
   }
 
-  // The customer's 50% card portion has now settled. Mark the order paid. The
-  // company's 50% is tracked separately via company_billing_status (left at
-  // 'pending_invoice' for the QuickBooks pipeline) — the order being 'paid' means
-  // the card half is captured and the order is confirmed for fulfilment.
-  await db.execute({
-    sql: "UPDATE orders SET status = 'paid', paid_at = datetime('now'), updated_at = datetime('now') WHERE id = ?",
-    args: [orderId as any],
-  });
+  // ---- Payment received — finalize -----------------------------------------
+  // The customer's 50% card portion has now settled. PAYMENT IS THE SOURCE OF
+  // TRUTH: whatever happens with our DB below, the money is captured and the
+  // order MUST be recorded somewhere (the confirmation email is that record).
+  //
+  // Mark the order paid + assign its SG number. If either DB write fails we do
+  // NOT lose the order: we still send the confirmation email (so it's recorded),
+  // then return 500 so Stripe RETRIES this webhook and the write is reconciled.
+  // The company's 50% is tracked separately via company_billing_status (left at
+  // 'pending_invoice' for the QuickBooks pipeline).
+  let orderNumber = "";
+  let dbWriteOk = true;
+  try {
+    await db.execute({
+      sql: "UPDATE orders SET status = 'paid', paid_at = datetime('now'), updated_at = datetime('now') WHERE id = ?",
+      args: [orderId as any],
+    });
+    // Assign the SG number once (idempotent on retries via `order_no IS NULL`).
+    // Cancelled/abandoned orders never reach here, so numbers stay gap-free.
+    orderNumber = await assignSynergyOrderNumber(db, orderId as any);
+  } catch (err) {
+    dbWriteOk = false;
+    console.error("Stripe webhook: payment WAS received but the DB finalize failed — sending the confirmation email so the order is recorded, and returning 500 so Stripe retries:", err);
+  }
 
-  // The order is paid — NOW assign its SG number (once; idempotent on retries).
-  // Cancelled/abandoned orders never reach this point, so they never burn a
-  // number and paid numbers stay gap-free.
-  const orderNumber = await assignSynergyOrderNumber(db, orderId as any);
-
-  // Send the confirmation email (items from DB, everything else from metadata).
+  // Send the confirmation email (items from the row we already fetched above,
+  // everything else from Stripe metadata). This runs whether or not the DB write
+  // succeeded, so a paid order is always recorded even if our DB is misbehaving.
+  // sendConfirmationEmail never throws.
   const apiKey = env.get("RESEND_API_KEY") || env.get("VITE_RESEND_API_KEY");
   if (apiKey) {
     let items: OrderItem[] = [];
@@ -115,6 +129,15 @@ export const onPost: RequestHandler = async ({ request, env, json }) => {
       },
     };
     await sendConfirmationEmail({ apiKey, from: fromAddress, staffAddresses }, emailData);
+  }
+
+  if (!dbWriteOk) {
+    // Payment captured + order emailed, but the DB wasn't updated. 500 → Stripe
+    // retries; the retry re-runs the UPDATE (status still isn't 'paid', so it
+    // isn't short-circuited above) and reconciles the row. The order is never
+    // lost — worst case a paid order is emailed twice before the write lands.
+    json(500, { error: "payment received and order emailed, but DB finalize failed — retrying" });
+    return;
   }
 
   json(200, { received: true });
