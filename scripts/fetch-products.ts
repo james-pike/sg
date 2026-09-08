@@ -70,6 +70,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#1f2a44": { en: "Navy", fr: "Marine" },
   "#9a9c9e": { en: "Sport Grey", fr: "Gris sport" },
   "#53565a": { en: "Charcoal", fr: "Charbon" },
+  "#5d5e62": { en: "Graphite", fr: "Graphite" },
   "#464648": { en: "Charcoal Heather", fr: "Charbon chiné" },
   "#b02b2c": { en: "Red", fr: "Rouge" },
   "#2c3e50": { en: "Navy", fr: "Marine" },

@@ -2984,8 +2984,6 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   transition: all var(--transition);
   position: relative;
   cursor: pointer;
-  transform: translateZ(0);
-  backface-visibility: hidden;
   contain: layout style paint;
 }
 
@@ -3031,6 +3029,16 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
     inset 0 -1px 0 rgba(255,255,255,0.55);
   pointer-events: none;
   z-index: 2;
+}
+
+/* Gallery cards carry no engraved dark hairline — remove the ring from both the
+   whole-card rim (desktop `.product-card::after`) and the image panel
+   (`.product-card__image::after`) across every breakpoint. Scoped to the
+   catalog grid so the product page's related-items carousel keeps its rim.
+   `.apparel-grid` specificity beats the bare `.product-card…::after` rules. */
+.apparel-grid .product-card::after,
+.apparel-grid .product-card__image::after {
+  box-shadow: none;
 }
 
 .product-card__image img {
@@ -4473,7 +4481,9 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--sg-gap);
-  background: transparent;
+  /* Not white: the gutters between cards show this cool grey so the grid of
+     products still reads as a grid now that the card borders are gone. */
+  background: #e6e9ec;
   padding: 0;
   border-radius: 0;
   min-height: 60vh;
@@ -4481,6 +4491,26 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .apparel-grid:has(:nth-child(5)) {
   padding-bottom: 2rem;
+}
+
+/* Even gutters (desktop 4-col): the grid `gap` sat between fractional 1fr
+   columns, so the browser snapped the first column's gutter ~1px thinner than
+   the rest. Draw the gutter as a per-card right/bottom border instead — each
+   border snaps to its own card's pixel box, so every gutter is exactly
+   --sg-gap. The last column drops its trailing right border. */
+@media (min-width: 1025px) {
+  /* Kill the grid gap entirely (it's forced to 2px !important elsewhere for the
+     .home-catalog wrapper) so the ONLY gutter is the even per-card border. */
+  .home-catalog .apparel-grid:not(.apparel-grid--list),
+  .apparel-grid:not(.apparel-grid--list) { gap: 0 !important; }
+  .apparel-grid:not(.apparel-grid--list) .product-card {
+    box-sizing: border-box;
+    border-right: 2px solid #e6e9ec;
+    border-bottom: 2px solid #e6e9ec;
+  }
+  .apparel-grid:not(.apparel-grid--list) .product-card:nth-child(4n) {
+    border-right: 0;
+  }
 }
 
 /* ===== Locale Toggle ===== */
@@ -10411,8 +10441,9 @@ details[open] > .cart-drawer__checkout-title::after {
   }
   /* Gaps between cards read as the sidebar gray (was the greige card showing
      through) — no card borders, just the gray gutter. */
-  /* White tray behind the product rows. */
-  .home-catalog .apparel-grid { background: #ffffff; }
+  /* Tray behind the product rows — a touch off-white so the gutters between
+     cards read as faint grid lines (card borders are removed). */
+  .home-catalog .apparel-grid { background: #e6e9ec; }
   .apparel-catalog:has(.product-detail) {
     background: var(--ce-greige);
     box-shadow:

@@ -244,12 +244,14 @@ export const allProducts = [
     "sizes": "One Size",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#5d5e62"
     ],
     "price": 23.5,
     "img": "/portals/i8502-cf.webp",
     "imgs": [
-      "/portals/i8502-cf.webp"
+      "/portals/i8502-cf.webp",
+      "/portals/i8502-graphite-cf.png"
     ],
     "material": "Poly/spandex with performance mesh",
     "details": "Structured mid-profile 6-panel Flexfit 110®, Shapeable pre-curved visor, Plastic snapback closure, UV protection, Moisture wicking, Contrasting grey undervisor, #i8502"
@@ -444,6 +446,7 @@ const colorNames: Record<string, Record<string, string>> = {
   "#1f2a44": { en: "Navy", fr: "Marine" },
   "#9a9c9e": { en: "Sport Grey", fr: "Gris sport" },
   "#53565a": { en: "Charcoal", fr: "Charbon" },
+  "#5d5e62": { en: "Graphite", fr: "Graphite" },
   "#464648": { en: "Charcoal Heather", fr: "Charbon chiné" },
   "#b02b2c": { en: "Red", fr: "Rouge" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
