@@ -30,7 +30,8 @@ export const allProducts = [
     "badge": "",
     "colors": [
       "#1a1a18",
-      "#1f2a44"
+      "#1f2a44",
+      "#9a9c9e"
     ],
     "price": 16,
     "img": "/tshirtblack.png",
@@ -120,12 +121,14 @@ export const allProducts = [
     "sizes": "S - 5XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#53565a"
     ],
     "price": 50,
     "img": "/88194-as.png",
     "imgs": [
-      "/88194-as.png"
+      "/88194-as.png",
+      "/88194-charcoal-as.png"
     ],
     "material": "55/45 cotton/polyester twill",
     "details": "Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, UPF 40+ protection, #88194"
@@ -188,12 +191,14 @@ export const allProducts = [
     "sizes": "XS - 4XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#53565a"
     ],
     "price": 41,
     "img": "/portals/L00555-ps.webp",
     "imgs": [
-      "/portals/L00555-ps.webp"
+      "/portals/L00555-ps.webp",
+      "/portals/L00555-charcoal-ps.png"
     ],
     "material": "70% ring-spun combed cotton / 30% polyester fleece",
     "details": "100% ring-spun combed cotton, Self-fabric lined hood with drawcord, Rib-knit cuff and hem, Kangaroo pocket, YKK zipper, Tear-away label, #L00555"
@@ -358,12 +363,14 @@ export const allProducts = [
     "sizes": "S - 5XL",
     "badge": "",
     "colors": [
-      "#1a1a18"
+      "#1a1a18",
+      "#53565a"
     ],
     "price": 55,
     "img": "/portals/88193-as.jpg",
     "imgs": [
-      "/portals/88193-as.jpg"
+      "/portals/88193-as.jpg",
+      "/portals/88193-charcoal-as.png"
     ],
     "material": "55/45 cotton/polyester twill, 7.3 oz/L yd (CA)",
     "details": "Button-down collar, Adjustable cuffs, Left-chest pocket, Durable flat-felled side and underarm seams, Back yoke with box pleat, UPF 40+ protection, #88193"
@@ -435,6 +442,9 @@ const colorNames: Record<string, Record<string, string>> = {
   "#393e5d": { en: "Navy", fr: "Marine" },
   "#c90a29": { en: "Red", fr: "Rouge" },
   "#1f2a44": { en: "Navy", fr: "Marine" },
+  "#9a9c9e": { en: "Sport Grey", fr: "Gris sport" },
+  "#53565a": { en: "Charcoal", fr: "Charbon" },
+  "#464648": { en: "Charcoal Heather", fr: "Charbon chiné" },
   "#b02b2c": { en: "Red", fr: "Rouge" },
   "#2c3e50": { en: "Navy", fr: "Marine" },
   "#6e6e6e": { en: "Grey", fr: "Gris" },
