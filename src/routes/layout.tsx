@@ -51,7 +51,7 @@ const PROVINCE_NAMES: Record<string, string> = {
   NS: "Nova Scotia", ON: "Ontario", PE: "Prince Edward Island",
   QC: "Quebec", SK: "Saskatchewan",
 };
-const taxRateFor = (code: string): number | undefined => PROVINCE_TAX[code];
+export const taxRateFor = (code: string): number | undefined => PROVINCE_TAX[code];
 
 // The header's height drives every scroll offset in the app: the sticky strips
 // (catalog tabs, apparel titlebar, product breadcrumb) pin directly beneath it,
@@ -168,7 +168,7 @@ export const useSubmitOrder = routeAction$(
     const apiKey = env.get("RESEND_API_KEY") || env.get("VITE_RESEND_API_KEY");
     const stripeKey = env.get("STRIPE_SECRET_KEY") || env.get("VITE_STRIPE_SECRET_KEY");
 
-    const { employee, items, date } = data;
+    const { employee, items, date, idempotencyKey } = data;
 
     const province = employee.province;
     if (!province || !PROVINCE_TAX[province]) {
@@ -210,6 +210,20 @@ export const useSubmitOrder = routeAction$(
     const customerAmount = +(customerCents / 100).toFixed(2);
     const companyAmount = +(companyCents / 100).toFixed(2);
 
+    // Dry-run / test mode (local .env only — never set in production). Runs the
+    // full validation + UI flow but skips the Turso write, Stripe, and email:
+    //   ORDER_TEST_MODE=1|true|yes  -> simulate SUCCESS (redirect to success page)
+    //   ORDER_TEST_MODE=fail        -> simulate the Stripe-handoff failure
+    const testModeVal = (env.get("ORDER_TEST_MODE") || env.get("VITE_ORDER_TEST_MODE") || "").trim().toLowerCase();
+    if (testModeVal === "fail") {
+      console.warn("[ORDER_TEST_MODE=fail] Simulating a failed checkout (no DB, no Stripe, no email).");
+      return fail(502, { message: "Card payment couldn't start: simulated failure (test mode)." });
+    }
+    if (/^(1|true|yes)$/.test(testModeVal)) {
+      console.warn("[ORDER_TEST_MODE] Skipping DB + Stripe + email. Simulated order.", { vendor, total });
+      return { redirectUrl: `${url.origin}/checkout/success/?test=1&order=${encodeURIComponent("SG-TEST")}`, orderNumber: "SG-TEST" };
+    }
+
     if (!tursoUrl || !tursoToken) {
       return fail(500, { message: "Order database not configured (missing env vars)" });
     }
@@ -232,36 +246,92 @@ export const useSubmitOrder = routeAction$(
     const status = "awaiting_payment";
     let orderNumber = "";
     let orderId: bigint | number | null = null;
+    // Empty string must become NULL so orders without a key don't collide on the
+    // unique index (SQLite treats NULLs as distinct, empty strings not).
+    const idemKey = (idempotencyKey || "").trim() || null;
     try {
-      const result = await db.execute({
-        sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, card_amount, customer_amount, company_amount, company_name, company_billing_status, device, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        args: [
-          vendor,
-          "",
-          // The name IS stored (so the admin knows who ordered); email/phone are
-          // NOT — they travel through Stripe metadata to the webhook, never a
-          // column here. See the privacy policy.
-          employee.name || "",
-          "",
-          "",
-          JSON.stringify(items2),
-          total,
-          status,
-          "split",
-          customerAmount, // card_amount — the card charge (customer half)
-          customerAmount, // customer_amount
-          companyAmount,  // company_amount — invoiced to the company
-          companyName,
-          "pending_invoice",
-          data.device || null,
-        ],
-      });
-      orderId = (result.lastInsertRowid as any) ?? null;
-      // NB: the SG-<n> order number is NOT assigned here — the row is still only
-      // 'awaiting_payment'. It's assigned once, at payment time (dev simulated
-      // path below / the Stripe webhook), so cancelled orders never burn a number
-      // and paid numbers stay gap-free. See assignSynergyOrderNumber().
+      // Warm up the connection before writing. Turso databases on low-traffic
+      // apps can be cold, and the first request after idle can fail or be slow.
+      // Retry a harmless SELECT a few times (with backoff) to wake it. We retry
+      // only this read — never the INSERT — so a cold start can't create a
+      // duplicate order. The INSERT below then runs once on a live connection.
+      const WARMUP_TRIES = 3;
+      let warmErr: unknown = null;
+      for (let attempt = 1; attempt <= WARMUP_TRIES; attempt++) {
+        try {
+          await db.execute("SELECT 1");
+          warmErr = null;
+          break;
+        } catch (e) {
+          warmErr = e;
+          console.warn(`Turso warmup attempt ${attempt}/${WARMUP_TRIES} failed:`, e);
+          if (attempt < WARMUP_TRIES) await new Promise((r) => setTimeout(r, 600 * attempt));
+        }
+      }
+      if (warmErr) throw warmErr;
+
+      try {
+        const result = await db.execute({
+          sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, card_amount, customer_amount, company_amount, company_name, company_billing_status, device, idempotency_key, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+          args: [
+            vendor,
+            "",
+            // The name IS stored (so the admin knows who ordered); email/phone are
+            // NOT — they travel through Stripe metadata to the webhook, never a
+            // column here. See the privacy policy.
+            employee.name || "",
+            "",
+            "",
+            JSON.stringify(items2),
+            total,
+            status,
+            "split",
+            customerAmount, // card_amount — the card charge (customer half)
+            customerAmount, // customer_amount
+            companyAmount,  // company_amount — invoiced to the company
+            companyName,
+            "pending_invoice",
+            data.device || null,
+            idemKey,
+          ],
+        });
+        orderId = (result.lastInsertRowid as any) ?? null;
+        // NB: the SG-<n> order number is NOT assigned here — the row is still only
+        // 'awaiting_payment'. It's assigned once, at payment time (dev simulated
+        // path below / the Stripe webhook), so cancelled orders never burn a number
+        // and paid numbers stay gap-free. See assignSynergyOrderNumber().
+      } catch (err) {
+        // Idempotent replay: a prior attempt with this key already created the
+        // order row (before its response was lost). Reuse that same row instead
+        // of inserting a duplicate awaiting_payment order. The Stripe session is
+        // also created idempotently below, so no duplicate session/charge either.
+        if (idemKey && /UNIQUE constraint failed/i.test(String((err as any)?.message ?? err))) {
+          const existing = await db.execute({
+            sql: "SELECT id FROM orders WHERE idempotency_key = ?",
+            args: [idemKey],
+          });
+          if (existing.rows.length > 0) {
+            orderId = (existing.rows[0] as any).id;
+            console.warn("Idempotent replay — reusing existing order for key", idemKey);
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
+
+      // Confirm the row actually persisted before we hand off to payment.
+      if (orderId == null) {
+        console.error("Insert returned no rowid — order not confirmed");
+        return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
+      const check = await db.execute({ sql: "SELECT id FROM orders WHERE id = ?", args: [orderId as any] });
+      if (check.rows.length === 0) {
+        console.error("Order row not found after insert — order not confirmed", orderId);
+        return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
     } catch (err) {
       console.error("Failed to save order to database:", err);
       return fail(500, { message: "Order could not be saved. Please try again." });
@@ -324,6 +394,9 @@ export const useSubmitOrder = routeAction$(
     try {
       const session = await createCheckoutSession({
         secretKey: stripeKey!,
+        // Idempotent create: a retry with the same checkout key returns the same
+        // session, so a re-submit after a lost response can't open a second one.
+        idempotencyKey: idemKey ? `sg_checkout_${idemKey}` : undefined,
         amountCents: customerCents,
         currency: "cad",
         // No SG number in the description — it isn't assigned until this payment
@@ -403,15 +476,16 @@ export const useSubmitOrder = routeAction$(
       .min(1)
       .max(100),
     date: z.string().min(1).max(40),
+    idempotencyKey: z.string().max(80).optional().default(""),
   }),
 );
 
-function stripColorSuffix(name: string): string {
+export function stripColorSuffix(name: string): string {
   const i = name.lastIndexOf(" - ");
   return i > -1 ? name.slice(0, i) : name;
 }
 
-interface CartItem {
+export interface CartItem {
   name: string;
   sku: string;
   category: string;
@@ -436,6 +510,13 @@ export default component$(() => {
   // login wall instead of their confirmation. These pages must show regardless
   // of auth, so exempt them from the login gate.
   const isPaymentReturn = useComputed$(() => loc.url.pathname.includes("/checkout/"));
+  // The dedicated /checkout route styles the header like the cart drawer (elevated
+  // above the checkout overlay). True only on /checkout — never on the home/login
+  // path, so this cannot affect the home render.
+  const isCheckout = useComputed$(() => {
+    const p = loc.url.pathname;
+    return p === "/checkout" || p === "/checkout/";
+  });
   const loginAction = useLogin();
   const logoutAction = useLogout();
   const orderAction = useSubmitOrder();
@@ -1101,7 +1182,7 @@ export default component$(() => {
           <=1024px "not finished" cover is needed again. */}
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
-      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
+      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
         <div class="site-header__inner">
           <Link href="/" class={`site-header__logo brand-cluster brand-cluster--small ${portal.value.headerMark ? "brand-cluster--split" : "brand-cluster--lockup"}`}>
             {portal.value.headerMark ? (
@@ -1449,7 +1530,7 @@ export default component$(() => {
       </footer>
 
       {/* Cart Drawer */}
-      {cartOpen.value && (
+      {cartOpen.value && !isCheckout.value && (
         <div class="modal-overlay" onClick$={() => { if (checkoutStep.value !== "details") cartOpen.value = false; }}>
           <div class="drawer cart-drawer" onClick$={(e) => e.stopPropagation()}>
             <div class="cart-drawer__site-header">
@@ -1542,7 +1623,7 @@ export default component$(() => {
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
-                    onClick$={() => { summaryOpen.value = window.innerWidth > 1024; checkoutStep.value = "details"; }}
+                    onClick$={() => { nav("/checkout/"); }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {t("cart.checkout", locale.value)}

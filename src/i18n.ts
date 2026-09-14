@@ -215,7 +215,7 @@ const translations = {
   "cart.checkout": { en: "Checkout", fr: "Passer à la caisse" },
   "cart.backtocart": { en: "Back to Cart", fr: "Retour au panier" },
   "cart.ordersummary": { en: "Order Summary", fr: "Résumé de la commande" },
-  "cart.pickup": { en: "Pickup in store", fr: "Ramassage en magasin" },
+  "cart.pickup": { en: "Pickup at The Safety House - 595 West Hunt Club Rd", fr: "Ramassage au The Safety House - 595 West Hunt Club Rd" },
 
   // Cart errors
   "cart.error.both": { en: "Employee number and name are required", fr: "Le numéro d'employé et le nom sont requis" },
@@ -261,6 +261,12 @@ const translations = {
     fr: "Elle a été confirmée et envoyée pour traitement.",
   },
   "order.continue": { en: "Home", fr: "Accueil" },
+  "order.fail.title": { en: "Order Not Submitted", fr: "Commande non soumise" },
+  "order.fail.text": {
+    en: "Your order could not be submitted at this time. Please try again.",
+    fr: "Votre commande n'a pas pu être soumise pour le moment. Veuillez réessayer.",
+  },
+  "order.fail.retry": { en: "Try Again", fr: "Réessayer" },
 
   // Categories (used in apparel chips & product cards)
   "cat.Polos": { en: "Polos", fr: "Polos" },
