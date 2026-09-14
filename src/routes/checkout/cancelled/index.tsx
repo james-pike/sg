@@ -17,8 +17,7 @@ export default component$(() => {
         </div>
         <h1 class="checkout-result__title">Payment cancelled</h1>
         <p class="checkout-result__text">
-          No charge was made and your cart is still saved. You can return to your
-          cart and try again whenever you're ready.
+          No charge was made and your cart is still saved.
         </p>
         <Link href="/apparel/" class="btn btn--primary">Back to apparel</Link>
       </div>
