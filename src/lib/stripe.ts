@@ -23,12 +23,6 @@ export interface CheckoutSessionInput {
   customerEmail?: string;
   /** Small key/values echoed back on the webhook (each value <= 500 chars). */
   metadata?: Record<string, string>;
-  /**
-   * Stripe Idempotency-Key. When set, retrying with the SAME key returns the
-   * SAME session instead of creating a second one — so a retry after a lost
-   * response can't open a duplicate Checkout Session / charge.
-   */
-  idempotencyKey?: string;
 }
 
 export interface CheckoutSession {
@@ -80,16 +74,12 @@ export async function createCheckoutSession(input: CheckoutSessionInput): Promis
   const params = new URLSearchParams();
   for (const [k, v] of toForm(body)) params.append(k, v);
 
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${input.secretKey}`,
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-  // Idempotent create: Stripe returns the same session for a repeated key.
-  if (input.idempotencyKey) headers["Idempotency-Key"] = input.idempotencyKey;
-
   const res = await fetch(`${STRIPE_API}/checkout/sessions`, {
     method: "POST",
-    headers,
+    headers: {
+      Authorization: `Bearer ${input.secretKey}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
     body: params.toString(),
   });
   const json = (await res.json()) as any;

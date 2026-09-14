@@ -4536,28 +4536,6 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 }
 .locale-btn:hover, .locale-btn:focus, .locale-btn:active { color: var(--ce-gray-700); background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
 .locale-btn__short { display: none; }
-
-/* Footer: the language toggle sits on one row, to the LEFT of the privacy link. */
-.site-footer__legal-row {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-/* Footer variant (moved from the header) — light text on the dark footer. */
-.locale-btn--footer {
-  color: #fff;
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(255,255,255,0.28);
-  box-shadow: none;
-  margin: 0;
-  padding: 6px 12px;
-}
-.locale-btn--footer:hover, .locale-btn--footer:focus, .locale-btn--footer:active {
-  color: #fff;
-  background: rgba(255,255,255,0.18);
-  border-color: rgba(255,255,255,0.45);
-}
-.locale-btn--footer .locale-btn__icon { stroke: #fff; }
 .locale-btn__full { display: inline; }
 
 /* Language toggle — coloured by the language it switches TO, using the Modern
@@ -6734,17 +6712,6 @@ details[open] > .cart-drawer__checkout-title::after {
   color: #fff;
 }
 .order-confirm__btn:hover { color: #fff; }
-
-/* Order failure modal: red title + a row of actions (Try Again). */
-.order-confirm--error .order-confirm__title { color: #a4161e; }
-.order-confirm__actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 1.25rem;
-}
-.order-confirm__actions .btn { margin: 0; }
 
 /* ===== Login Button ===== */
 .site-header__login {
@@ -14125,13 +14092,14 @@ body:has(.cart-drawer) .pdp-breadcrumb {
   .related-items { margin-top: 1.4rem !important; }
 }
 
-/* Cart page (item list): lighter (white) body so the list reads clearly. */
+/* Cart page (item list) shares the checkout page's panel background so the two
+   steps match — the cart view was plain white against the checkout's blue/gray. */
 .cart-drawer__items {
-  background: var(--ce-white) !important;
+  background: #f2f2f1 !important;
 }
 @media (min-width: 1025px) {
   .cart-drawer__items {
-    background: var(--ce-white) !important;
+    background: rgb(235, 238, 240) !important;
   }
 }
 
@@ -14682,8 +14650,8 @@ body .site-header__inner { border-top-left-radius: 0 !important; border-top-righ
   body:has(.home-catalog) .site-header .cart-btn,
   body:has(.home-catalog) .site-header .cart-btn.cart-btn--active,
   body .site-header .logout-btn {
-    height: 48px !important;
-    min-height: 48px !important;
+    height: 44px !important;
+    min-height: 44px !important;
     align-self: center !important;
     box-sizing: border-box !important;
   }

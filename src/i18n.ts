@@ -208,14 +208,14 @@ const translations = {
   "pay.gift.card.remaining": { en: "Remaining on card", fr: "Solde restant sur la carte" },
   "pay.gift.short": { en: "This gift card doesn't cover the full order — choose \"Gift card + credit card\" to pay the balance.", fr: "Cette carte-cadeau ne couvre pas la totalité — choisissez « Carte-cadeau + carte de crédit » pour payer le solde." },
   // Split payment (50% card now / 50% invoiced to the company)
-  "pay.split.note": { en: "Expense 50% to", fr: "Imputer 50 % à" },
+  "pay.split.note": { en: "Save 50% from", fr: "Économisez 50 % grâce à" },
   "pay.split.paynow": { en: "You pay today (card)", fr: "À payer aujourd'hui (carte)" },
   "pay.split.company": { en: "Invoiced to", fr: "Facturé à" },
   "pay.split.half": { en: "50%", fr: "50 %" },
   "cart.checkout": { en: "Checkout", fr: "Passer à la caisse" },
   "cart.backtocart": { en: "Back to Cart", fr: "Retour au panier" },
   "cart.ordersummary": { en: "Order Summary", fr: "Résumé de la commande" },
-  "cart.pickup": { en: "Pickup at The Safety House - 595 West Hunt Club Rd", fr: "Ramassage au The Safety House - 595 West Hunt Club Rd" },
+  "cart.pickup": { en: "Pickup in store", fr: "Ramassage en magasin" },
 
   // Cart errors
   "cart.error.both": { en: "Employee number and name are required", fr: "Le numéro d'employé et le nom sont requis" },
@@ -261,12 +261,6 @@ const translations = {
     fr: "Elle a été confirmée et envoyée pour traitement.",
   },
   "order.continue": { en: "Home", fr: "Accueil" },
-  "order.fail.title": { en: "Order Not Submitted", fr: "Commande non soumise" },
-  "order.fail.text": {
-    en: "Your order could not be submitted at this time. Please try again.",
-    fr: "Votre commande n'a pas pu être soumise pour le moment. Veuillez réessayer.",
-  },
-  "order.fail.retry": { en: "Try Again", fr: "Réessayer" },
 
   // Categories (used in apparel chips & product cards)
   "cat.Polos": { en: "Polos", fr: "Polos" },
