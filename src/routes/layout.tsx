@@ -1297,13 +1297,7 @@ export default component$(() => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
-            {/* EN/FR toggle sits between search and cart (tablet + desktop; hidden
-                on phones, where it lives in the menu drawer instead). */}
-            <button class="locale-btn locale-btn--header" onClick$={toggleLocale} aria-label="Toggle language">
-              <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>
-              <span class="locale-btn__short">{locale.value === "en" ? "FR" : "EN"}</span>
-              <svg class="locale-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </button>
+            {/* EN/FR toggle now lives in the footer legal row (see site-footer__legal-row). */}
             <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               {cartOpen.value ? (
@@ -1523,7 +1517,13 @@ export default component$(() => {
               <svg class="site-footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               <a href="mailto:info@synergygroupapparel.ca">info@synergygroupapparel.ca</a>
             </div>
-            <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+            <div class="site-footer__legal-row">
+              <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+              <button class="locale-btn locale-btn--footer" onClick$={toggleLocale} aria-label="Toggle language">
+                <svg class="locale-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                <span>{locale.value === "en" ? "Français" : "English"}</span>
+              </button>
+            </div>
           </div>
           </div>
         </div>
