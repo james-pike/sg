@@ -4541,7 +4541,7 @@ body:has(.nav-drawer-overlay) .site-header .hamburger-btn { pointer-events: auto
 .site-footer__legal-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1.1rem;
 }
 /* Footer variant (moved from the header) — light text on the dark footer. */
 .locale-btn--footer {
