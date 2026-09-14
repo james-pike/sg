@@ -99,3 +99,35 @@ export function sizeGroups(sizes: string): string[] {
   if (tall.length) groups.push(condense(tall, TALL_ORDER));
   return groups.length ? groups : [sizes];
 }
+
+// Per-SKU variant options (Short / Regular / Tall) — the single source of truth
+// shared by the PDP size picker and the product card. Each entry maps a variant
+// label to the sizes available for that variant.
+export const VARIANT_SIZES_BY_SKU: Record<string, Record<string, string[]>> = {
+  "SG-1": { "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"], "Tall": ["L", "XL", "2XL", "3XL"] },
+  "MN-3": { "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"], "Tall": ["L", "XL", "2XL", "3XL", "4XL"] },
+  "CAR-11": { "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"], "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"] },
+  "CAR-17": { "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"], "Tall": ["S", "M", "L", "XL", "2XL", "3XL", "4XL"] },
+  "MN-8": { "Short": ["M", "L", "XL", "2XL", "3XL", "4XL"], "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"], "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"] },
+  "SG-20": { "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"], "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"] },
+  "SG-24": { "Regular": ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"], "Tall": ["M", "L", "XL", "2XL", "3XL", "4XL"] },
+};
+
+// Fit ranges shown on the product card: the base size range plus any extra
+// variant fits (Short/Tall) the SKU carries, de-duped against ranges the base
+// size string already lists. Suffix S = short cut, T = tall cut.
+export function cardSizeGroups(sku: string, sizes: string): string[] {
+  const groups = sizeGroups(sizes);
+  const v = VARIANT_SIZES_BY_SKU[sku];
+  if (!v) return groups;
+  const seen = new Set(groups);
+  const add = (arr: string[] | undefined, suffix: string) => {
+    if (!arr?.length) return;
+    const s = arr.map((x) => x + suffix);
+    const r = s.length > 1 ? `${s[0]} - ${s[s.length - 1]}` : s[0];
+    if (!seen.has(r)) { seen.add(r); groups.push(r); }
+  };
+  add(v.Short, "S");
+  add(v.Tall, "T");
+  return groups;
+}

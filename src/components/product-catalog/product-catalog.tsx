@@ -4,7 +4,7 @@ import { LocaleContext, t } from "../../i18n";
 import { categoryLabel, colorName } from "../../routes/apparel/products";
 import { portalProducts } from "../../portal-images";
 import type { Product } from "../../routes/apparel/products";
-import { sizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
+import { sizeGroups, cardSizeGroups, sortColorsWhiteLast } from "../../routes/apparel/utils";
 import { LoginTypeContext, stickyTop } from "../../routes/layout";
 import { ProductImage } from "../product-image/product-image";
 
@@ -251,11 +251,11 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
           </div>
           <div class="product-card__price-group">
             {!isTech && (() => {
+              // Card prices show as whole dollars (no .00); the PDP keeps the exact
+              // price with decimals.
               const p = Number(item.price) || 0;
-              const dollars = Math.floor(p);
-              const cents = Math.round((p - dollars) * 100).toString().padStart(2, "0");
               return (
-                <div class="product-card__price">${dollars}<span class="product-card__price-cents">.{cents}</span></div>
+                <div class="product-card__price">${Math.round(p)}</div>
               );
             })()}
           </div>
@@ -306,11 +306,13 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
               const g = genderOf(item);
               return g === "Men" || g === "Women" ? <span class="product-card__gender">{t(g === "Men" ? "gender.mens" : "gender.womens", locale.value)}</span> : null;
             })()}
-            {/* One line per fit, so a product stocked in regular AND tall shows
-                both instead of a single run-on list (see sizeGroups). */}
+            {/* Fits shown beside each other on one line — regular plus any extra
+                variant (Tall/Short) the SKU carries (see cardSizeGroups). */}
             <span class="product-card__sizes">
-              {(item.sizes === "One Size" ? [t("modal.onesize", locale.value)] : sizeGroups(item.sizes)).map((g) => (
-                <span key={g} class="product-card__sizes-line">{g}</span>
+              {(item.sizes === "One Size" ? [t("modal.onesize", locale.value)] : cardSizeGroups(item.sku, item.sizes)).map((g, i, arr) => (
+                <span key={g} class="product-card__sizes-line">
+                  {g}{i < arr.length - 1 ? <span class="product-card__sizes-sep"> · </span> : null}
+                </span>
               ))}
             </span>
             {/* Colour names as text. Hidden in every mode but desktop Catalog,
