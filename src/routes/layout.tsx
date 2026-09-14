@@ -51,7 +51,7 @@ const PROVINCE_NAMES: Record<string, string> = {
   NS: "Nova Scotia", ON: "Ontario", PE: "Prince Edward Island",
   QC: "Quebec", SK: "Saskatchewan",
 };
-const taxRateFor = (code: string): number | undefined => PROVINCE_TAX[code];
+export const taxRateFor = (code: string): number | undefined => PROVINCE_TAX[code];
 
 // The header's height drives every scroll offset in the app: the sticky strips
 // (catalog tabs, apparel titlebar, product breadcrumb) pin directly beneath it,
@@ -168,7 +168,7 @@ export const useSubmitOrder = routeAction$(
     const apiKey = env.get("RESEND_API_KEY") || env.get("VITE_RESEND_API_KEY");
     const stripeKey = env.get("STRIPE_SECRET_KEY") || env.get("VITE_STRIPE_SECRET_KEY");
 
-    const { employee, items, date } = data;
+    const { employee, items, date, idempotencyKey } = data;
 
     const province = employee.province;
     if (!province || !PROVINCE_TAX[province]) {
@@ -210,6 +210,20 @@ export const useSubmitOrder = routeAction$(
     const customerAmount = +(customerCents / 100).toFixed(2);
     const companyAmount = +(companyCents / 100).toFixed(2);
 
+    // Dry-run / test mode (local .env only — never set in production). Runs the
+    // full validation + UI flow but skips the Turso write, Stripe, and email:
+    //   ORDER_TEST_MODE=1|true|yes  -> simulate SUCCESS (redirect to success page)
+    //   ORDER_TEST_MODE=fail        -> simulate the Stripe-handoff failure
+    const testModeVal = (env.get("ORDER_TEST_MODE") || env.get("VITE_ORDER_TEST_MODE") || "").trim().toLowerCase();
+    if (testModeVal === "fail") {
+      console.warn("[ORDER_TEST_MODE=fail] Simulating a failed checkout (no DB, no Stripe, no email).");
+      return fail(502, { message: "Card payment couldn't start: simulated failure (test mode)." });
+    }
+    if (/^(1|true|yes)$/.test(testModeVal)) {
+      console.warn("[ORDER_TEST_MODE] Skipping DB + Stripe + email. Simulated order.", { vendor, total });
+      return { redirectUrl: `${url.origin}/checkout/success/?test=1&order=${encodeURIComponent("SG-TEST")}`, orderNumber: "SG-TEST" };
+    }
+
     if (!tursoUrl || !tursoToken) {
       return fail(500, { message: "Order database not configured (missing env vars)" });
     }
@@ -232,36 +246,92 @@ export const useSubmitOrder = routeAction$(
     const status = "awaiting_payment";
     let orderNumber = "";
     let orderId: bigint | number | null = null;
+    // Empty string must become NULL so orders without a key don't collide on the
+    // unique index (SQLite treats NULLs as distinct, empty strings not).
+    const idemKey = (idempotencyKey || "").trim() || null;
     try {
-      const result = await db.execute({
-        sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, card_amount, customer_amount, company_amount, company_name, company_billing_status, device, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        args: [
-          vendor,
-          "",
-          // The name IS stored (so the admin knows who ordered); email/phone are
-          // NOT — they travel through Stripe metadata to the webhook, never a
-          // column here. See the privacy policy.
-          employee.name || "",
-          "",
-          "",
-          JSON.stringify(items2),
-          total,
-          status,
-          "split",
-          customerAmount, // card_amount — the card charge (customer half)
-          customerAmount, // customer_amount
-          companyAmount,  // company_amount — invoiced to the company
-          companyName,
-          "pending_invoice",
-          data.device || null,
-        ],
-      });
-      orderId = (result.lastInsertRowid as any) ?? null;
-      // NB: the SG-<n> order number is NOT assigned here — the row is still only
-      // 'awaiting_payment'. It's assigned once, at payment time (dev simulated
-      // path below / the Stripe webhook), so cancelled orders never burn a number
-      // and paid numbers stay gap-free. See assignSynergyOrderNumber().
+      // Warm up the connection before writing. Turso databases on low-traffic
+      // apps can be cold, and the first request after idle can fail or be slow.
+      // Retry a harmless SELECT a few times (with backoff) to wake it. We retry
+      // only this read — never the INSERT — so a cold start can't create a
+      // duplicate order. The INSERT below then runs once on a live connection.
+      const WARMUP_TRIES = 3;
+      let warmErr: unknown = null;
+      for (let attempt = 1; attempt <= WARMUP_TRIES; attempt++) {
+        try {
+          await db.execute("SELECT 1");
+          warmErr = null;
+          break;
+        } catch (e) {
+          warmErr = e;
+          console.warn(`Turso warmup attempt ${attempt}/${WARMUP_TRIES} failed:`, e);
+          if (attempt < WARMUP_TRIES) await new Promise((r) => setTimeout(r, 600 * attempt));
+        }
+      }
+      if (warmErr) throw warmErr;
+
+      try {
+        const result = await db.execute({
+          sql: `INSERT INTO orders (vendor, emp_number, emp_name, emp_dept, po_number, items, total, status, payment_method, card_amount, customer_amount, company_amount, company_name, company_billing_status, device, idempotency_key, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
+          args: [
+            vendor,
+            "",
+            // The name IS stored (so the admin knows who ordered); email/phone are
+            // NOT — they travel through Stripe metadata to the webhook, never a
+            // column here. See the privacy policy.
+            employee.name || "",
+            "",
+            "",
+            JSON.stringify(items2),
+            total,
+            status,
+            "split",
+            customerAmount, // card_amount — the card charge (customer half)
+            customerAmount, // customer_amount
+            companyAmount,  // company_amount — invoiced to the company
+            companyName,
+            "pending_invoice",
+            data.device || null,
+            idemKey,
+          ],
+        });
+        orderId = (result.lastInsertRowid as any) ?? null;
+        // NB: the SG-<n> order number is NOT assigned here — the row is still only
+        // 'awaiting_payment'. It's assigned once, at payment time (dev simulated
+        // path below / the Stripe webhook), so cancelled orders never burn a number
+        // and paid numbers stay gap-free. See assignSynergyOrderNumber().
+      } catch (err) {
+        // Idempotent replay: a prior attempt with this key already created the
+        // order row (before its response was lost). Reuse that same row instead
+        // of inserting a duplicate awaiting_payment order. The Stripe session is
+        // also created idempotently below, so no duplicate session/charge either.
+        if (idemKey && /UNIQUE constraint failed/i.test(String((err as any)?.message ?? err))) {
+          const existing = await db.execute({
+            sql: "SELECT id FROM orders WHERE idempotency_key = ?",
+            args: [idemKey],
+          });
+          if (existing.rows.length > 0) {
+            orderId = (existing.rows[0] as any).id;
+            console.warn("Idempotent replay — reusing existing order for key", idemKey);
+          } else {
+            throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
+
+      // Confirm the row actually persisted before we hand off to payment.
+      if (orderId == null) {
+        console.error("Insert returned no rowid — order not confirmed");
+        return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
+      const check = await db.execute({ sql: "SELECT id FROM orders WHERE id = ?", args: [orderId as any] });
+      if (check.rows.length === 0) {
+        console.error("Order row not found after insert — order not confirmed", orderId);
+        return fail(500, { message: "Order could not be confirmed. Please try again." });
+      }
     } catch (err) {
       console.error("Failed to save order to database:", err);
       return fail(500, { message: "Order could not be saved. Please try again." });
@@ -324,6 +394,9 @@ export const useSubmitOrder = routeAction$(
     try {
       const session = await createCheckoutSession({
         secretKey: stripeKey!,
+        // Idempotent create: a retry with the same checkout key returns the same
+        // session, so a re-submit after a lost response can't open a second one.
+        idempotencyKey: idemKey ? `sg_checkout_${idemKey}` : undefined,
         amountCents: customerCents,
         currency: "cad",
         // No SG number in the description — it isn't assigned until this payment
@@ -403,15 +476,16 @@ export const useSubmitOrder = routeAction$(
       .min(1)
       .max(100),
     date: z.string().min(1).max(40),
+    idempotencyKey: z.string().max(80).optional().default(""),
   }),
 );
 
-function stripColorSuffix(name: string): string {
+export function stripColorSuffix(name: string): string {
   const i = name.lastIndexOf(" - ");
   return i > -1 ? name.slice(0, i) : name;
 }
 
-interface CartItem {
+export interface CartItem {
   name: string;
   sku: string;
   category: string;
@@ -436,9 +510,14 @@ export default component$(() => {
   // login wall instead of their confirmation. These pages must show regardless
   // of auth, so exempt them from the login gate.
   const isPaymentReturn = useComputed$(() => loc.url.pathname.includes("/checkout/"));
+  // The dedicated /checkout route renders the cart-drawer overlay as a page. Pin
+  // the site header above it (like opening the cart does) so it stays visible.
+  const isCheckout = useComputed$(() => {
+    const p = loc.url.pathname;
+    return p === "/checkout" || p === "/checkout/";
+  });
   const loginAction = useLogin();
   const logoutAction = useLogout();
-  const orderAction = useSubmitOrder();
 
   const showLogin = useSignal(false);
   const overlayFading = useSignal(false);
@@ -505,26 +584,9 @@ export default component$(() => {
   const cartOpen = useSignal(false);
   const orderSubmitted = useSignal(false);
   const orderNum = useSignal("");
-  const submitting = useSignal(false);
-  const checkoutOpen = useSignal(false);
-  const checkoutStep = useSignal<"cart" | "details">("cart");
-  const summaryOpen = useSignal(true);
-  const formError = useSignal("");
-  const formTouched = useSignal(false);
-  const empFirstName = useSignal("");
-  const empLastName = useSignal("");
-  const empEmail = useSignal("");
-  const empPhone = useSignal("");
-  const empDept = useSignal("");
+  // Province still drives the cart drawer's tax preview; all other checkout
+  // fields (and the submit flow) now live on the dedicated /checkout route.
   const empProvince = useSignal("");
-  const empAddress1 = useSignal("");
-  const empCity = useSignal("");
-  const empPostal = useSignal("");
-  const empPO = useSignal("");
-
-  // Payment is always a 50/50 split: half by card now (Stripe), half invoiced to
-  // the signed-in portal's company (QuickBooks later). No method to choose.
-  const companyName = useComputed$(() => `${portal.value.name} ${portal.value.sub}`);
 
   const cartCount = useComputed$(() => {
     const count = cart.items.reduce((sum, i) => sum + i.quantity, 0);
@@ -536,20 +598,6 @@ export default component$(() => {
   const taxRate = useComputed$(() => taxRateFor(empProvince.value));
   const taxAmount = useComputed$(() => taxRate.value === undefined ? undefined : subtotal.value * taxRate.value);
   const orderTotal = useComputed$(() => subtotal.value + (taxAmount.value ?? 0));
-  // 50/50 split, mirrored from the server: split in integer cents so the two
-  // halves sum EXACTLY to the total, with any odd cent going to the card half.
-  const customerPay = useComputed$(() => Math.round(Math.round(orderTotal.value * 100) / 2) / 100);
-  const companyPay = useComputed$(() => +(orderTotal.value - customerPay.value).toFixed(2));
-  // Whether the order can be placed — every required field filled. Drives the
-  // greyed-out state of the place-order button. Detailed email/phone FORMAT
-  // checks stay on submit so the button un-greys once the fields are simply
-  // filled in.
-  const canPlaceOrder = useComputed$(() => {
-    if (!empFirstName.value.trim() || !empLastName.value.trim() || !empEmail.value.trim()
-        || !empPhone.value.trim() || !empProvince.value) return false;
-    if (!empAddress1.value.trim() || !empCity.value.trim() || !empPostal.value.trim()) return false;
-    return true;
-  });
   const taxLabel = useComputed$(() => {
     if (taxRate.value === undefined) return t("cart.invoice.tax", locale.value);
     const pct = +(taxRate.value * 100).toFixed(3);
@@ -590,6 +638,15 @@ export default component$(() => {
     cleanup(() => window.removeEventListener("cart-updated", loadCart));
   }, { strategy: 'document-ready' });
 
+  // The cart "Checkout" button navigates WITHOUT closing the drawer (so it
+  // covers the page through the transition — no flash of the page underneath).
+  // Once the /checkout route has taken over, drop the layout cart-open state so
+  // returning to another page doesn't re-pop the cart drawer.
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    if (track(() => isCheckout.value)) cartOpen.value = false;
+  });
+
   const saveCart = $(() => {
     try {
       const key = `ce_cart_mn_${loginType.value || "clothing"}`;
@@ -610,112 +667,6 @@ export default component$(() => {
     window.dispatchEvent(new CustomEvent("cart-updated"));
   });
 
-  const submitOrder = $(async () => {
-    // Fail-safe: the button is disabled while greyed out, but never act on a
-    // click that somehow gets through when the order can't be placed / is sending.
-    if (!canPlaceOrder.value || submitting.value) return;
-    formTouched.value = true;
-    if (!empFirstName.value || !empLastName.value || !empAddress1.value || !empCity.value || !empPostal.value || !empEmail.value || !empPhone.value || !empProvince.value) {
-      formError.value = t("cart.error.required", locale.value);
-      checkoutOpen.value = true;
-      return;
-    }
-    // Field-format checks — collect ALL failures so every invalid field is
-    // reported together in one submit, not one at a time.
-    const fmtErrors: string[] = [];
-    // Email (basic RFC-ish — anything@anything.tld)
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(empEmail.value.trim())) fmtErrors.push(t("cart.error.email", locale.value));
-    // Phone — full number (10 digits NANP, up to 15 for an intl. dialing
-    // prefix), allowing +, spaces, dashes, parens, dots.
-    const phoneDigits = empPhone.value.replace(/[^\d]/g, "");
-    if (phoneDigits.length < 10 || phoneDigits.length > 15 || !/^[\d\s+()\-.]+$/.test(empPhone.value.trim())) fmtErrors.push(t("cart.error.phone", locale.value));
-    // Canadian postal code — A1A 1A1 (optional space/hyphen).
-    if (!/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(empPostal.value.trim())) fmtErrors.push(t("cart.error.postal", locale.value));
-    if (fmtErrors.length) {
-      formError.value = fmtErrors.join("\n");
-      checkoutOpen.value = true;
-      return;
-    }
-    formError.value = "";
-
-    // Which layout the order was placed on — viewport width against the site's
-    // own breakpoints (mobile <=600, tablet 601-1024, desktop >=1025).
-    const device: "mobile" | "tablet" | "desktop" = window.innerWidth <= 600 ? "mobile" : window.innerWidth <= 1024 ? "tablet" : "desktop";
-    const orderData = {
-      device,
-      employee: { name: `${empFirstName.value} ${empLastName.value}`, email: empEmail.value, phone: empPhone.value, department: empDept.value, province: empProvince.value, address1: empAddress1.value, city: empCity.value, postal: empPostal.value, po: empPO.value },
-      items: cart.items.map((i: any) => ({
-        name: i.name || "",
-        sku: i.sku || "",
-        color: i.color || "",
-        size: i.size || "",
-        quantity: Number(i.quantity) || 1,
-        price: Number(i.price) || 0,
-        ...(i.waist ? { waist: i.waist } : {}),
-        ...(i.length ? { length: i.length } : {}),
-        ...(i.variant ? { variant: i.variant } : {}),
-        ...(i.code ? { code: i.code } : {}),
-      })),
-      date: new Date().toLocaleDateString("en-CA"),
-    };
-
-    // Send order via server action. Show a spinner while the server saves the
-    // order to the DB — success is only shown after that write confirms.
-    submitting.value = true;
-    let result: any;
-    try {
-      result = await orderAction.submit(orderData);
-    } catch (err) {
-      console.error("Order submit threw:", err);
-      formError.value = (err as Error)?.message || t("cart.error.network", locale.value);
-      submitting.value = false;
-      return;
-    }
-    const v = result?.value as any;
-    if (v?.failed) {
-      submitting.value = false;
-      // Surface zod field errors, top-level form errors, or generic message
-      let msg = v.message;
-      if (!msg && v.fieldErrors) {
-        const flat: string[] = [];
-        const walk = (obj: any) => {
-          if (Array.isArray(obj)) flat.push(...obj.map(String));
-          else if (obj && typeof obj === "object") Object.values(obj).forEach(walk);
-        };
-        walk(v.fieldErrors);
-        msg = flat.join(", ");
-      }
-      if (!msg && v.formErrors?.length) msg = v.formErrors.join(", ");
-      formError.value = msg || t("cart.error.failed", locale.value);
-      console.error("Order submission failed:", v);
-      return;
-    }
-
-    // Card / gift+card: the server created a Stripe Checkout session — hand off
-    // to Stripe. The cart is cleared on return (the /checkout/success page), not
-    // here, so it survives if the customer cancels the card payment.
-    if (v?.redirectUrl) {
-      window.location.href = v.redirectUrl;
-      return;
-    }
-
-    orderNum.value = v?.orderNumber || "";
-    cart.items = [];
-    await saveCart();
-    window.dispatchEvent(new CustomEvent("cart-updated"));
-    orderSubmitted.value = true;
-    cartOpen.value = false;
-    empFirstName.value = "";
-    empLastName.value = "";
-    empEmail.value = "";
-    empPhone.value = "";
-    empDept.value = "";
-    empProvince.value = "";
-    empPO.value = "";
-    formTouched.value = false;
-    submitting.value = false;
-  });
 
 
   // Listen for open-cart events from child pages
@@ -723,8 +674,6 @@ export default component$(() => {
   useVisibleTask$(({ cleanup }) => {
     const handler = () => {
       cartOpen.value = true;
-      checkoutStep.value = "details";
-      checkoutOpen.value = true;
     };
     window.addEventListener("open-cart", handler);
     cleanup(() => window.removeEventListener("open-cart", handler));
@@ -1101,7 +1050,7 @@ export default component$(() => {
           <=1024px "not finished" cover is needed again. */}
 
       {(auth.value.loggedIn || (loginAction.value && !loginAction.value.failed) || isPaymentReturn.value) && <>
-      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
+      <header class={`site-header site-header--white ${tabsStuck.value ? "site-header--tabs-stuck" : ""} ${searchOpen.value ? "site-header--search-open" : ""} ${cartOpen.value || isCheckout.value ? "site-header--cart-open" : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !cartOpen.value ? `site-header--hero-hidden ${headerScrolled.value || searchOpen.value ? "site-header--hero-visible" : ""}` : ""} ${SHOW_HERO_HEADER && loc.url.pathname === "/" && !headerScrolled.value && !searchOpen.value && !cartOpen.value ? "site-header--logo-hidden" : ""}`}>
         <div class="site-header__inner">
           <Link href="/" class={`site-header__logo brand-cluster brand-cluster--small ${portal.value.headerMark ? "brand-cluster--split" : "brand-cluster--lockup"}`}>
             {portal.value.headerMark ? (
@@ -1216,14 +1165,9 @@ export default component$(() => {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </button>
             )}
-            {/* EN/FR toggle sits between search and cart (tablet + desktop; hidden
-                on phones, where it lives in the menu drawer instead). */}
-            <button class="locale-btn locale-btn--header" onClick$={toggleLocale} aria-label="Toggle language">
-              <span class="locale-btn__full">{locale.value === "en" ? "Français" : "English"}</span>
-              <span class="locale-btn__short">{locale.value === "en" ? "FR" : "EN"}</span>
-              <svg class="locale-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            </button>
-            <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; if (!cartOpen.value) checkoutStep.value = "cart"; }}>
+            {/* EN/FR toggle moved to the footer (desktop); on phones it lives in
+                the menu drawer. */}
+            <button class={`cart-btn ${cart.items.length > 0 ? "cart-btn--active" : ""}`} onClick$={() => { cartOpen.value = !cartOpen.value; if (cartOpen.value) menuOpen.value = false; }}>
               <span class="cart-btn__label">{t("cart.mycart", locale.value)}</span>
               {cartOpen.value ? (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
@@ -1442,15 +1386,24 @@ export default component$(() => {
               <svg class="site-footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               <a href="mailto:info@synergygroupapparel.ca">info@synergygroupapparel.ca</a>
             </div>
-            <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+            <div class="site-footer__legal-row">
+              <Link class="site-footer__privacy-link" href="/privacy/">{t("footer.privacypolicy", locale.value)}</Link>
+              <button class="locale-btn locale-btn--footer" onClick$={toggleLocale} aria-label="Toggle language">
+                <svg class="locale-btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                <span>{locale.value === "en" ? "Français" : "English"}</span>
+              </button>
+            </div>
           </div>
           </div>
         </div>
       </footer>
 
-      {/* Cart Drawer */}
-      {cartOpen.value && (
-        <div class="modal-overlay" onClick$={() => { if (checkoutStep.value !== "details") cartOpen.value = false; }}>
+      {/* Cart Drawer — suppressed on /checkout, where the route renders its own
+          drawer. The cart button navigates WITHOUT closing this drawer, so it
+          keeps covering the page through the transition (no flash of the page
+          underneath); this drawer hands off to the checkout drawer seamlessly. */}
+      {cartOpen.value && !isCheckout.value && (
+        <div class="modal-overlay" onClick$={() => { cartOpen.value = false; }}>
           <div class="drawer cart-drawer" onClick$={(e) => e.stopPropagation()}>
             <div class="cart-drawer__site-header">
               <Link href="/" class="site-header__logo">
@@ -1472,7 +1425,7 @@ export default component$(() => {
                 <p>{t("cart.empty", locale.value)}</p>
                 <Link href="/apparel/" class="cart-drawer__back-link" onClick$={() => (cartOpen.value = false)}>{t("cart.backtoapparel", locale.value)}</Link>
               </div>
-            ) : checkoutStep.value === "cart" ? (
+            ) : (
               <>
                 <div class="cart-drawer__items">
                   <table class="cart-table">
@@ -1542,212 +1495,11 @@ export default component$(() => {
                   </span>
                   <button
                     class="btn btn--primary cart-drawer__order-btn"
-                    onClick$={() => { summaryOpen.value = window.innerWidth > 1024; checkoutStep.value = "details"; }}
+                    onClick$={() => { nav("/checkout/"); }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                     {t("cart.checkout", locale.value)}
                   </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div class="cart-drawer__details-step">
-                  <button class="cart-drawer__back-btn" onClick$={() => { checkoutStep.value = "cart"; }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-                    {t("cart.backtocart", locale.value)}
-                  </button>
-                  <Collapsible.Root class="cart-drawer__summary" bind:open={summaryOpen}>
-                    <Collapsible.Trigger class="cart-drawer__checkout-title">
-                      {t("cart.ordersummary", locale.value)} — {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}
-                    </Collapsible.Trigger>
-                    <Collapsible.Content>
-                      <div class="cart-drawer__summary-list">
-                        {cart.items.map((item) => (
-                          <div key={`${item.name}-${item.size}`} class="cart-drawer__summary-item">
-                            <span>
-                              {item.color && item.color.startsWith("#") && <span class="cart-drawer__summary-swatch" style={{ background: item.color }} aria-hidden="true" />}
-                              {item.quantity}x {stripColorSuffix(item.name)}{(item.color || item.size) ? ` — ${item.color ? (item.color.startsWith("#") ? colorName(item.color, locale.value) : item.color) : ""}${item.color && item.size ? " / " : ""}${item.size || ""}` : ""}
-                            </span>
-                            {loginType.value !== "tech" && <span>${(((Number(item.price) || 0) * item.quantity)).toFixed(2)}</span>}
-                          </div>
-                        ))}
-                        {loginType.value !== "tech" && (
-                          <>
-                            <div class="cart-drawer__summary-item cart-drawer__summary-total">
-                              <span>{t("cart.invoice.subtotal", locale.value)}</span>
-                              <span>${subtotal.value.toFixed(2)}</span>
-                            </div>
-                            {empProvince.value ? (
-                              <>
-                                <div class="cart-drawer__summary-item">
-                                  <span>{taxLabel.value}</span>
-                                  <span>${(taxAmount.value ?? 0).toFixed(2)}</span>
-                                </div>
-                                <div class="cart-drawer__summary-item cart-drawer__summary-total">
-                                  <span>{t("cart.invoice.total", locale.value)}</span>
-                                  <span>${orderTotal.value.toFixed(2)}</span>
-                                </div>
-                              </>
-                            ) : (
-                              <div class="cart-drawer__summary-item">
-                                <span>+ {t("cart.invoice.tax", locale.value)}</span>
-                                <span>—</span>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </Collapsible.Content>
-                  </Collapsible.Root>
-                  <div class="checkout-modal__form">
-                    <h3 class="checkout-modal__form-title">{t("cart.orderdetails", locale.value)}</h3>
-                    <div class="checkout-modal__row">
-                      <div class={`checkout-modal__field ${formTouched.value && !empFirstName.value ? "checkout-modal__field--error" : ""}`}>
-                        <label>{t("cart.firstname", locale.value)}</label>
-                        <input
-                          type="text"
-                          value={empFirstName.value}
-                          onInput$={(_, el) => { empFirstName.value = el.value; formError.value = ""; }}
-                        />
-                      </div>
-                      <div class={`checkout-modal__field ${formTouched.value && !empLastName.value ? "checkout-modal__field--error" : ""}`}>
-                        <label>{t("cart.lastname", locale.value)}</label>
-                        <input
-                          type="text"
-                          value={empLastName.value}
-                          onInput$={(_, el) => { empLastName.value = el.value; formError.value = ""; }}
-                        />
-                      </div>
-                    </div>
-                    {/* Full shipping address — all required. */}
-                    <div class={`checkout-modal__field ${formTouched.value && !empAddress1.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.address", locale.value)}</label>
-                      <input
-                        type="text"
-                        autoComplete="street-address"
-                        value={empAddress1.value}
-                        onInput$={(_, el) => { empAddress1.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empCity.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.city", locale.value)}</label>
-                      <input
-                        type="text"
-                        autoComplete="address-level2"
-                        value={empCity.value}
-                        onInput$={(_, el) => { empCity.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    {/* Province sits directly under the name row so the
-                        tax line in the cart total updates as soon as
-                        possible — before the user fills in phone/email. */}
-                    <div class={`checkout-modal__field ${formTouched.value && !empProvince.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.province", locale.value)}</label>
-                      <select
-                        required
-                        value={empProvince.value}
-                        onChange$={(_, el) => {
-                          empProvince.value = el.value;
-                          formError.value = "";
-                        }}
-                      >
-                        <option value="" disabled hidden>{locale.value === "fr" ? "Sélectionner…" : "Select…"}</option>
-                        <option value="AB">{t("prov.AB", locale.value)}</option>
-                        <option value="BC">{t("prov.BC", locale.value)}</option>
-                        <option value="MB">{t("prov.MB", locale.value)}</option>
-                        <option value="NB">{t("prov.NB", locale.value)}</option>
-                        <option value="NL">{t("prov.NL", locale.value)}</option>
-                        <option value="NS">{t("prov.NS", locale.value)}</option>
-                        <option value="ON">{t("prov.ON", locale.value)}</option>
-                        <option value="PE">{t("prov.PE", locale.value)}</option>
-                        <option value="QC">{t("prov.QC", locale.value)}</option>
-                        <option value="SK">{t("prov.SK", locale.value)}</option>
-                      </select>
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empPostal.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.postal", locale.value)}</label>
-                      <input
-                        type="text"
-                        autoComplete="postal-code"
-                        value={empPostal.value}
-                        onInput$={(_, el) => { empPostal.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empEmail.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.email", locale.value)}</label>
-                      <input
-                        type="email"
-                        value={empEmail.value}
-                        onInput$={(_, el) => { empEmail.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                    <div class={`checkout-modal__field ${formTouched.value && !empPhone.value ? "checkout-modal__field--error" : ""}`}>
-                      <label>{t("cart.phone", locale.value)}</label>
-                      <input
-                        type="tel"
-                        value={empPhone.value}
-                        onInput$={(_, el) => { empPhone.value = el.value; formError.value = ""; }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* ---- Payment: 50/50 split ---- */}
-                  {/* Every order is split: the customer pays half by credit card
-                      now (Stripe), and the signed-in portal's company is invoiced
-                      the other half (reconciled to QuickBooks later). No method to
-                      pick — this panel just shows the split before the card step. */}
-                  <div class="checkout-modal__pay">
-                    <h3 class="checkout-modal__form-title">{t("pay.title", locale.value)}</h3>
-                    <div class="checkout-modal__pay-header">
-                      <p class="checkout-modal__pay-note">{t("pay.split.note", locale.value)} {companyName.value}</p>
-                      <span class="checkout-modal__pay-pickup">{t("cart.pickup", locale.value)}</span>
-                    </div>
-                    <div class="checkout-modal__split">
-                      <div class="checkout-modal__split-row">
-                        <span class="checkout-modal__split-label">
-                          {t("pay.split.paynow", locale.value)}
-                          <span class="checkout-modal__split-badge">{t("pay.split.half", locale.value)}</span>
-                        </span>
-                        <span class="checkout-modal__split-amt">
-                          {empProvince.value ? `$${customerPay.value.toFixed(2)}` : "—"}
-                        </span>
-                      </div>
-                      <div class="checkout-modal__split-row">
-                        <span class="checkout-modal__split-label">
-                          {t("pay.split.company", locale.value)} {companyName.value}
-                          <span class="checkout-modal__split-badge">{t("pay.split.half", locale.value)}</span>
-                        </span>
-                        <span class="checkout-modal__split-amt checkout-modal__split-amt--muted">
-                          {empProvince.value ? `$${companyPay.value.toFixed(2)}` : "—"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                {formError.value && (
-                  <div class="cart-drawer__error" role="alert">{formError.value}</div>
-                )}
-                <div class="cart-drawer__footer">
-                  <span class="cart-drawer__total">
-                    {cartCount.value} {cartCount.value !== 1 ? t("cart.items", locale.value) : t("cart.item", locale.value)}{loginType.value !== "tech" && (empProvince.value ? ` — $${orderTotal.value.toFixed(2)}` : ` — $${subtotal.value.toFixed(2)} + ${t("cart.invoice.tax", locale.value).toLowerCase()}`)}
-                  </span>
-                  <button
-                    class={`btn btn--primary cart-drawer__order-btn ${!canPlaceOrder.value ? "cart-drawer__order-btn--disabled" : ""}`}
-                    disabled={!canPlaceOrder.value || submitting.value}
-                    onClick$={submitOrder}
-                  >
-                    {submitting.value ? (
-                      <>
-                        <span class="btn-spinner" aria-hidden="true" />
-                        {t("cart.placing", locale.value)}
-                      </>
-                    ) : (
-                      <>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-                    {t("cart.continuepayment", locale.value)}
-                      </>
-                    )}
-                  </button>
-                </div>
                 </div>
               </>
             )}
