@@ -251,11 +251,13 @@ const ProductCard = component$<{ item: Product; sku: string; index: number }>(({
           </div>
           <div class="product-card__price-group">
             {!isTech && (() => {
-              // Card prices show as whole dollars (no .00); the PDP keeps the exact
-              // price with decimals.
+              // Card prices show whole dollars with no ".00" (e.g. $8), but keep
+              // two decimals when the price has cents (e.g. $12.50). The PDP keeps
+              // the exact price regardless.
               const p = Number(item.price) || 0;
+              const priceStr = Number.isInteger(p) ? String(p) : p.toFixed(2);
               return (
-                <div class="product-card__price">${Math.round(p)}</div>
+                <div class="product-card__price">${priceStr}</div>
               );
             })()}
           </div>
